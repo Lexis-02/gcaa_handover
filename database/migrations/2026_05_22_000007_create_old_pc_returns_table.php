@@ -16,12 +16,12 @@ return new class extends Migration
             $table->string('old_make_model');
             $table->string('old_serial_no');
             $table->integer('year_of_purchase')->nullable();
-            $table->enum('condition', ['Working', 'Minor Defect', 'Beyond Repair', 'Scrap']);
+            $table->string('condition');
             $table->text('reason_for_replacement')->nullable();
-            $table->boolean('data_wiped')->default(false);
+            $table->string('data_wiped')->nullable();
             $table->string('data_wiped_by')->nullable();
             $table->timestamp('data_wiped_at')->nullable();
-            $table->boolean('returned_to_stores')->default(false);
+            $table->string('returned_to_stores')->nullable();
             $table->timestamp('returned_at')->nullable();
             $table->timestamps();
         });

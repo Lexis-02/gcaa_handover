@@ -140,14 +140,31 @@ return [
             'permissions' => $handoverGuidePermissions,
         ],
         [
-            'title' => 'Old PC Returns',
-            'slug' => 'old-pc-returns',
+            'title' => 'PC Handover',
+            'slug' => 'pc-handover',
             'icon' => 'rotate-ccw',
-            'permissions' => ['stage1.signoff', 'old-pc.submit', 'pc.manage', 'stage.manage-all', 'pc.view'],
+            'permissions' => ['stage1.signoff', 'old-pc.submit', 'pc.manage', 'stage.manage-all', 'pc.view', 'pc.view-dept', 'pc.view-own'],
             'children' => [
-                ['title' => 'View', 'action' => 'view', 'icon' => 'eye'],
-                ['title' => 'Add', 'action' => 'add', 'icon' => 'plus'],
-                ['title' => 'Edit', 'action' => 'edit', 'icon' => 'pencil'],
+                [
+                    'title' => 'View',
+                    'route' => 'pc-handover.index',
+                    'icon' => 'eye',
+                    'match' => 'exact',
+                    'permissions' => ['stage1.signoff', 'old-pc.submit', 'pc.manage', 'stage.manage-all', 'pc.view', 'pc.view-dept', 'pc.view-own'],
+                ],
+                [
+                    'title' => 'Add',
+                    'route' => 'pc-handover.create',
+                    'icon' => 'plus',
+                    'permissions' => ['stage1.signoff', 'old-pc.submit', 'pc.manage', 'stage.manage-all'],
+                ],
+                [
+                    'title' => 'Edit',
+                    'route' => 'pc-handover.index',
+                    'icon' => 'pencil',
+                    'match' => 'edit',
+                    'permissions' => ['stage1.signoff', 'old-pc.submit', 'pc.manage', 'stage.manage-all'],
+                ],
             ],
         ],
         [

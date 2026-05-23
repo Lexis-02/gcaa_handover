@@ -8,6 +8,7 @@ use App\Http\Controllers\HandoverSignOffController;
 use App\Http\Controllers\Lookups\BuildingController;
 use App\Http\Controllers\Lookups\DepartmentController;
 use App\Http\Controllers\Lookups\LookupValueController;
+use App\Http\Controllers\PcHandoverController;
 use App\Http\Controllers\PcRegisterController;
 use App\Http\Middleware\EnsureValidInvitation;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
@@ -34,6 +35,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('pc-register.sign-off.store');
     Route::get('handover-guide', [HandoverGuideController::class, 'show'])
         ->name('handover.guide');
+
+    Route::get('pc-handover', [PcHandoverController::class, 'index'])
+        ->name('pc-handover.index');
+    Route::get('pc-handover/create', [PcHandoverController::class, 'create'])
+        ->name('pc-handover.create');
+    Route::post('pc-handover', [PcHandoverController::class, 'store'])
+        ->name('pc-handover.store');
+    Route::get('pc-handover/{pc_handover}/edit', [PcHandoverController::class, 'edit'])
+        ->name('pc-handover.edit');
+    Route::put('pc-handover/{pc_handover}', [PcHandoverController::class, 'update'])
+        ->name('pc-handover.update');
 
     Route::prefix('lookups')->name('lookups.')->group(function () {
         Route::resource('departments', DepartmentController::class);

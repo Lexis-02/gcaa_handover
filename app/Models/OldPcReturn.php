@@ -29,12 +29,21 @@ class OldPcReturn extends Model
     protected function casts(): array
     {
         return [
-            'data_wiped' => 'boolean',
             'data_wiped_at' => 'datetime',
-            'returned_to_stores' => 'boolean',
             'returned_at' => 'datetime',
             'year_of_purchase' => 'integer',
         ];
+    }
+
+    public static function isAffirmative(?string $value): bool
+    {
+        return $value === 'Yes';
+    }
+
+    public function isFullyReturned(): bool
+    {
+        return self::isAffirmative($this->data_wiped)
+            && self::isAffirmative($this->returned_to_stores);
     }
 
     protected static function booted()

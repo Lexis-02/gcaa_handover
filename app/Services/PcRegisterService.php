@@ -84,7 +84,7 @@ class PcRegisterService
     public function stageProgress(PcAsset $asset): array
     {
         $stages = $asset->handoverStages->keyBy('stage');
-        $oldReturned = (bool) ($asset->oldPcReturn?->returned_to_stores && $asset->oldPcReturn?->data_wiped);
+        $oldReturned = (bool) $asset->oldPcReturn?->isFullyReturned();
 
         return [
             'stage_1' => $stages->has(1),
@@ -175,7 +175,7 @@ class PcRegisterService
             'form_2_signed' => $stages->has(2),
             'end_user_receipt_date' => $stages->get(3)?->actioned_at?->format('Y-m-d'),
             'form_3_signed' => $stages->has(3),
-            'old_pc_returned' => (bool) ($asset->oldPcReturn?->returned_to_stores && $asset->oldPcReturn?->data_wiped),
+            'old_pc_returned' => (bool) $asset->oldPcReturn?->isFullyReturned(),
             'can_edit' => $asset->status === 'pending',
             'stage_progress' => $this->stageProgress($asset),
             'next_signer' => $this->nextSignerLabel($asset),

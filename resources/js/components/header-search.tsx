@@ -10,11 +10,32 @@ type HeaderSearchProps = {
     placeholder?: string;
 };
 
-type RegisterFilters = {
+type ListPageFilters = {
     filters?: { q?: string; status?: string };
 };
 
 const REGISTER_SEARCH_PATH = '/pc-register';
+const HANDOVER_SEARCH_PATH = '/pc-handover';
+
+type SearchableList = 'register' | 'handover' | null;
+
+function resolveListPage(component: string, urlPath: string): SearchableList {
+    if (
+        component === 'pc-register/index' ||
+        urlPath === REGISTER_SEARCH_PATH
+    ) {
+        return 'register';
+    }
+
+    if (
+        component === 'pc-handover/index' ||
+        urlPath === HANDOVER_SEARCH_PATH
+    ) {
+        return 'handover';
+    }
+
+    return null;
+}
 
 export function HeaderSearch({
     className,
@@ -22,11 +43,10 @@ export function HeaderSearch({
 }: HeaderSearchProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const page = usePage<RegisterFilters>();
-    const isRegisterList =
-        page.component === 'pc-register/index' ||
-        page.url.split('?')[0] === REGISTER_SEARCH_PATH;
-    const queryFromServer = isRegisterList
+    const page = usePage<ListPageFilters>();
+    const urlPath = page.url.split('?')[0];
+    const listPage = resolveListPage(page.component, urlPath);
+    const queryFromServer = listPage
         ? (page.props.filters?.q ?? '')
         : '';
     const [value, setValue] = useState(queryFromServer);
@@ -39,11 +59,16 @@ export function HeaderSearch({
         inputRef.current?.focus();
     });
 
+    const searchPath =
+        listPage === 'handover'
+            ? HANDOVER_SEARCH_PATH
+            : REGISTER_SEARCH_PATH;
+
     const runSearch = (term: string) => {
         const status = page.props.filters?.status;
 
         router.get(
-            REGISTER_SEARCH_PATH,
+            searchPath,
             {
                 q: term.trim() || undefined,
                 status: status || undefined,
@@ -59,7 +84,7 @@ export function HeaderSearch({
     const handleChange = (next: string) => {
         setValue(next);
 
-        if (!isRegisterList) {
+        if (!listPage) {
             return;
         }
 
@@ -81,7 +106,7 @@ export function HeaderSearch({
             clearTimeout(debounceRef.current);
         }
 
-        if (isRegisterList) {
+        if (listPage) {
             runSearch(value);
             return;
         }
@@ -90,6 +115,18 @@ export function HeaderSearch({
             q: value.trim() || undefined,
         });
     };
+
+    const defaultPlaceholder = (() => {
+        if (listPage === 'register') {
+            return 'Search ref no., asset tag, user, department…';
+        }
+
+        if (listPage === 'handover') {
+            return 'Search ref, user, department, old PC…';
+        }
+
+        return 'Search PCs — press Enter to open register';
+    })();
 
     return (
         <div className={cn('relative w-full', className)}>
@@ -104,12 +141,7 @@ export function HeaderSearch({
                 value={value}
                 onChange={(event) => handleChange(event.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={
-                    placeholder ??
-                    (isRegisterList
-                        ? 'Search ref no., asset tag, user, department…'
-                        : 'Search PCs — press Enter to open register')
-                }
+                placeholder={placeholder ?? defaultPlaceholder}
                 className="h-10 rounded-lg border-border/60 bg-background pr-[4.25rem] pl-10 text-sm shadow-sm transition-shadow placeholder:text-muted-foreground/70 focus-visible:border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/15"
             />
             <kbd className="pointer-events-none absolute top-1/2 right-2.5 hidden -translate-y-1/2 items-center gap-0.5 rounded border border-border/70 bg-muted/50 px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground shadow-sm sm:inline-flex">

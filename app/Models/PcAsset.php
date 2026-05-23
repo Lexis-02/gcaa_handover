@@ -47,7 +47,7 @@ class PcAsset extends Model
         $hasStage2 = in_array(2, $stages);
         $hasStage3 = in_array(3, $stages);
         
-        $oldPcReturned = $oldReturn && $oldReturn->returned_to_stores && $oldReturn->data_wiped;
+        $oldPcReturned = $oldReturn?->isFullyReturned() ?? false;
 
         if ($hasStage1 && $hasStage2 && $hasStage3 && $oldPcReturned) {
             return 'complete';

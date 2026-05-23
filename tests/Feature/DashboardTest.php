@@ -129,6 +129,8 @@ class DashboardTest extends TestCase
         $this->actingAs($user);
 
         $this->get(route('dashboard'))
-            ->assertInertia(fn ($page) => $page->has('navigation.main', 5));
+            ->assertInertia(fn ($page) => $page
+                ->has('navigation.main', 6)
+                ->where('navigation.main.4.title', 'PC Handover'));
     }
 }

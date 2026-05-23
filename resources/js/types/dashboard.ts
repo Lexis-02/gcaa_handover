@@ -47,6 +47,7 @@ export type SharedNavChild = {
     title: string;
     href: string;
     icon: string;
+    match?: 'exact' | 'edit';
 };
 
 export type SharedNavItem = {

@@ -1,6 +1,5 @@
 import { usePage } from '@inertiajs/react';
 import { Bell, Search } from 'lucide-react';
-import { Breadcrumbs } from '@/components/breadcrumbs';
 import { HeaderIconButton } from '@/components/header-icon-button';
 import { HeaderSearch } from '@/components/header-search';
 import { ThemeToggleIcon } from '@/components/theme-toggle-icon';
@@ -8,13 +7,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
-import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
 
-export function AppSidebarHeader({
-    breadcrumbs = [],
-}: {
-    breadcrumbs?: BreadcrumbItemType[];
-}) {
+export function AppSidebarHeader({ pageTitle = '' }: { pageTitle?: string }) {
     const { auth } = usePage().props;
     const getInitials = useInitials();
     const user = auth.user;
@@ -34,7 +28,11 @@ export function AppSidebarHeader({
                         )}
                     />
                     <div className="hidden h-5 w-px bg-border/80 sm:block" />
-                    <Breadcrumbs breadcrumbs={breadcrumbs} />
+                    {pageTitle ? (
+                        <h1 className="truncate text-base font-semibold tracking-tight text-foreground md:text-lg">
+                            {pageTitle}
+                        </h1>
+                    ) : null}
                 </div>
 
                 <div className="mx-auto hidden w-full max-w-xl min-w-0 flex-1 px-2 lg:block">

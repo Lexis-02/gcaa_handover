@@ -26,6 +26,7 @@ function mapNavItems(items: SharedNavItem[]): NavItem[] {
             title: child.title,
             href: child.href,
             icon: resolveNavIcon(child.icon),
+            match: child.match,
         })),
     }));
 }
@@ -36,7 +37,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader className="border-b border-sidebar-border px-2 py-4">
+            <SidebarHeader className="border-b border-sidebar-border px-3 py-5">
                 <motion.div
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -47,7 +48,7 @@ export function AppSidebar() {
                             <SidebarMenuButton
                                 size="lg"
                                 asChild
-                                className="h-auto px-3 py-2 hover:bg-white/[0.06]"
+                                className="h-auto min-h-[3.25rem] px-3 py-3 hover:bg-white/[0.06]"
                             >
                                 <Link href={dashboard()} prefetch>
                                     <AppLogo />

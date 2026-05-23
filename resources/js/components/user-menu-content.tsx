@@ -12,6 +12,7 @@ import {
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { useAppearance } from '@/hooks/use-appearance';
+import { confirmLogout } from '@/lib/sweetalert';
 import { logout } from '@/routes';
 import { edit } from '@/routes/profile';
 import type { User } from '@/types';
@@ -24,9 +25,16 @@ export function UserMenuContent({ user }: Props) {
     const cleanup = useMobileNavigation();
     const { appearance, updateAppearance } = useAppearance();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        const confirmed = await confirmLogout();
+
+        if (!confirmed) {
+            return;
+        }
+
         cleanup();
         router.flushAll();
+        router.post(logout());
     };
 
     return (
@@ -81,17 +89,13 @@ export function UserMenuContent({ user }: Props) {
                 </DropdownMenuSub>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-                <Link
-                    className="block w-full cursor-pointer"
-                    href={logout()}
-                    as="button"
-                    onClick={handleLogout}
-                    data-test="logout-button"
-                >
-                    <LogOut className="mr-2" />
-                    Log out
-                </Link>
+            <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={handleLogout}
+                data-test="logout-button"
+            >
+                <LogOut className="mr-2" />
+                Log out
             </DropdownMenuItem>
         </>
     );

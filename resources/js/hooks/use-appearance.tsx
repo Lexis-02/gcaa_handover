@@ -70,17 +70,43 @@ const mediaQuery = (): MediaQueryList | null => {
 
 const handleSystemThemeChange = (): void => applyTheme(currentAppearance);
 
+const getCookieAppearance = (): Appearance | null => {
+    if (typeof document === 'undefined') {
+        return null;
+    }
+
+    const match = document.cookie.match(/(?:^|;\s*)appearance=([^;]*)/);
+
+    if (!match) {
+        return null;
+    }
+
+    const value = decodeURIComponent(match[1]) as Appearance;
+
+    return value === 'light' || value === 'dark' || value === 'system'
+        ? value
+        : null;
+};
+
 export function initializeTheme(): void {
     if (typeof window === 'undefined') {
         return;
     }
 
-    if (!localStorage.getItem('appearance')) {
+    const cookieAppearance = getCookieAppearance();
+
+    if (cookieAppearance) {
+        currentAppearance = cookieAppearance;
+        localStorage.setItem('appearance', cookieAppearance);
+    } else if (!localStorage.getItem('appearance')) {
         localStorage.setItem('appearance', 'system');
         setCookie('appearance', 'system');
+        currentAppearance = 'system';
+    } else {
+        currentAppearance = getStoredAppearance();
+        setCookie('appearance', currentAppearance);
     }
 
-    currentAppearance = getStoredAppearance();
     applyTheme(currentAppearance);
 
     // Set up system theme change listener

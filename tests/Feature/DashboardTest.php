@@ -78,4 +78,57 @@ class DashboardTest extends TestCase
             ->where('navigation.main.0.title', 'Dashboard')
         );
     }
+
+    public function test_super_admin_navigation_shows_only_lookups_and_users(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('super_admin');
+
+        $this->actingAs($user);
+
+        $response = $this->get(route('dashboard'));
+
+        $response->assertInertia(fn ($page) => $page
+            ->has('navigation.main', 3)
+            ->where('navigation.main.0.title', 'Dashboard')
+            ->where('navigation.main.1.title', 'Lookups')
+            ->where('navigation.main.2.title', 'Users')
+        );
+    }
+
+    public function test_super_admin_cannot_access_register(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('super_admin');
+
+        $this->actingAs($user)
+            ->get(route('pc-register.index'))
+            ->assertForbidden();
+    }
+
+    public function test_ict_admin_navigation_includes_batches_and_register(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('ict_admin');
+
+        $this->actingAs($user);
+
+        $response = $this->get(route('dashboard'));
+
+        $response->assertInertia(fn ($page) => $page
+            ->where('navigation.main.1.title', 'Batches')
+            ->where('navigation.main.2.title', 'Register')
+        );
+    }
+
+    public function test_ict_admin_navigation_excludes_users(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('ict_admin');
+
+        $this->actingAs($user);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn ($page) => $page->has('navigation.main', 5));
+    }
 }

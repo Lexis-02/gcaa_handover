@@ -1,3 +1,4 @@
+import { FlashAlerts } from '@/components/flash-alerts';
 import { useAppearance } from '@/hooks/use-appearance';
 import { Moon, Sun } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -53,6 +54,7 @@ export default function AuthLayout({
                 isDark ? 'bg-[#020617] text-slate-100' : 'bg-slate-50 text-slate-800'
             }`}
         >
+            <FlashAlerts />
             {/* ── LEFT PANEL: 65% — cinematic image slideshow ─────────────────── */}
             <div className="hidden md:block md:w-[65%] shrink-0 relative overflow-hidden">
 

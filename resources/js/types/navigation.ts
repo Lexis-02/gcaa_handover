@@ -6,10 +6,14 @@ export type BreadcrumbItem = {
     href: NonNullable<InertiaLinkProps['href']>;
 };
 
+export type NavChildMatch = 'exact' | 'edit';
+
 export type NavChildItem = {
     title: string;
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon | null;
+    /** How to highlight this item; defaults to exact path match. */
+    match?: NavChildMatch;
 };
 
 export type NavItem = {

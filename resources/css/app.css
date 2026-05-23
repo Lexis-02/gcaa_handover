@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
+@import 'sweetalert2/dist/sweetalert2.min.css';
 @import './brand.css';
 
 @source '../views';
@@ -159,8 +160,20 @@
     }
 }
 
-/* Button hover — left-to-right fill */
+/* Button hover — left-to-right fill (text stays above fill via z-10 span) */
 @layer components {
+    .btn-fill {
+        transition:
+            color 0.32s ease,
+            border-color 0.32s ease,
+            background-color 0.32s ease,
+            box-shadow 0.32s ease;
+    }
+
+    .btn-fill > span {
+        transition: color 0.32s ease;
+    }
+
     .btn-fill::before {
         content: '';
         position: absolute;
@@ -177,6 +190,86 @@
 
     .btn-fill:disabled::before {
         display: none;
+    }
+
+    /* Outline: readable label before hover, high-contrast on fill */
+    .btn-fill[data-variant='outline']:not(:hover) {
+        color: var(--foreground);
+    }
+
+    .btn-fill[data-variant='outline']:hover {
+        color: var(--primary-foreground);
+        border-color: var(--primary);
+    }
+
+    .btn-fill[data-variant='destructive-outline']:not(:hover) {
+        color: var(--destructive);
+    }
+
+    .btn-fill[data-variant='destructive-outline']:hover {
+        color: var(--destructive-foreground);
+        border-color: var(--destructive);
+    }
+}
+
+/* SweetAlert2 — separated action buttons */
+@layer components {
+    .swal2-actions-gcaa {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 0.75rem !important;
+        width: calc(100% - 2.5rem) !important;
+        margin: 0 1.25rem 1.25rem !important;
+        padding: 0 !important;
+    }
+
+    .swal2-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 6.5rem !important;
+        height: 2.5rem !important;
+        margin: 0 !important;
+        padding: 0 1.25rem !important;
+        border-radius: 0.5rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        line-height: 1.25rem !important;
+        box-shadow: none !important;
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease,
+            opacity 0.2s ease !important;
+    }
+
+    .swal2-btn-cancel {
+        border: 1px solid var(--border) !important;
+        background: var(--background) !important;
+        color: var(--foreground) !important;
+    }
+
+    .swal2-btn-cancel:hover {
+        background: var(--muted) !important;
+        color: var(--foreground) !important;
+    }
+
+    .swal2-btn-confirm {
+        border: none !important;
+        background: var(--primary) !important;
+        color: var(--primary-foreground) !important;
+    }
+
+    .swal2-btn-confirm:hover {
+        opacity: 0.92 !important;
+        color: var(--primary-foreground) !important;
+    }
+
+    .swal2-popup-gcaa .swal2-icon {
+        margin: 1.25rem auto 0.75rem !important;
     }
 }
 

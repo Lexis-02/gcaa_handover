@@ -154,24 +154,9 @@ class DashboardService
     {
         return collect($items)
             ->filter(function (array $item) use ($roles, $permissions) {
-                $allowedRoles = $item['roles'] ?? null;
-                $requiredPermissions = $item['permissions'] ?? null;
-
-                if ($allowedRoles && ! in_array('*', $allowedRoles, true)) {
-                    if ($roles->intersect($allowedRoles)->isEmpty()) {
-                        return false;
-                    }
-                }
-
-                if ($requiredPermissions) {
-                    if ($permissions->intersect($requiredPermissions)->isEmpty()) {
-                        return false;
-                    }
-                }
-
-                return true;
+                return $this->navItemVisibleToUser($item, $roles, $permissions);
             })
-            ->map(function (array $item) use ($badges) {
+            ->map(function (array $item) use ($badges, $permissions, $roles) {
                 $slug = $item['slug'] ?? str($item['title'])->slug()->toString();
                 $nav = [
                     'title' => $item['title'],
@@ -180,11 +165,18 @@ class DashboardService
                 ];
 
                 if (! empty($item['children'])) {
-                    $nav['children'] = collect($item['children'])->map(fn (array $child) => [
-                        'title' => $child['title'],
-                        'icon' => $child['icon'] ?? 'circle',
-                        'href' => $child['href'] ?? '#'.$slug.'-'.($child['action'] ?? str($child['title'])->slug()),
-                    ])->values()->all();
+                    $nav['children'] = collect($item['children'])
+                        ->filter(fn (array $child) => $this->navItemVisibleToUser($child, $roles, $permissions))
+                        ->map(fn (array $child) => array_filter([
+                            'title' => $child['title'],
+                            'icon' => $child['icon'] ?? 'circle',
+                            'href' => isset($child['route'])
+                                ? route($child['route'], $child['route_params'] ?? [])
+                                : ($child['href'] ?? '#'.$slug.'-'.($child['action'] ?? str($child['title'])->slug())),
+                            'match' => $child['match'] ?? null,
+                        ], fn ($value) => $value !== null))
+                        ->values()
+                        ->all();
                 }
 
                 if (! empty($item['badge']) && ($badges[$item['badge']] ?? 0) > 0) {
@@ -193,7 +185,39 @@ class DashboardService
 
                 return $nav;
             })
+            ->filter(function (array $nav) {
+                if (array_key_exists('children', $nav) && $nav['children'] === []) {
+                    return false;
+                }
+
+                return true;
+            })
             ->values()
             ->all();
+    }
+
+    /**
+     * @param  array<string, mixed>  $item
+     */
+    private function navItemVisibleToUser(array $item, Collection $roles, Collection $permissions): bool
+    {
+        $excludedRoles = $item['exclude_roles'] ?? null;
+        if ($excludedRoles && $roles->intersect($excludedRoles)->isNotEmpty()) {
+            return false;
+        }
+
+        $allowedRoles = $item['roles'] ?? null;
+        if ($allowedRoles && ! in_array('*', $allowedRoles, true)) {
+            if ($roles->intersect($allowedRoles)->isEmpty()) {
+                return false;
+            }
+        }
+
+        $requiredPermissions = $item['permissions'] ?? null;
+        if ($requiredPermissions) {
+            return $permissions->intersect($requiredPermissions)->isNotEmpty();
+        }
+
+        return true;
     }
 }

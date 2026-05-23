@@ -45,7 +45,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'pc.manage',
             'stage.manage-all',
             'reports.all',
-            'users.manage',
             'forms.generate',
         ]);
 
@@ -78,6 +77,9 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         $superAdmin = Role::updateOrCreate(['name' => 'super_admin'], ['guard_name' => 'web']);
-        $superAdmin->syncPermissions(Permission::all());
+        $superAdmin->syncPermissions([
+            'config.manage',
+            'users.manage',
+        ]);
     }
 }

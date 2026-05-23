@@ -1,9 +1,98 @@
 <?php
 
-$crudChildren = static fn (string $slug): array => [
-    ['title' => 'Add', 'action' => 'add', 'icon' => 'plus'],
-    ['title' => 'View', 'action' => 'view', 'icon' => 'eye'],
-    ['title' => 'Edit', 'action' => 'edit', 'icon' => 'pencil'],
+$registerChildren = [
+    [
+        'title' => 'View',
+        'route' => 'pc-register.index',
+        'icon' => 'eye',
+        'match' => 'exact',
+        'permissions' => ['pc.view', 'pc.view-dept', 'pc.view-own', 'stage.manage-all'],
+    ],
+    [
+        'title' => 'Sign-offs',
+        'route' => 'handover-sign-offs.index',
+        'icon' => 'clipboard-check',
+        'match' => 'exact',
+        'permissions' => ['stage1.signoff', 'stage2.signoff', 'stage3.signoff', 'stage.manage-all'],
+    ],
+    [
+        'title' => 'Add',
+        'route' => 'pc-register.create',
+        'icon' => 'plus',
+        'permissions' => ['pc.manage'],
+    ],
+    [
+        'title' => 'Edit',
+        'route' => 'pc-register.index',
+        'icon' => 'pencil',
+        'match' => 'edit',
+        'permissions' => ['pc.manage'],
+    ],
+];
+
+$handoverGuidePermissions = [
+    'pc.view',
+    'pc.view-dept',
+    'pc.view-own',
+    'pc.manage',
+    'stage.manage-all',
+    'stage1.signoff',
+    'stage2.signoff',
+    'stage3.signoff',
+];
+
+$batchChildren = [
+    [
+        'title' => 'View',
+        'route' => 'batches.index',
+        'icon' => 'eye',
+        'match' => 'exact',
+        'permissions' => ['batch.create'],
+    ],
+    [
+        'title' => 'Add',
+        'route' => 'batches.create',
+        'icon' => 'plus',
+        'permissions' => ['batch.create'],
+    ],
+];
+
+$lookupChildren = [
+    [
+        'title' => 'Departments',
+        'route' => 'lookups.departments.index',
+        'icon' => 'eye',
+        'match' => 'exact',
+        'permissions' => ['config.manage'],
+    ],
+    [
+        'title' => 'PC Condition',
+        'route' => 'lookups.values.index',
+        'route_params' => ['type' => 'pc-conditions'],
+        'icon' => 'eye',
+        'permissions' => ['config.manage'],
+    ],
+    [
+        'title' => 'Old PC Condition',
+        'route' => 'lookups.values.index',
+        'route_params' => ['type' => 'old-pc-conditions'],
+        'icon' => 'eye',
+        'permissions' => ['config.manage'],
+    ],
+    [
+        'title' => 'Yes / No',
+        'route' => 'lookups.values.index',
+        'route_params' => ['type' => 'yes-no'],
+        'icon' => 'eye',
+        'permissions' => ['config.manage'],
+    ],
+    [
+        'title' => 'Buildings',
+        'route' => 'lookups.buildings.index',
+        'icon' => 'eye',
+        'match' => 'exact',
+        'permissions' => ['config.manage'],
+    ],
 ];
 
 return [
@@ -13,42 +102,66 @@ return [
             'title' => 'Dashboard',
             'route' => 'dashboard',
             'icon' => 'layout-grid',
-            'roles' => ['*'],
+        ],
+        [
+            'title' => 'Batches',
+            'slug' => 'batches',
+            'icon' => 'package',
+            'permissions' => ['batch.create'],
+            'children' => $batchChildren,
         ],
         [
             'title' => 'Register',
             'slug' => 'register',
             'icon' => 'clipboard-plus',
-            'roles' => ['*'],
-            'children' => $crudChildren('register'),
+            'permissions' => ['pc.view', 'pc.view-dept', 'pc.view-own', 'pc.manage', 'stage.manage-all', 'stage1.signoff', 'stage2.signoff', 'stage3.signoff'],
+            'children' => $registerChildren,
+        ],
+        [
+            'title' => 'Handover guide',
+            'route' => 'handover.guide',
+            'icon' => 'book-open',
+            'permissions' => $handoverGuidePermissions,
         ],
         [
             'title' => 'Old PC Returns',
             'slug' => 'old-pc-returns',
             'icon' => 'rotate-ccw',
-            'roles' => ['*'],
-            'children' => $crudChildren('old-pc-returns'),
+            'permissions' => ['stage1.signoff', 'old-pc.submit', 'pc.manage', 'stage.manage-all', 'pc.view'],
+            'children' => [
+                ['title' => 'View', 'action' => 'view', 'icon' => 'eye'],
+                ['title' => 'Add', 'action' => 'add', 'icon' => 'plus'],
+                ['title' => 'Edit', 'action' => 'edit', 'icon' => 'pencil'],
+            ],
         ],
         [
             'title' => 'Summary or report',
             'slug' => 'summary-report',
             'icon' => 'bar-chart-3',
-            'roles' => ['*'],
-            'children' => $crudChildren('summary-report'),
+            'permissions' => ['reports.all', 'reports.dept'],
+            'children' => [
+                ['title' => 'View', 'action' => 'view', 'icon' => 'eye'],
+                ['title' => 'Add', 'action' => 'add', 'icon' => 'plus'],
+                ['title' => 'Edit', 'action' => 'edit', 'icon' => 'pencil'],
+            ],
         ],
         [
             'title' => 'Lookups',
             'slug' => 'lookups',
             'icon' => 'search',
-            'roles' => ['*'],
-            'children' => $crudChildren('lookups'),
+            'permissions' => ['config.manage'],
+            'children' => $lookupChildren,
         ],
         [
             'title' => 'Users',
             'slug' => 'users',
             'icon' => 'users',
             'permissions' => ['users.manage'],
-            'children' => $crudChildren('users'),
+            'children' => [
+                ['title' => 'View', 'action' => 'view', 'icon' => 'eye'],
+                ['title' => 'Add', 'action' => 'add', 'icon' => 'plus'],
+                ['title' => 'Edit', 'action' => 'edit', 'icon' => 'pencil'],
+            ],
         ],
     ],
 

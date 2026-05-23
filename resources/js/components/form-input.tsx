@@ -37,12 +37,10 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                     <label
                         htmlFor={id}
                         className={cn(
-                            "text-xs font-medium transition-colors duration-200",
-                            isFocused 
-                                ? "text-accent" 
-                                : "text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300",
-                            error && "text-destructive",
-                            labelClassName
+                            'text-sm font-medium text-foreground transition-colors duration-200',
+                            isFocused && 'text-primary',
+                            error && 'text-destructive',
+                            labelClassName,
                         )}
                     >
                         {label}

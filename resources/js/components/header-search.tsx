@@ -1,5 +1,6 @@
+import { router, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { useSearchShortcut } from '@/hooks/use-search-shortcut';
 import { cn } from '@/lib/utils';
@@ -9,15 +10,86 @@ type HeaderSearchProps = {
     placeholder?: string;
 };
 
+type RegisterFilters = {
+    filters?: { q?: string; status?: string };
+};
+
+const REGISTER_SEARCH_PATH = '/pc-register';
+
 export function HeaderSearch({
     className,
-    placeholder = 'Search PCs, batches, users…',
+    placeholder,
 }: HeaderSearchProps) {
     const inputRef = useRef<HTMLInputElement>(null);
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const page = usePage<RegisterFilters>();
+    const isRegisterList =
+        page.component === 'pc-register/index' ||
+        page.url.split('?')[0] === REGISTER_SEARCH_PATH;
+    const queryFromServer = isRegisterList
+        ? (page.props.filters?.q ?? '')
+        : '';
+    const [value, setValue] = useState(queryFromServer);
+
+    useEffect(() => {
+        setValue(queryFromServer);
+    }, [queryFromServer]);
 
     useSearchShortcut(() => {
         inputRef.current?.focus();
     });
+
+    const runSearch = (term: string) => {
+        const status = page.props.filters?.status;
+
+        router.get(
+            REGISTER_SEARCH_PATH,
+            {
+                q: term.trim() || undefined,
+                status: status || undefined,
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            },
+        );
+    };
+
+    const handleChange = (next: string) => {
+        setValue(next);
+
+        if (!isRegisterList) {
+            return;
+        }
+
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
+        debounceRef.current = setTimeout(() => {
+            runSearch(next);
+        }, 350);
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key !== 'Enter') {
+            return;
+        }
+
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
+        if (isRegisterList) {
+            runSearch(value);
+            return;
+        }
+
+        router.get(REGISTER_SEARCH_PATH, {
+            q: value.trim() || undefined,
+        });
+    };
 
     return (
         <div className={cn('relative w-full', className)}>
@@ -29,7 +101,15 @@ export function HeaderSearch({
                 ref={inputRef}
                 data-header-search
                 type="search"
-                placeholder={placeholder}
+                value={value}
+                onChange={(event) => handleChange(event.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={
+                    placeholder ??
+                    (isRegisterList
+                        ? 'Search ref no., asset tag, user, department…'
+                        : 'Search PCs — press Enter to open register')
+                }
                 className="h-10 rounded-lg border-border/60 bg-background pr-[4.25rem] pl-10 text-sm shadow-sm transition-shadow placeholder:text-muted-foreground/70 focus-visible:border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/15"
             />
             <kbd className="pointer-events-none absolute top-1/2 right-2.5 hidden -translate-y-1/2 items-center gap-0.5 rounded border border-border/70 bg-muted/50 px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground shadow-sm sm:inline-flex">

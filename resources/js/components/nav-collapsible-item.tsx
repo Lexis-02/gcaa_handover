@@ -15,6 +15,7 @@ import {
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
+import { isNavChildActive } from '@/lib/nav-active';
 import {
     dropdownChild,
     dropdownPanel,
@@ -35,9 +36,11 @@ type NavCollapsibleItemProps = {
 };
 
 export function NavCollapsibleItem({ item }: NavCollapsibleItemProps) {
-    const { isCurrentUrl } = useCurrentUrl();
+    const { currentUrl } = useCurrentUrl();
     const children = item.children ?? [];
-    const childActive = children.some((child) => isCurrentUrl(child.href));
+    const childActive = children.some((child) =>
+        isNavChildActive(child, currentUrl),
+    );
     const [open, setOpen] = useState(childActive);
     const Icon = item.icon;
 
@@ -80,7 +83,10 @@ export function NavCollapsibleItem({ item }: NavCollapsibleItemProps) {
                                 <SidebarMenuSub className="mx-0 gap-1.5 border-l border-white/10 px-3 py-2.5 pl-5">
                                     {children.map((child, index) => {
                                         const ChildIcon = child.icon;
-                                        const active = isCurrentUrl(child.href);
+                                        const active = isNavChildActive(
+                                            child,
+                                            currentUrl,
+                                        );
 
                                         return (
                                             <SidebarMenuSubItem

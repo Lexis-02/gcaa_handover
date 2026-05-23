@@ -4,10 +4,10 @@ export default function AppLogo() {
             <img
                 src="/assets/logo.png"
                 alt="PC Handover"
-                className="size-9 shrink-0 object-contain"
+                className="size-11 shrink-0 object-contain group-data-[collapsible=icon]/sidebar-wrapper:size-9"
             />
-            <div className="ml-2 grid flex-1 text-left text-sm group-data-[collapsible=icon]:hidden">
-                <span className="truncate leading-tight font-semibold text-sidebar-foreground">
+            <div className="ml-3 grid flex-1 text-left group-data-[collapsible=icon]:hidden">
+                <span className="truncate text-base leading-tight font-semibold tracking-tight text-sidebar-foreground">
                     PC Handover
                 </span>
             </div>

@@ -11,8 +11,8 @@ class DepartmentSeeder extends Seeder
     {
         $departments = [
             ['name' => 'ICT', 'code' => 'ICT'],
-            ['name' => 'ANS', 'code' => 'ANS'],
-            ['name' => 'Aerodromes & Safety', 'code' => 'ASD'],
+            ['name' => 'Air Navigation Services (ANS)', 'code' => 'ANS'],
+            ['name' => 'Aerodromes & Aviation Safety', 'code' => 'ASD'],
             ['name' => 'Economic Regulation', 'code' => 'ERD'],
             ['name' => 'Human Resource', 'code' => 'HRD'],
             ['name' => 'Finance', 'code' => 'FIN'],
@@ -20,14 +20,17 @@ class DepartmentSeeder extends Seeder
             ['name' => 'Legal', 'code' => 'LEG'],
             ['name' => 'Procurement', 'code' => 'PRO'],
             ['name' => 'Estate & Transport', 'code' => 'EST'],
-            ['name' => 'AVSEC', 'code' => 'AVS'],
+            ['name' => 'Aviation Security (AVSEC)', 'code' => 'AVS'],
             ['name' => 'Public Affairs', 'code' => 'PAD'],
             ['name' => 'Training (GATA)', 'code' => 'GAT'],
             ['name' => 'Office of the DG', 'code' => 'ODG'],
         ];
 
         foreach ($departments as $dept) {
-            Department::updateOrCreate(['code' => $dept['code']], $dept);
+            Department::updateOrCreate(['code' => $dept['code']], [
+                'name' => $dept['name'],
+                'is_active' => true,
+            ]);
         }
     }
 }

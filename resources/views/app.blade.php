@@ -9,7 +9,9 @@
             (function() {
                 const appearance = '{{ $appearance ?? "system" }}';
 
-                if (appearance === 'system') {
+                if (appearance === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else if (appearance === 'system') {
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
                     if (prefersDark) {

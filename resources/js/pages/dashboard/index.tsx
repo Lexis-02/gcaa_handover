@@ -1,7 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { pageEnter } from '@/lib/motion';
-import { dashboard } from '@/routes';
 import type { DashboardMeta } from '@/types';
 
 type DashboardPageProps = {
@@ -26,10 +25,5 @@ export default function DashboardIndex({ meta }: DashboardPageProps) {
 }
 
 DashboardIndex.layout = {
-    breadcrumbs: [
-        {
-            title: 'Dashboard',
-            href: dashboard(),
-        },
-    ],
+    title: 'Dashboard',
 };

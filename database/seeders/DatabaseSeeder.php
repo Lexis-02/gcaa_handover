@@ -16,8 +16,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BuildingSeeder::class,
             DepartmentSeeder::class,
+            LookupValueSeeder::class,
             RolesAndPermissionsSeeder::class,
             UserSeeder::class,
+            BatchSeeder::class,
         ]);
     }
 }

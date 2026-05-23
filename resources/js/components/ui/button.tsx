@@ -10,15 +10,19 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "btn-fill overflow-hidden bg-primary text-primary-foreground shadow-xs [--btn-fill:rgb(255_255_255/0.22)]",
+          "btn-fill overflow-hidden bg-primary text-primary-foreground shadow-xs [--btn-fill:rgb(255_255_255/0.22)] hover:shadow-sm",
+        success:
+          "btn-fill overflow-hidden border border-success/30 bg-success font-semibold text-success-foreground shadow-md shadow-success/20 [--btn-fill:rgb(255_255_255/0.18)] hover:border-success hover:shadow-lg hover:shadow-success/30",
         destructive:
-          "btn-fill overflow-hidden bg-destructive text-white shadow-xs [--btn-fill:rgb(255_255_255/0.18)] focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+          "btn-fill overflow-hidden bg-destructive text-destructive-foreground shadow-xs [--btn-fill:rgb(255_255_255/0.18)] focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+        "destructive-outline":
+          "btn-fill overflow-hidden border border-destructive/40 bg-background shadow-xs [--btn-fill:var(--destructive)]",
         outline:
-          "btn-fill overflow-hidden border border-input bg-background shadow-xs [--btn-fill:var(--primary)] hover:text-primary-foreground",
+          "btn-fill overflow-hidden border border-input bg-background text-foreground shadow-xs [--btn-fill:var(--primary)] hover:border-primary hover:text-primary-foreground",
         secondary:
-          "btn-fill overflow-hidden bg-secondary text-secondary-foreground shadow-xs [--btn-fill:var(--primary)]",
+          "btn-fill overflow-hidden bg-secondary text-secondary-foreground shadow-xs [--btn-fill:var(--primary)] hover:text-primary-foreground",
         ghost:
-          "hover:bg-accent/70 hover:text-accent-foreground",
+          "text-foreground hover:bg-accent/70 hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
@@ -48,11 +52,22 @@ function Button({
   }) {
   const Comp = asChild ? Slot : "button"
   const classes = cn(buttonVariants({ variant, size, className }))
+  /* asChild (e.g. Link) cannot use the fill overlay — it breaks label visibility */
   const useFill =
-    variant === "default" ||
-    variant === "destructive" ||
-    variant === "outline" ||
-    variant === "secondary"
+    !asChild &&
+    (variant === "default" ||
+      variant === "success" ||
+      variant === "destructive" ||
+      variant === "destructive-outline" ||
+      variant === "outline" ||
+      variant === "secondary")
+
+  const dataVariant =
+    variant === "destructive-outline"
+      ? "destructive-outline"
+      : variant === "outline"
+        ? "outline"
+        : undefined
 
   if (asChild) {
     return (
@@ -71,7 +86,12 @@ function Button({
   }
 
   return (
-    <Comp data-slot="button" className={classes} {...props}>
+    <Comp
+      data-slot="button"
+      data-variant={dataVariant}
+      className={classes}
+      {...props}
+    >
       <span className="relative z-10 inline-flex items-center justify-center gap-2">
         {children}
       </span>

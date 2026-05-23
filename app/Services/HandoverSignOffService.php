@@ -45,10 +45,6 @@ class HandoverSignOffService
             return null;
         }
 
-        if ($user->can('stage.manage-all')) {
-            return $pendingStage;
-        }
-
         return match ($pendingStage) {
             1 => $user->can('stage1.signoff') ? 1 : null,
             2 => $this->directorMaySignStage2($user, $asset) ? 2 : null,
@@ -76,6 +72,40 @@ class HandoverSignOffService
             'description' => $config['description'],
             'form_ref' => sprintf('ICT/PC-HO/%02d', $stage),
         ];
+    }
+
+    /**
+     * Read-only handover status for register overseers (e.g. ICT admin) who cannot sign.
+     *
+     * @return array{stage: int, stage_label: string, stage_description: string, form_ref: string}|null
+     */
+    public function oversightFor(User $user, PcAsset $asset): ?array
+    {
+        if (! $user->can('stage.manage-all')) {
+            return null;
+        }
+
+        $pendingStage = $this->pendingStageFor($asset);
+
+        if ($pendingStage === null || $this->canUserSignOff($user, $asset) !== null) {
+            return null;
+        }
+
+        $config = config("handover.stages.{$pendingStage}");
+
+        return [
+            'stage' => $pendingStage,
+            'stage_label' => $config['label'],
+            'stage_description' => $config['description'],
+            'form_ref' => sprintf('ICT/PC-HO/%02d', $pendingStage),
+        ];
+    }
+
+    public function userMaySignAnyStage(User $user): bool
+    {
+        return $user->can('stage1.signoff')
+            || $user->can('stage2.signoff')
+            || $user->can('stage3.signoff');
     }
 
     public function recordSignOff(User $user, PcAsset $asset, ?string $notes = null): HandoverStage
@@ -125,7 +155,7 @@ class HandoverSignOffService
     {
         $query = PcAsset::query();
 
-        if ($user->can('stage.manage-all')) {
+        if ($user->can('stage.manage-all') && $this->userMaySignAnyStage($user)) {
             return $this->manageAllActionableQuery($query, $user);
         }
 

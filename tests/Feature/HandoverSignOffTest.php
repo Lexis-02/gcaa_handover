@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Batch;
+use App\Models\HandoverStage;
 use App\Models\PcAsset;
 use App\Models\User;
 use Database\Seeders\BatchSeeder;
@@ -148,5 +149,69 @@ class HandoverSignOffTest extends TestCase
             ->get(route('handover.guide'))
             ->assertOk()
             ->assertInertia(fn ($page) => $page->component('handover/guide'));
+    }
+
+    public function test_ict_admin_cannot_sign_off_stage_two_pc(): void
+    {
+        $user = User::query()->where('username', 'ictadmin')->first();
+        $batch = Batch::query()->first();
+
+        $stores = User::query()->where('username', 'storesofficer')->first();
+
+        $asset = PcAsset::query()->create([
+            'batch_id' => $batch->id,
+            'ref_no' => 'GCAA-PC-2026-090',
+            'make_model' => 'Dell',
+            'serial_number' => 'SN-ICT-NO-SIGN',
+            'os' => 'Windows 11 Pro',
+            'condition_on_issue' => 'Sealed/New',
+            'status' => 'stage_1_complete',
+        ]);
+
+        HandoverStage::query()->create([
+            'pc_asset_id' => $asset->id,
+            'stage' => 1,
+            'actioned_by' => $stores->id,
+            'actioned_at' => now(),
+            'form_ref' => 'ICT/PC-HO/01',
+            'ip_address' => '127.0.0.1',
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('pc-register.sign-off.store', $asset))
+            ->assertForbidden();
+
+        $this->actingAs($user)
+            ->get(route('pc-register.show', $asset))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->where('meta.sign_off', null)
+                ->where('meta.handover_oversight.stage', 2)
+                ->where('record.next_signer', 'Director (receiving department)')
+            );
+    }
+
+    public function test_ict_admin_sign_off_queue_is_empty_for_pending_handovers(): void
+    {
+        $user = User::query()->where('username', 'ictadmin')->first();
+        $batch = Batch::query()->first();
+
+        PcAsset::query()->create([
+            'batch_id' => $batch->id,
+            'ref_no' => 'GCAA-PC-2026-091',
+            'make_model' => 'HP',
+            'serial_number' => 'SN-ICT-QUEUE',
+            'os' => 'Windows 11 Pro',
+            'condition_on_issue' => 'Sealed/New',
+            'status' => 'stage_1_complete',
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('handover-sign-offs.index'))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->where('oversight_only', true)
+                ->where('records.total', 0)
+            );
     }
 }

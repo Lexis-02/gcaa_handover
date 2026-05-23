@@ -41,6 +41,8 @@ class HandoverSignOffController extends Controller
             }),
             'status_labels' => config('handover.status_labels', []),
             'stage_heading' => $this->queueHeadingFor($request->user()),
+            'oversight_only' => $request->user()->can('stage.manage-all')
+                && ! $this->signOff->userMaySignAnyStage($request->user()),
         ]);
     }
 
@@ -85,6 +87,10 @@ class HandoverSignOffController extends Controller
 
     private function queueHeadingFor(\App\Models\User $user): string
     {
+        if ($user->can('stage.manage-all') && ! $this->signOff->userMaySignAnyStage($user)) {
+            return 'Handover sign-off queue (monitoring only — you do not sign forms)';
+        }
+
         if ($user->can('stage.manage-all')) {
             return 'PCs awaiting any stage sign-off';
         }

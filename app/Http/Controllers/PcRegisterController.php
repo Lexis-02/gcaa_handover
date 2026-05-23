@@ -121,6 +121,7 @@ class PcRegisterController extends Controller
                 'can_edit' => $user->can('pc.manage') && $pc_register->status === 'pending',
                 'can_delete' => $this->userCanDelete($user, $pc_register),
                 'sign_off' => $this->signOff->signOffActionFor($user, $pc_register),
+                'handover_oversight' => $this->signOff->oversightFor($user, $pc_register),
             ],
             'status_labels' => config('handover.status_labels', []),
         ]);

@@ -15,6 +15,10 @@ import {
     HandoverStageProgress,
     type StageProgress,
 } from '@/components/handover-stage-progress';
+import {
+    HandoverOversightBadge,
+    type HandoverOversight,
+} from '@/components/handover-oversight-badge';
 import { SignOffButton } from '@/components/sign-off-button';
 import { Button } from '@/components/ui/button';
 import { confirmDelete } from '@/lib/sweetalert';
@@ -64,6 +68,7 @@ type PageProps = {
         can_edit: boolean;
         can_delete: boolean;
         sign_off: SignOffAction | null;
+        handover_oversight: HandoverOversight | null;
     };
     status_labels: Record<string, string>;
 };
@@ -231,6 +236,12 @@ export default function PcRegisterShow({
                                     size="default"
                                 />
                             )}
+                            {!meta.sign_off && meta.handover_oversight && (
+                                <HandoverOversightBadge
+                                    oversight={meta.handover_oversight}
+                                    awaiting={record.next_signer}
+                                />
+                            )}
                             {meta.can_edit && (
                                 <Button asChild variant="outline" size="default">
                                     <Link href={`/pc-register/${record.id}/edit`}>
@@ -255,7 +266,7 @@ export default function PcRegisterShow({
                 </header>
 
                 <div className="flex flex-col gap-6 px-4 py-6 md:px-6">
-                    {record.next_signer && (
+                    {record.next_signer && !meta.handover_oversight && (
                         <div
                             className={cn(
                                 'flex items-start gap-3 rounded-xl border border-amber-500/35',

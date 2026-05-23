@@ -42,10 +42,12 @@ export default function HandoverSignOffsIndex({
     records,
     status_labels,
     stage_heading,
+    oversight_only = false,
 }: {
     records: PaginatedRecords;
     status_labels: Record<string, string>;
     stage_heading: string;
+    oversight_only?: boolean;
 }) {
     return (
         <>
@@ -89,7 +91,9 @@ export default function HandoverSignOffsIndex({
                                             colSpan={5}
                                             className="px-4 py-12 text-center text-muted-foreground"
                                         >
-                                            No PCs awaiting your sign-off.
+                                            {oversight_only
+                                                ? 'You oversee handovers in the PC register. PCs appear here only when you are assigned to sign a form.'
+                                                : 'No PCs awaiting your sign-off.'}
                                         </td>
                                     </tr>
                                 ) : (

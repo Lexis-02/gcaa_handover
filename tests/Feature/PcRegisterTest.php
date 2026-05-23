@@ -191,6 +191,8 @@ class PcRegisterTest extends TestCase
             ->assertOk()
             ->assertInertia(fn ($page) => $page
                 ->where('record.next_signer', 'ICT Stores Officer')
+                ->where('meta.sign_off', null)
+                ->where('meta.handover_oversight.stage', 1)
             );
     }
 

@@ -72,7 +72,7 @@ export default function NotFound({
                         Error {status}
                     </p>
                     <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                        Page not found
+                        {titleForStatus(status)}
                     </h1>
                     <p className="mt-4 max-w-md text-base text-muted-foreground">
                         {message}

@@ -11,6 +11,7 @@ const POLL_MS = 3_000;
 const REMINDER_MS = 120_000;
 const SOUND_ENABLED_KEY = 'gcaa-handover-alert-sound';
 const PLAYED_IDS_KEY = 'gcaa-handover-alert-played';
+const LOGIN_ALERT_KEY = 'gcaa-handover-login-alert-done';
 const MAX_PLAYED_IDS = 100;
 
 type NotificationsShared = {
@@ -74,13 +75,36 @@ export function useHandoverNotificationAlerts(): void {
     );
     const playedIds = useRef<Set<string>>(new Set());
     const lastReminderAt = useRef(0);
+    const pendingLoginAlert = useRef(false);
+    const previousUserId = useRef<number | null>(null);
     const userId = auth.user?.id;
+    const unreadCount = notifications?.unread_count ?? 0;
 
     useEffect(() => {
         if (notifications?.latest_id) {
             lastKnownId.current = notifications.latest_id;
         }
     }, [notifications?.latest_id]);
+
+    /** One beep per sign-in when unread sign-offs were already waiting. */
+    useEffect(() => {
+        if (!userId) {
+            previousUserId.current = null;
+            pendingLoginAlert.current = false;
+            return;
+        }
+
+        const justSignedIn = previousUserId.current !== userId;
+        previousUserId.current = userId;
+
+        if (justSignedIn) {
+            sessionStorage.removeItem(`${LOGIN_ALERT_KEY}:${userId}`);
+
+            if (unreadCount > 0 && isHandoverAlertSoundEnabled()) {
+                pendingLoginAlert.current = true;
+            }
+        }
+    }, [userId, unreadCount]);
 
     const poll = useCallback(async () => {
         if (!userId) {
@@ -117,7 +141,7 @@ export function useHandoverNotificationAlerts(): void {
             let played = false;
 
             if (unplayed.length > 0 && soundOn) {
-                playHandoverAlertSound();
+                void playHandoverAlertSound();
                 unplayed.forEach((item) => {
                     playedIds.current.add(item.id);
                 });
@@ -130,7 +154,7 @@ export function useHandoverNotificationAlerts(): void {
                 data.unread_count > 0 &&
                 now - lastReminderAt.current >= REMINDER_MS
             ) {
-                playHandoverAlertSound();
+                void playHandoverAlertSound();
                 lastReminderAt.current = now;
             }
 
@@ -146,6 +170,29 @@ export function useHandoverNotificationAlerts(): void {
         }
     }, [userId]);
 
+    const tryPlayLoginAlert = useCallback(async () => {
+        if (!userId || !pendingLoginAlert.current || unreadCount <= 0) {
+            return;
+        }
+
+        if (!isHandoverAlertSoundEnabled()) {
+            pendingLoginAlert.current = false;
+            return;
+        }
+
+        if (sessionStorage.getItem(`${LOGIN_ALERT_KEY}:${userId}`) === '1') {
+            pendingLoginAlert.current = false;
+            return;
+        }
+
+        await unlockHandoverAlertSound();
+        await playHandoverAlertSound();
+
+        sessionStorage.setItem(`${LOGIN_ALERT_KEY}:${userId}`, '1');
+        pendingLoginAlert.current = false;
+        lastReminderAt.current = Date.now();
+    }, [userId, unreadCount]);
+
     useEffect(() => {
         if (!userId) {
             return;
@@ -153,9 +200,11 @@ export function useHandoverNotificationAlerts(): void {
 
         playedIds.current = loadPlayedIds(userId);
 
-        const unlock = () => unlockHandoverAlertSound();
-        document.addEventListener('click', unlock, { once: true });
-        document.addEventListener('keydown', unlock, { once: true });
+        const onUserGesture = () => {
+            void tryPlayLoginAlert();
+        };
+        document.addEventListener('click', onUserGesture, { once: true });
+        document.addEventListener('keydown', onUserGesture, { once: true });
 
         const onVisible = () => {
             if (document.visibilityState === 'visible') {
@@ -171,11 +220,12 @@ export function useHandoverNotificationAlerts(): void {
         }, POLL_MS);
 
         return () => {
-            document.removeEventListener('click', unlock);
+            document.removeEventListener('click', onUserGesture);
+            document.removeEventListener('keydown', onUserGesture);
             document.removeEventListener('visibilitychange', onVisible);
             window.clearInterval(interval);
         };
-    }, [userId, poll]);
+    }, [userId, poll, tryPlayLoginAlert]);
 
     /** Poll immediately when shared notification props change (e.g. after navigation). */
     useEffect(() => {

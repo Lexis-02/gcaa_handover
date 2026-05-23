@@ -14,7 +14,10 @@ import {
     isHandoverAlertSoundEnabled,
     setHandoverAlertSoundEnabled,
 } from '@/hooks/use-handover-notification-alerts';
-import { playHandoverAlertSound } from '@/lib/handover-alert-sound';
+import {
+    playHandoverAlertSound,
+    unlockHandoverAlertSound,
+} from '@/lib/handover-alert-sound';
 import { pageEnter } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
@@ -107,7 +110,7 @@ export default function NotificationsIndex({
         setSoundOn(next);
         setHandoverAlertSoundEnabled(next);
         if (next) {
-            playHandoverAlertSound();
+            void unlockHandoverAlertSound().then(() => playHandoverAlertSound());
         }
     };
 

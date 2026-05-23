@@ -40,12 +40,25 @@ type SidebarContext = {
   toggleSidebar: () => void
 }
 
+const defaultSidebarContext: SidebarContext = {
+  state: "expanded",
+  open: true,
+  setOpen: () => {},
+  openMobile: false,
+  setOpenMobile: () => {},
+  isMobile: false,
+  toggleSidebar: () => {},
+}
+
 const SidebarContext = React.createContext<SidebarContext | null>(null)
 
 function useSidebar() {
   const context = React.useContext(SidebarContext)
   if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider.")
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("useSidebar was called outside of a SidebarProvider. Returning safe default context.")
+    }
+    return defaultSidebarContext
   }
 
   return context

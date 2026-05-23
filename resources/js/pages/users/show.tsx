@@ -37,7 +37,7 @@ function InfoTile({
     value: React.ReactNode;
 }) {
     return (
-        <div className="flex gap-3 rounded-xl border border-border/50 bg-muted/20 p-4">
+        <div className="flex gap-3 p-2">
             <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Icon className="size-4" />
             </div>
@@ -80,9 +80,8 @@ export default function UsersShow({
                 initial="hidden"
                 animate="visible"
             >
-                <section className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-card p-6 shadow-sm">
-                    <div className="pointer-events-none absolute -top-8 -right-8 size-32 rounded-full bg-primary/10 blur-2xl" />
-                    <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <section className="mb-6">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="flex gap-4">
                             <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-xl font-bold text-primary">
                                 {initials}

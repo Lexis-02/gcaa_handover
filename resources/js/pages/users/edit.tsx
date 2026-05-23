@@ -41,7 +41,7 @@ export default function UsersEdit({
                     </p>
                 )}
 
-                <section className="rounded-xl bg-card p-6 shadow-sm ring-1 ring-border/60">
+                <section className="mt-4">
                     <Form
                         action={`/users/${record.id}`}
                         method="put"

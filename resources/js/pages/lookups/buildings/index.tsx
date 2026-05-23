@@ -25,10 +25,10 @@ export default function BuildingsIndex({ records }: { records: Building[] }) {
                     addHref="/lookups/buildings/create"
                     addLabel="Add building"
                 />
-                <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
+                <div className="overflow-hidden">
                     <table className="w-full border-collapse text-sm">
                         <thead>
-                            <tr className="border-b bg-muted/40 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            <tr className="border-b border-border/60 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                                 <th className="px-4 py-3">Name</th>
                                 <th className="px-4 py-3">Region</th>
                                 <th className="px-4 py-3">Status</th>

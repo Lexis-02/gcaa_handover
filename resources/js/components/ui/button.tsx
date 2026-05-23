@@ -10,17 +10,17 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+          "bg-primary text-primary-foreground hover:bg-primary/90",
         success:
-          "border border-success/30 bg-success font-semibold text-success-foreground shadow-md shadow-success/20 hover:bg-success/90",
+          "bg-success font-semibold text-success-foreground hover:bg-success/90",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         "destructive-outline":
-          "border border-destructive/40 bg-background text-destructive shadow-xs hover:bg-destructive hover:text-destructive-foreground",
+          "border border-destructive/40 bg-background text-destructive hover:bg-destructive hover:text-destructive-foreground",
         outline:
-          "border border-input bg-background text-foreground shadow-xs hover:border-primary hover:bg-primary hover:text-primary-foreground",
+          "border border-input bg-background text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground",
         secondary:
-          "border border-primary/20 bg-secondary text-secondary-foreground shadow-xs hover:border-primary/40 hover:bg-primary hover:text-primary-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
           "text-foreground hover:bg-accent/70 hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",

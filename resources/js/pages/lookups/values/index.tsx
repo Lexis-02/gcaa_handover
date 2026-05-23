@@ -33,10 +33,10 @@ export default function LookupValuesIndex({
                 animate="visible"
             >
                 <LookupPageHeader addHref={`${base}/create`} addLabel={`Add value`} />
-                <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
+                <div className="overflow-hidden">
                     <table className="w-full border-collapse text-sm">
                         <thead>
-                            <tr className="border-b bg-muted/40 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            <tr className="border-b border-border/60 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                                 <th className="px-4 py-3">Label</th>
                                 <th className="px-4 py-3">Order</th>
                                 <th className="px-4 py-3">Status</th>

@@ -55,9 +55,8 @@ export default function UsersIndex({ records, filters }: PageProps) {
                 initial="hidden"
                 animate="visible"
             >
-                <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-card p-5 shadow-sm md:p-6">
-                    <div className="pointer-events-none absolute -top-10 -right-10 size-40 rounded-full bg-primary/10 blur-2xl" />
-                    <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mb-8">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex gap-4">
                             <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
                                 <Users className="size-6" />
@@ -137,11 +136,11 @@ export default function UsersIndex({ records, filters }: PageProps) {
                     </form>
                 </div>
 
-                <div className="overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border/60">
+                <div className="overflow-hidden">
                     <div className="custom-scrollbar overflow-x-auto">
                         <table className="w-full border-collapse text-sm">
                             <thead>
-                                <tr className="border-b bg-muted/40 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                <tr className="border-b border-border/60 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                                     <th className="px-4 py-3">Name</th>
                                     <th className="px-4 py-3">Username</th>
                                     <th className="px-4 py-3">Role</th>

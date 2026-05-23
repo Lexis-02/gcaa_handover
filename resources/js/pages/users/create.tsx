@@ -41,7 +41,7 @@ export default function UsersCreate({
                     instead.
                 </p>
 
-                <section className="rounded-xl bg-card p-6 shadow-sm ring-1 ring-border/60">
+                <section className="mt-4">
                     <Form action="/users" method="post" className="space-y-6">
                         {({ processing, errors }) => (
                             <UserFormFields

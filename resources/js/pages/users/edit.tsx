@@ -1,5 +1,6 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import { Pencil } from 'lucide-react';
 import { UserFormFields } from '@/pages/users/user-form';
 import { pageEnter } from '@/lib/motion';
 
@@ -21,29 +22,44 @@ export default function UsersEdit({
                 initial="hidden"
                 animate="visible"
             >
+                <div className="flex items-center gap-3">
+                    <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <Pencil className="size-5" />
+                    </div>
+                    <div>
+                        <h1 className="text-lg font-semibold">Edit user</h1>
+                        <p className="text-sm text-muted-foreground">
+                            {record.name}
+                        </p>
+                    </div>
+                </div>
+
                 {meta.is_self && (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-900 dark:text-amber-200">
                         You are editing your own account. Role and active status
                         cannot be changed here.
                     </p>
                 )}
 
-                <Form
-                    action={`/users/${record.id}`}
-                    method="put"
-                    className="space-y-6"
-                >
-                    {({ processing, errors }) => (
-                        <UserFormFields
-                            record={record}
-                            options={options}
-                            isEdit
-                            isSelf={meta.is_self}
-                            processing={processing}
-                            errors={errors}
-                        />
-                    )}
-                </Form>
+                <section className="rounded-xl bg-card p-6 shadow-sm ring-1 ring-border/60">
+                    <Form
+                        action={`/users/${record.id}`}
+                        method="put"
+                        className="space-y-6"
+                    >
+                        {({ processing, errors }) => (
+                            <UserFormFields
+                                record={record}
+                                options={options}
+                                isEdit
+                                isSelf={meta.is_self}
+                                processing={processing}
+                                errors={errors}
+                            />
+                        )}
+                    </Form>
+                </section>
+
                 <Link
                     href={`/users/${record.id}`}
                     className="text-sm text-muted-foreground hover:text-foreground"

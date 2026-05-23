@@ -166,16 +166,21 @@ class HandoverNotificationService
      */
     public function pollNewSince(User $user, ?string $sinceId = null): array
     {
-        $query = $user->unreadNotifications()->latest();
-
-        if ($sinceId) {
-            $since = $user->notifications()->where('id', $sinceId)->first();
-            if ($since) {
-                $query->where('created_at', '>', $since->created_at);
-            }
+        if ($sinceId === null || $sinceId === '') {
+            return [];
         }
 
-        return $query->get()->map(fn (DatabaseNotification $n) => [
+        $since = $user->notifications()->where('id', $sinceId)->first();
+
+        if ($since === null) {
+            return [];
+        }
+
+        return $user->unreadNotifications()
+            ->where('created_at', '>', $since->created_at)
+            ->latest()
+            ->get()
+            ->map(fn (DatabaseNotification $n) => [
             'id' => $n->id,
             'created_at' => $n->created_at?->toIso8601String(),
             ...$n->data,

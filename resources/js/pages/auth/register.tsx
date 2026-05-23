@@ -4,19 +4,58 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { login } from '@/routes';
-import { store } from '@/routes/register';
-import { User, Lock } from 'lucide-react';
+import { Lock, Shield, User } from 'lucide-react';
+
+type InvitationInfo = {
+    role: string;
+    role_label: string;
+    department: { id: number; name: string } | null;
+    expires_at: string;
+};
 
 type Props = {
     passwordRules: string;
+    registerUrl: string;
+    invitation: InvitationInfo | null;
 };
 
-export default function Register({ passwordRules }: Props) {
+export default function Register({
+    passwordRules,
+    registerUrl,
+    invitation,
+}: Props) {
     return (
         <>
             <Head title="Register" />
+            {invitation && (
+                <div className="mb-6 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3 text-sm">
+                    <div className="flex items-start gap-3">
+                        <Shield className="mt-0.5 size-5 shrink-0 text-primary" />
+                        <div>
+                            <p className="font-semibold text-foreground">
+                                Invitation to register
+                            </p>
+                            <p className="mt-1 text-muted-foreground">
+                                You will be registered as{' '}
+                                <span className="font-medium text-foreground">
+                                    {invitation.role_label}
+                                </span>
+                                {invitation.department && (
+                                    <>
+                                        {' '}
+                                        ({invitation.department.name})
+                                    </>
+                                )}
+                                . Link valid until {invitation.expires_at}.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <Form
-                {...store.form()}
+                action={registerUrl}
+                method="post"
                 resetOnSuccess={['password', 'password_confirmation']}
                 disableWhileProcessing
                 className="flex flex-col gap-6"
@@ -26,7 +65,7 @@ export default function Register({ passwordRules }: Props) {
                         <div className="grid gap-6">
                             <FormInput
                                 id="name"
-                                label="Name"
+                                label="Full name"
                                 type="text"
                                 name="name"
                                 required
@@ -46,7 +85,7 @@ export default function Register({ passwordRules }: Props) {
                                 required
                                 tabIndex={2}
                                 autoComplete="username"
-                                placeholder="Enter your username"
+                                placeholder="Choose a username"
                                 icon={User}
                                 error={errors.username}
                             />
@@ -77,20 +116,30 @@ export default function Register({ passwordRules }: Props) {
                                 error={errors.password_confirmation}
                             />
 
+                            <p className="text-xs text-muted-foreground">
+                                {passwordRules}
+                            </p>
+
                             <Button
                                 type="submit"
-                                className="mt-4 w-full bg-slate-900 hover:bg-slate-800 text-white dark:bg-gradient-to-r dark:from-[oklch(0.55_0.15_250)] dark:to-[oklch(0.40_0.12_250)] dark:hover:from-[oklch(0.60_0.16_250)] dark:hover:to-[oklch(0.45_0.13_250)] dark:text-white font-semibold text-sm hover:shadow-[0_0_15px_rgba(37,99,235,0.25)] transition-all duration-300 border-none h-11 cursor-pointer rounded-xl"
+                                className="mt-2 w-full"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
-                                {processing && <Spinner className="text-white dark:text-white mr-2" />}
+                                {processing && (
+                                    <Spinner className="mr-2 size-4" />
+                                )}
                                 Create account
                             </Button>
                         </div>
 
-                        <div className="text-center text-xs text-slate-500 dark:text-slate-400 font-medium uppercase">
-                            Already have credentials?{' '}
-                            <TextLink href={login()} tabIndex={6} className="text-slate-700 dark:text-accent hover:underline dark:hover:underline">
+                        <div className="text-center text-sm text-muted-foreground">
+                            Already have an account?{' '}
+                            <TextLink
+                                href={login()}
+                                tabIndex={6}
+                                className="font-medium text-primary hover:underline"
+                            >
                                 Log in
                             </TextLink>
                         </div>
@@ -103,5 +152,6 @@ export default function Register({ passwordRules }: Props) {
 
 Register.layout = {
     title: 'Register ICT Account',
-    description: 'Create an account to manage and authorize GCAA IT asset handovers',
+    description:
+        'Create your GCAA PC Handover account using your invitation link',
 };

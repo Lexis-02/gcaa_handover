@@ -161,7 +161,8 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Registration is invitation-only — see routes/web.php (signed URLs).
+        // Features::registration(),
         // Features::resetPasswords(),
         // Features::emailVerification(),
         Features::passkeys([

@@ -11,7 +11,6 @@ use App\Models\User;
 use App\Services\UserManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,17 +24,15 @@ class UserController extends Controller
     {
         abort_unless($request->user()?->can('users.manage'), 403);
 
-        $records = User::query()
-            ->with(['department:id,name', 'staff:id,full_name'])
-            ->orderBy('name')
-            ->get()
-            ->map(fn (User $user) => [
-                ...$this->users->serializeForList($user),
-                'can_delete' => $user->id !== $request->user()->id,
-            ]);
+        $search = $request->string('q')->trim()->toString();
+        $paginator = $this->users->paginateUsers($search !== '' ? $search : null);
 
         return Inertia::render('users/index', [
-            'records' => $records,
+            'records' => $paginator->through(fn (User $user) => [
+                ...$this->users->serializeForList($user),
+                'can_delete' => $user->id !== $request->user()->id,
+            ]),
+            'filters' => ['q' => $search],
         ]);
     }
 
@@ -72,12 +69,14 @@ class UserController extends Controller
             'message' => 'User account created.',
         ]);
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.show', $user);
     }
 
     public function show(Request $request, User $user): Response
     {
         abort_unless($request->user()?->can('users.manage'), 403);
+
+        $user->load(['department:id,name', 'staff:id,full_name,staff_number']);
 
         return Inertia::render('users/show', [
             'record' => $this->users->serializeForDetail($user),

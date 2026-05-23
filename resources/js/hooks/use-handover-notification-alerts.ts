@@ -1,16 +1,27 @@
 import { router, usePage } from '@inertiajs/react';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import {
     playHandoverAlertSound,
     unlockHandoverAlertSound,
 } from '@/lib/handover-alert-sound';
 
-const POLL_MS = 20_000;
+/** Fast poll so new sign-off alerts are detected within a few seconds. */
+const POLL_MS = 3_000;
+/** Re-alert while unread handover notifications remain (until sign-off / dismiss). */
+const REMINDER_MS = 120_000;
 const SOUND_ENABLED_KEY = 'gcaa-handover-alert-sound';
+const PLAYED_IDS_KEY = 'gcaa-handover-alert-played';
+const MAX_PLAYED_IDS = 100;
 
 type NotificationsShared = {
     unread_count?: number;
     latest_id?: string | null;
+};
+
+type PollResponse = {
+    unread_count: number;
+    new: { id: string }[];
+    latest_id: string | null;
 };
 
 export function isHandoverAlertSoundEnabled(): boolean {
@@ -25,6 +36,33 @@ export function setHandoverAlertSoundEnabled(enabled: boolean): void {
     localStorage.setItem(SOUND_ENABLED_KEY, enabled ? 'on' : 'off');
 }
 
+function loadPlayedIds(userId: number): Set<string> {
+    if (typeof window === 'undefined') {
+        return new Set();
+    }
+
+    try {
+        const raw = sessionStorage.getItem(`${PLAYED_IDS_KEY}:${userId}`);
+        if (!raw) {
+            return new Set();
+        }
+
+        const parsed = JSON.parse(raw) as string[];
+
+        return new Set(Array.isArray(parsed) ? parsed : []);
+    } catch {
+        return new Set();
+    }
+}
+
+function savePlayedIds(userId: number, ids: Set<string>): void {
+    const trimmed = [...ids].slice(-MAX_PLAYED_IDS);
+    sessionStorage.setItem(
+        `${PLAYED_IDS_KEY}:${userId}`,
+        JSON.stringify(trimmed),
+    );
+}
+
 export function useHandoverNotificationAlerts(): void {
     const { auth, notifications } = usePage<{
         auth: { user: { id: number } | null };
@@ -34,83 +72,117 @@ export function useHandoverNotificationAlerts(): void {
     const lastKnownId = useRef<string | null>(
         notifications?.latest_id ?? null,
     );
-    const unreadRef = useRef(notifications?.unread_count ?? 0);
+    const playedIds = useRef<Set<string>>(new Set());
+    const lastReminderAt = useRef(0);
+    const userId = auth.user?.id;
 
     useEffect(() => {
-        unreadRef.current = notifications?.unread_count ?? 0;
         if (notifications?.latest_id) {
             lastKnownId.current = notifications.latest_id;
         }
-    }, [notifications?.latest_id, notifications?.unread_count]);
+    }, [notifications?.latest_id]);
 
-    useEffect(() => {
-        if (!auth.user) {
+    const poll = useCallback(async () => {
+        if (!userId) {
             return;
         }
+
+        try {
+            const params = new URLSearchParams();
+            if (lastKnownId.current) {
+                params.set('since', lastKnownId.current);
+            }
+
+            const response = await fetch(
+                `/notifications/poll?${params.toString()}`,
+                {
+                    headers: {
+                        Accept: 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                },
+            );
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = (await response.json()) as PollResponse;
+            const soundOn = isHandoverAlertSoundEnabled();
+            const unplayed = data.new.filter(
+                (item) => !playedIds.current.has(item.id),
+            );
+            const now = Date.now();
+            let played = false;
+
+            if (unplayed.length > 0 && soundOn) {
+                playHandoverAlertSound();
+                unplayed.forEach((item) => {
+                    playedIds.current.add(item.id);
+                });
+                savePlayedIds(userId, playedIds.current);
+                lastReminderAt.current = now;
+                played = true;
+            } else if (
+                !played &&
+                soundOn &&
+                data.unread_count > 0 &&
+                now - lastReminderAt.current >= REMINDER_MS
+            ) {
+                playHandoverAlertSound();
+                lastReminderAt.current = now;
+            }
+
+            if (data.latest_id) {
+                lastKnownId.current = data.latest_id;
+            }
+
+            if (data.new.length > 0) {
+                router.reload({ only: ['notifications'] });
+            }
+        } catch {
+            // Ignore network errors during background poll
+        }
+    }, [userId]);
+
+    useEffect(() => {
+        if (!userId) {
+            return;
+        }
+
+        playedIds.current = loadPlayedIds(userId);
 
         const unlock = () => unlockHandoverAlertSound();
         document.addEventListener('click', unlock, { once: true });
         document.addEventListener('keydown', unlock, { once: true });
 
-        const poll = async () => {
-            try {
-                const params = new URLSearchParams();
-                if (lastKnownId.current) {
-                    params.set('since', lastKnownId.current);
-                }
-
-                const response = await fetch(
-                    `/notifications/poll?${params.toString()}`,
-                    {
-                        headers: {
-                            Accept: 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                        credentials: 'same-origin',
-                    },
-                );
-
-                if (!response.ok) {
-                    return;
-                }
-
-                const data = (await response.json()) as {
-                    unread_count: number;
-                    new: { id: string }[];
-                    latest_id: string | null;
-                };
-
-                const hasNew =
-                    data.new.length > 0 ||
-                    data.unread_count > unreadRef.current;
-
-                if (hasNew && isHandoverAlertSoundEnabled()) {
-                    playHandoverAlertSound();
-                }
-
-                unreadRef.current = data.unread_count;
-                if (data.latest_id) {
-                    lastKnownId.current = data.latest_id;
-                }
-
-                if (data.new.length > 0) {
-                    router.reload({
-                        only: ['notifications'],
-                        preserveScroll: true,
-                        preserveState: true,
-                    });
-                }
-            } catch {
-                // Ignore network errors during background poll
+        const onVisible = () => {
+            if (document.visibilityState === 'visible') {
+                void poll();
             }
         };
 
-        const interval = window.setInterval(poll, POLL_MS);
+        document.addEventListener('visibilitychange', onVisible);
+
+        void poll();
+        const interval = window.setInterval(() => {
+            void poll();
+        }, POLL_MS);
 
         return () => {
             document.removeEventListener('click', unlock);
-            document.removeEventListener('keydown', unlock);
+            document.removeEventListener('visibilitychange', onVisible);
             window.clearInterval(interval);
         };
-    }, [auth.user]);
+    }, [userId, poll]);
+
+    /** Poll immediately when shared notification props change (e.g. after navigation). */
+    useEffect(() => {
+        if (!userId) {
+            return;
+        }
+
+        void poll();
+    }, [userId, poll, notifications?.latest_id, notifications?.unread_count]);
 }

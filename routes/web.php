@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserInvitationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HandoverGuideController;
 use App\Http\Controllers\HandoverSignOffController;
@@ -14,13 +15,15 @@ use App\Http\Controllers\PcHandoverController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\PcRegisterController;
 use App\Http\Middleware\EnsureValidInvitation;
-use Laravel\Fortify\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\RegisterInvitationController;
 
 Route::redirect('/', '/login')->name('home');
 
+Route::redirect('/register', '/login')->name('register.redirect');
+
 Route::middleware(['web', EnsureValidInvitation::class])->group(function () {
-    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
+    Route::get('/register/{invitation}', [RegisterInvitationController::class, 'create'])->name('register');
+    Route::post('/register/{invitation}', [RegisterInvitationController::class, 'store'])->name('register.store');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -35,6 +38,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 
     Route::resource('batches', BatchController::class);
+    Route::get('users/invitations', [UserInvitationController::class, 'index'])
+        ->name('users.invitations.index');
+    Route::post('users/invitations', [UserInvitationController::class, 'store'])
+        ->name('users.invitations.store');
+    Route::delete('users/invitations/{invitation}', [UserInvitationController::class, 'destroy'])
+        ->name('users.invitations.destroy');
     Route::resource('users', UserController::class);
 
     Route::resource('pc-register', PcRegisterController::class)

@@ -15,6 +15,7 @@ import {
     Laptop,
     LayoutGrid,
     LifeBuoy,
+    Link2,
     Monitor,
     Package,
     Pencil,
@@ -57,6 +58,7 @@ const iconMap: Record<string, LucideIcon> = {
     eye: Eye,
     pencil: Pencil,
     circle: Circle,
+    'link-2': Link2,
 };
 
 export function resolveNavIcon(name?: string): LucideIcon | null {

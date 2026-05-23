@@ -1,3 +1,4 @@
+import AppLogo from '@/components/app-logo';
 import { FlashAlerts } from '@/components/flash-alerts';
 import { useAppearance } from '@/hooks/use-appearance';
 import { Moon, Sun } from 'lucide-react';
@@ -174,14 +175,9 @@ export default function AuthLayout({
                 </div>
 
                 {/* Auth form — centred vertically */}
-                <div className="flex flex-col justify-center flex-1 w-full max-w-[340px] mx-auto py-8">
-                    {/* GCAA Logo */}
-                    <div className="mb-6 flex justify-start">
-                        <img
-                            src="/assets/logo.png"
-                            alt="GCAA Logo"
-                            className="h-16 w-auto object-contain"
-                        />
+                <div className="flex flex-col justify-center flex-1 w-full max-w-[380px] mx-auto py-8">
+                    <div className="mb-8">
+                        <AppLogo variant="auth" />
                     </div>
 
                     <div className="mb-7 space-y-2">

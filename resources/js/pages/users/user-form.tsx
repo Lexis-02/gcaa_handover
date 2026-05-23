@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 
 type Options = {
     roles: string[];
+    role_labels?: Record<string, string>;
     departments: { id: number; name: string }[];
     staff: {
         id: number;
@@ -78,7 +79,8 @@ export function UserFormFields({
                     <option value="">Select role</option>
                     {options.roles.map((role) => (
                         <option key={role} value={role}>
-                            {role.replace(/_/g, ' ')}
+                            {options.role_labels?.[role] ??
+                                role.replace(/_/g, ' ')}
                         </option>
                     ))}
                 </select>

@@ -66,6 +66,13 @@ $usersChildren = [
         'permissions' => ['users.manage'],
     ],
     [
+        'title' => 'Registration links',
+        'route' => 'users.invitations.index',
+        'icon' => 'link-2',
+        'match' => 'exact',
+        'permissions' => ['users.manage'],
+    ],
+    [
         'title' => 'Add',
         'route' => 'users.create',
         'icon' => 'plus',

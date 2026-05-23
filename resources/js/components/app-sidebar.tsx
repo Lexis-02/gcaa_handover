@@ -37,7 +37,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader className="border-b border-sidebar-border px-3 py-5">
+            <SidebarHeader className="border-b border-sidebar-border px-2.5 py-4">
                 <motion.div
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -48,9 +48,19 @@ export function AppSidebar() {
                             <SidebarMenuButton
                                 size="lg"
                                 asChild
-                                className="h-auto min-h-[3.25rem] px-3 py-3 hover:bg-white/[0.06]"
+                                className={[
+                                    'h-auto w-full bg-transparent px-3.5 py-3.5',
+                                    'hover:bg-white/[0.06]',
+                                    'group-data-[collapsible=icon]/sidebar-wrapper:justify-center',
+                                    'group-data-[collapsible=icon]/sidebar-wrapper:px-2',
+                                    'group-data-[collapsible=icon]/sidebar-wrapper:py-2.5',
+                                ].join(' ')}
                             >
-                                <Link href={dashboard()} prefetch>
+                                <Link
+                                    href={dashboard()}
+                                    prefetch
+                                    className="flex w-full min-w-0 items-center"
+                                >
                                     <AppLogo />
                                 </Link>
                             </SidebarMenuButton>

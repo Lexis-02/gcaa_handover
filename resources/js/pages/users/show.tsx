@@ -1,5 +1,13 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import {
+    Building2,
+    Calendar,
+    Clock,
+    Pencil,
+    Shield,
+    User,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { confirmDelete } from '@/lib/sweetalert';
 import { pageEnter } from '@/lib/motion';
@@ -11,20 +19,34 @@ type UserDetail = {
     username: string;
     department: { name: string } | null;
     staff: { full_name: string } | null;
-    roles: string[];
+    role: string | null;
+    role_label: string | null;
     is_active: boolean;
     last_login_at: string | null;
     created_at: string | null;
     updated_at: string | null;
 };
 
-function Field({ label, value }: { label: string; value: React.ReactNode }) {
+function InfoTile({
+    icon: Icon,
+    label,
+    value,
+}: {
+    icon: React.ComponentType<{ className?: string }>;
+    label: string;
+    value: React.ReactNode;
+}) {
     return (
-        <div className="space-y-1">
-            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                {label}
-            </dt>
-            <dd className="text-sm font-medium">{value ?? '—'}</dd>
+        <div className="flex gap-3 rounded-xl border border-border/50 bg-muted/20 p-4">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Icon className="size-4" />
+            </div>
+            <div className="min-w-0">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {label}
+                </p>
+                <p className="mt-0.5 text-sm font-medium">{value ?? '—'}</p>
+            </div>
         </div>
     );
 }
@@ -42,6 +64,13 @@ export default function UsersShow({
         router.delete(`/users/${record.id}`);
     };
 
+    const initials = record.name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
+
     return (
         <>
             <Head title={`${record.name} — User`} />
@@ -51,65 +80,89 @@ export default function UsersShow({
                 initial="hidden"
                 animate="visible"
             >
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div>
-                        <h1 className="text-2xl font-bold">{record.name}</h1>
-                        <p className="font-mono text-sm text-muted-foreground">
-                            @{record.username}
-                        </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        {meta.can_edit && (
-                            <Button asChild variant="outline">
-                                <Link href={`/users/${record.id}/edit`}>
-                                    Edit
-                                </Link>
-                            </Button>
-                        )}
-                        {meta.can_delete && (
-                            <Button
-                                type="button"
-                                variant="destructive-outline"
-                                onClick={handleDelete}
-                            >
-                                Delete
-                            </Button>
-                        )}
-                        <Button asChild variant="ghost">
-                            <Link href="/users">Back</Link>
-                        </Button>
-                    </div>
-                </div>
-
-                <section className="rounded-xl bg-card p-6 shadow-sm ring-1 ring-border/60">
-                    <dl className="grid gap-4 sm:grid-cols-2">
-                        <Field
-                            label="Role"
-                            value={record.roles
-                                .map((r) => r.replace(/_/g, ' '))
-                                .join(', ')}
-                        />
-                        <Field label="Department" value={record.department?.name} />
-                        <Field label="Staff profile" value={record.staff?.full_name} />
-                        <Field
-                            label="Status"
-                            value={
+                <section className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-card p-6 shadow-sm">
+                    <div className="pointer-events-none absolute -top-8 -right-8 size-32 rounded-full bg-primary/10 blur-2xl" />
+                    <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="flex gap-4">
+                            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-xl font-bold text-primary">
+                                {initials}
+                            </div>
+                            <div>
+                                <h1 className="text-2xl font-bold tracking-tight">
+                                    {record.name}
+                                </h1>
+                                <p className="mt-1 font-mono text-sm text-muted-foreground">
+                                    @{record.username}
+                                </p>
                                 <span
                                     className={cn(
-                                        'inline-flex rounded-full px-2 py-0.5 text-xs font-medium',
+                                        'mt-2 inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold',
                                         record.is_active
-                                            ? 'bg-emerald-500/15 text-emerald-800'
+                                            ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300'
                                             : 'bg-muted text-muted-foreground',
                                     )}
                                 >
                                     {record.is_active ? 'Active' : 'Inactive'}
                                 </span>
-                            }
-                        />
-                        <Field label="Last login" value={record.last_login_at} />
-                        <Field label="Created" value={record.created_at} />
-                        <Field label="Updated" value={record.updated_at} />
-                    </dl>
+                            </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {meta.can_edit && (
+                                <Button asChild variant="outline" size="sm">
+                                    <Link href={`/users/${record.id}/edit`}>
+                                        <Pencil className="size-4" />
+                                        Edit
+                                    </Link>
+                                </Button>
+                            )}
+                            {meta.can_delete && (
+                                <Button
+                                    type="button"
+                                    variant="destructive-outline"
+                                    size="sm"
+                                    onClick={handleDelete}
+                                >
+                                    Delete
+                                </Button>
+                            )}
+                            <Button asChild variant="ghost" size="sm">
+                                <Link href="/users">Back</Link>
+                            </Button>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="grid gap-3 sm:grid-cols-2">
+                    <InfoTile
+                        icon={Shield}
+                        label="Role"
+                        value={record.role_label}
+                    />
+                    <InfoTile
+                        icon={Building2}
+                        label="Department"
+                        value={record.department?.name}
+                    />
+                    <InfoTile
+                        icon={User}
+                        label="Staff profile"
+                        value={record.staff?.full_name}
+                    />
+                    <InfoTile
+                        icon={Clock}
+                        label="Last login"
+                        value={record.last_login_at ?? 'Never'}
+                    />
+                    <InfoTile
+                        icon={Calendar}
+                        label="Created"
+                        value={record.created_at}
+                    />
+                    <InfoTile
+                        icon={Calendar}
+                        label="Last updated"
+                        value={record.updated_at}
+                    />
                 </section>
             </motion.div>
         </>

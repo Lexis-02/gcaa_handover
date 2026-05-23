@@ -9,7 +9,10 @@ type Props = React.ComponentProps<'main'> & {
 export function AppContent({ variant = 'sidebar', children, ...props }: Props) {
     if (variant === 'sidebar') {
         return (
-            <SidebarInset className="custom-scrollbar overflow-auto" {...props}>
+            <SidebarInset
+                className="flex h-svh max-h-svh flex-col overflow-hidden"
+                {...props}
+            >
                 {children}
             </SidebarInset>
         );

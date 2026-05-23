@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BatchController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HandoverGuideController;
 use App\Http\Controllers\HandoverSignOffController;
@@ -21,7 +22,8 @@ Route::middleware(['web', EnsureValidInvitation::class])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('batches', BatchController::class)->only(['index', 'create', 'store']);
+    Route::resource('batches', BatchController::class);
+    Route::resource('users', UserController::class);
 
     Route::resource('pc-register', PcRegisterController::class)
         ->parameters(['pc-register' => 'pc_register']);

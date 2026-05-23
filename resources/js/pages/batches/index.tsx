@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import { ListRowActions } from '@/components/list-row-actions';
 import { pageEnter } from '@/lib/motion';
 
 type BatchRecord = {
@@ -9,27 +10,40 @@ type BatchRecord = {
     total_pcs: number;
     serial_from: string;
     serial_to: string;
-    notes: string | null;
     pcs_registered: number;
     created_at: string | null;
+    can_edit: boolean;
+    can_delete: boolean;
 };
 
-type PageProps = {
+export default function BatchesIndex({
+    batches,
+    meta,
+}: {
     batches: BatchRecord[];
     meta: { can_create: boolean };
-};
-
-export default function BatchesIndex({ batches, meta }: PageProps) {
+}) {
     return (
         <>
             <Head title="Handover batches" />
             <motion.div
-                className="flex flex-1 flex-col gap-4 p-4 md:p-6"
+                className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 p-4 md:p-6"
                 variants={pageEnter}
                 initial="hidden"
                 animate="visible"
             >
-                <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
+                {meta.can_create && (
+                    <div className="flex justify-end">
+                        <Link
+                            href="/batches/create"
+                            className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                        >
+                            Add batch
+                        </Link>
+                    </div>
+                )}
+
+                <div className="overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border/60">
                     <div className="custom-scrollbar overflow-x-auto">
                         <table className="w-full border-collapse text-sm">
                             <thead>
@@ -40,13 +54,16 @@ export default function BatchesIndex({ batches, meta }: PageProps) {
                                     <th className="px-4 py-3">Serial range</th>
                                     <th className="px-4 py-3">Registered</th>
                                     <th className="px-4 py-3">Created</th>
+                                    <th className="px-4 py-3 text-right">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {batches.length === 0 ? (
                                     <tr>
                                         <td
-                                            colSpan={6}
+                                            colSpan={7}
                                             className="px-4 py-12 text-center text-muted-foreground"
                                         >
                                             No batches yet.
@@ -55,7 +72,7 @@ export default function BatchesIndex({ batches, meta }: PageProps) {
                                                     {' '}
                                                     <Link
                                                         href="/batches/create"
-                                                        className="font-medium text-primary underline-offset-4 hover:underline"
+                                                        className="font-medium text-primary hover:underline"
                                                     >
                                                         Create the first batch
                                                     </Link>
@@ -69,8 +86,13 @@ export default function BatchesIndex({ batches, meta }: PageProps) {
                                             key={batch.id}
                                             className="border-b border-border/40 hover:bg-muted/20"
                                         >
-                                            <td className="px-4 py-3 font-mono font-medium">
-                                                {batch.batch_code}
+                                            <td className="px-4 py-3">
+                                                <Link
+                                                    href={`/batches/${batch.id}`}
+                                                    className="font-mono font-medium text-primary hover:underline"
+                                                >
+                                                    {batch.batch_code}
+                                                </Link>
                                             </td>
                                             <td className="px-4 py-3">
                                                 {batch.year}
@@ -89,6 +111,16 @@ export default function BatchesIndex({ batches, meta }: PageProps) {
                                             </td>
                                             <td className="px-4 py-3 text-muted-foreground">
                                                 {batch.created_at ?? '—'}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <ListRowActions
+                                                    viewHref={`/batches/${batch.id}`}
+                                                    editHref={`/batches/${batch.id}/edit`}
+                                                    deleteUrl={`/batches/${batch.id}`}
+                                                    itemLabel={batch.batch_code}
+                                                    showEdit={batch.can_edit}
+                                                    showDelete={batch.can_delete}
+                                                />
                                             </td>
                                         </tr>
                                     ))

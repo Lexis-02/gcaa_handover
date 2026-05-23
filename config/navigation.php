@@ -57,6 +57,22 @@ $batchChildren = [
     ],
 ];
 
+$usersChildren = [
+    [
+        'title' => 'View',
+        'route' => 'users.index',
+        'icon' => 'eye',
+        'match' => 'exact',
+        'permissions' => ['users.manage'],
+    ],
+    [
+        'title' => 'Add',
+        'route' => 'users.create',
+        'icon' => 'plus',
+        'permissions' => ['users.manage'],
+    ],
+];
+
 $lookupChildren = [
     [
         'title' => 'Departments',
@@ -157,11 +173,7 @@ return [
             'slug' => 'users',
             'icon' => 'users',
             'permissions' => ['users.manage'],
-            'children' => [
-                ['title' => 'View', 'action' => 'view', 'icon' => 'eye'],
-                ['title' => 'Add', 'action' => 'add', 'icon' => 'plus'],
-                ['title' => 'Edit', 'action' => 'edit', 'icon' => 'pencil'],
-            ],
+            'children' => $usersChildren,
         ],
     ],
 

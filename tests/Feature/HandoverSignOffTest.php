@@ -111,6 +111,35 @@ class HandoverSignOffTest extends TestCase
         $this->assertDatabaseMissing('pc_assets', ['id' => $asset->id]);
     }
 
+    public function test_stores_officer_queue_excludes_pc_after_stage_one_sign_off(): void
+    {
+        $user = User::query()->where('username', 'storesofficer')->first();
+        $batch = Batch::query()->first();
+
+        $asset = PcAsset::query()->create([
+            'batch_id' => $batch->id,
+            'ref_no' => 'GCAA-PC-2026-080',
+            'make_model' => 'Dell',
+            'serial_number' => 'SN-QUEUE-1',
+            'os' => 'Windows 11 Pro',
+            'condition_on_issue' => 'Sealed/New',
+            'status' => 'pending',
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('pc-register.sign-off.store', $asset))
+            ->assertRedirect();
+
+        $response = $this->actingAs($user)
+            ->get(route('handover-sign-offs.index'))
+            ->assertOk();
+
+        $ids = collect($response->original->getData()['page']['props']['records']['data'])
+            ->pluck('id');
+
+        $this->assertFalse($ids->contains($asset->id));
+    }
+
     public function test_handover_guide_page_is_available(): void
     {
         $user = User::query()->where('username', 'storesofficer')->first();

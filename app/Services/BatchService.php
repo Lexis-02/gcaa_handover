@@ -41,4 +41,17 @@ class BatchService
             'created_at' => $batch->created_at?->format('Y-m-d'),
         ];
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function serializeForDetail(Batch $batch): array
+    {
+        return [
+            ...$this->serializeForList($batch),
+            'notes' => $batch->notes,
+            'created_by_name' => $batch->creator?->name,
+            'updated_at' => $batch->updated_at?->format('Y-m-d H:i'),
+        ];
+    }
 }

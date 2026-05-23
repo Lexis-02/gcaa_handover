@@ -90,6 +90,8 @@ export async function confirmAction(options: {
         title: options.title,
         text: options.text,
         showCancelButton: true,
+        showDenyButton: false,
+        showCloseButton: false,
         confirmButtonText: options.confirmText ?? 'Yes, continue',
         cancelButtonText: options.cancelText ?? 'Cancel',
         reverseButtons: true,

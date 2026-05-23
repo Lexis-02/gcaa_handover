@@ -14,12 +14,15 @@ type RegisterStatusFilterProps = {
     value: StatusFilterValue;
     search?: string;
     className?: string;
+    /** Plain = no outer box border (for toolbar alignment) */
+    appearance?: 'boxed' | 'plain';
 };
 
 export function RegisterStatusFilter({
     value,
     search,
     className,
+    appearance = 'plain',
 }: RegisterStatusFilterProps) {
     const apply = (status: StatusFilterValue) => {
         const params: Record<string, string> = {};
@@ -41,7 +44,10 @@ export function RegisterStatusFilter({
     return (
         <div
             className={cn(
-                'inline-flex flex-wrap gap-1 rounded-xl border border-border/60 bg-muted/30 p-1',
+                'inline-flex flex-wrap gap-1 rounded-lg p-1',
+                appearance === 'boxed'
+                    ? 'border border-border/60 bg-muted/30'
+                    : 'bg-muted/40',
                 className,
             )}
             role="tablist"

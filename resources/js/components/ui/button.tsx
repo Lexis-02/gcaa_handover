@@ -5,22 +5,22 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow,transform] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,background-color,border-color,box-shadow,opacity] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "btn-fill overflow-hidden bg-primary text-primary-foreground shadow-xs [--btn-fill:rgb(255_255_255/0.22)] hover:shadow-sm",
+          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
         success:
-          "btn-fill overflow-hidden border border-success/30 bg-success font-semibold text-success-foreground shadow-md shadow-success/20 [--btn-fill:rgb(255_255_255/0.18)] hover:border-success hover:shadow-lg hover:shadow-success/30",
+          "border border-success/30 bg-success font-semibold text-success-foreground shadow-md shadow-success/20 hover:bg-success/90",
         destructive:
-          "btn-fill overflow-hidden bg-destructive text-destructive-foreground shadow-xs [--btn-fill:rgb(255_255_255/0.18)] focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+          "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90",
         "destructive-outline":
-          "btn-fill overflow-hidden border border-destructive/40 bg-background shadow-xs [--btn-fill:var(--destructive)]",
+          "border border-destructive/40 bg-background text-destructive shadow-xs hover:bg-destructive hover:text-destructive-foreground",
         outline:
-          "btn-fill overflow-hidden border border-input bg-background text-foreground shadow-xs [--btn-fill:var(--primary)] hover:border-primary hover:text-primary-foreground",
+          "border border-input bg-background text-foreground shadow-xs hover:border-primary hover:bg-primary hover:text-primary-foreground",
         secondary:
-          "btn-fill overflow-hidden bg-secondary text-secondary-foreground shadow-xs [--btn-fill:var(--primary)] hover:text-primary-foreground",
+          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost:
           "text-foreground hover:bg-accent/70 hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
@@ -44,58 +44,19 @@ function Button({
   variant,
   size,
   asChild = false,
-  children,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }) {
   const Comp = asChild ? Slot : "button"
-  const classes = cn(buttonVariants({ variant, size, className }))
-  /* asChild (e.g. Link) cannot use the fill overlay — it breaks label visibility */
-  const useFill =
-    !asChild &&
-    (variant === "default" ||
-      variant === "success" ||
-      variant === "destructive" ||
-      variant === "destructive-outline" ||
-      variant === "outline" ||
-      variant === "secondary")
-
-  const dataVariant =
-    variant === "destructive-outline"
-      ? "destructive-outline"
-      : variant === "outline"
-        ? "outline"
-        : undefined
-
-  if (asChild) {
-    return (
-      <Comp data-slot="button" className={classes} {...props}>
-        {children}
-      </Comp>
-    )
-  }
-
-  if (!useFill) {
-    return (
-      <Comp data-slot="button" className={classes} {...props}>
-        {children}
-      </Comp>
-    )
-  }
 
   return (
     <Comp
       data-slot="button"
-      data-variant={dataVariant}
-      className={classes}
+      className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    >
-      <span className="relative z-10 inline-flex items-center justify-center gap-2">
-        {children}
-      </span>
-    </Comp>
+    />
   )
 }
 

@@ -101,12 +101,12 @@ class HandoverSignOffService
 
     public function signOffQueue(User $user, int $perPage = 15): LengthAwarePaginator
     {
-        return $this->queueQuery($user)
+        return $this->actionableQueueQuery($user)
             ->with([
                 'department:id,name',
                 'building:id,name',
                 'assignedStaff:id,full_name',
-                'handoverStages:id,pc_asset_id,stage',
+                'handoverStages:id,pc_asset_id,stage,actioned_by',
             ])
             ->latest('id')
             ->paginate($perPage)
@@ -115,19 +115,18 @@ class HandoverSignOffService
 
     public function queueCountFor(User $user): int
     {
-        return $this->queueQuery($user)->count();
+        return $this->actionableQueueQuery($user)->count();
     }
 
-    private function queueQuery(User $user): Builder
+    /**
+     * PCs that still need a sign-off from this user (excludes PCs they already signed).
+     */
+    private function actionableQueueQuery(User $user): Builder
     {
         $query = PcAsset::query();
 
         if ($user->can('stage.manage-all')) {
-            return $query->whereIn('status', [
-                'pending',
-                'stage_1_complete',
-                'stage_2_complete',
-            ]);
+            return $this->manageAllActionableQuery($query, $user);
         }
 
         if ($user->can('stage1.signoff')) {
@@ -137,16 +136,47 @@ class HandoverSignOffService
         if ($user->can('stage2.signoff')) {
             return $query
                 ->where('status', 'stage_1_complete')
-                ->where('department_id', $user->department_id);
+                ->where('department_id', $user->department_id)
+                ->whereDoesntHave('handoverStages', fn (Builder $q) => $q
+                    ->where('stage', 2)
+                    ->where('actioned_by', $user->id));
         }
 
         if ($user->can('stage3.signoff')) {
             return $query
                 ->where('status', 'stage_2_complete')
-                ->where('assigned_staff_id', $user->staff_id);
+                ->where('assigned_staff_id', $user->staff_id)
+                ->whereDoesntHave('handoverStages', fn (Builder $q) => $q
+                    ->where('stage', 3)
+                    ->where('actioned_by', $user->id));
         }
 
         return $query->whereRaw('0 = 1');
+    }
+
+    private function manageAllActionableQuery(Builder $query, User $user): Builder
+    {
+        return $query->where(function (Builder $outer) use ($user) {
+            $outer
+                ->where(function (Builder $q) use ($user) {
+                    $q->where('status', 'pending')
+                        ->whereDoesntHave('handoverStages', fn (Builder $s) => $s
+                            ->where('stage', 1)
+                            ->where('actioned_by', $user->id));
+                })
+                ->orWhere(function (Builder $q) use ($user) {
+                    $q->where('status', 'stage_1_complete')
+                        ->whereDoesntHave('handoverStages', fn (Builder $s) => $s
+                            ->where('stage', 2)
+                            ->where('actioned_by', $user->id));
+                })
+                ->orWhere(function (Builder $q) use ($user) {
+                    $q->where('status', 'stage_2_complete')
+                        ->whereDoesntHave('handoverStages', fn (Builder $s) => $s
+                            ->where('stage', 3)
+                            ->where('actioned_by', $user->id));
+                });
+        });
     }
 
     private function directorMaySignStage2(User $user, PcAsset $asset): bool

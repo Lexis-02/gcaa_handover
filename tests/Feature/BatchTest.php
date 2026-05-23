@@ -52,6 +52,31 @@ class BatchTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_ict_admin_can_view_and_delete_empty_batch(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('ict_admin');
+
+        $this->actingAs($user)
+            ->post(route('batches.store'), [
+                'year' => 2027,
+                'total_pcs' => 10,
+                'serial_from' => '001',
+            ]);
+
+        $batch = Batch::query()->where('year', 2027)->first();
+
+        $this->actingAs($user)
+            ->get(route('batches.show', $batch))
+            ->assertOk();
+
+        $this->actingAs($user)
+            ->delete(route('batches.destroy', $batch))
+            ->assertRedirect(route('batches.index'));
+
+        $this->assertDatabaseMissing('batches', ['id' => $batch->id]);
+    }
+
     public function test_ict_admin_cannot_access_users_nav_permission(): void
     {
         $user = User::factory()->create();

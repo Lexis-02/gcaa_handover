@@ -134,16 +134,15 @@ export default function HandoverSignOffsIndex({
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex flex-col items-end gap-2">
-                                                    {row.can_sign_off &&
-                                                        row.sign_off && (
-                                                            <SignOffButton
-                                                                pcId={row.id}
-                                                                signOff={
-                                                                    row.sign_off
-                                                                }
-                                                                size="sm"
-                                                            />
-                                                        )}
+                                                    {row.sign_off && (
+                                                        <SignOffButton
+                                                            pcId={row.id}
+                                                            signOff={
+                                                                row.sign_off
+                                                            }
+                                                            size="sm"
+                                                        />
+                                                    )}
                                                     <ListRowActions
                                                         viewHref={`/pc-register/${row.id}`}
                                                         showEdit={false}

@@ -18,7 +18,7 @@ export function AppSidebarHeader({ pageTitle = '' }: { pageTitle?: string }) {
     };
 
     return (
-        <div className="sticky top-0 z-30 shrink-0 border-b border-border/50 bg-card/90 shadow-[0_1px_0_0_rgba(0,0,0,0.04)] backdrop-blur-md supports-[backdrop-filter]:bg-card/75">
+        <div className="z-40 shrink-0 border-b border-border/50 bg-card shadow-[0_1px_0_0_rgba(0,0,0,0.04)]">
             <header className="flex h-[4.25rem] items-center gap-3 px-4 md:gap-5 md:px-6 lg:px-8">
                 <div className="flex min-w-0 items-center gap-2.5">
                     <SidebarTrigger

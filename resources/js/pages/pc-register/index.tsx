@@ -73,43 +73,49 @@ export default function PcRegisterIndex({
         <>
             <Head title="Handover register" />
             <motion.div
-                className="flex flex-1 flex-col gap-4 p-4 md:p-6"
+                className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 p-4 md:p-6"
                 variants={pageEnter}
                 initial="hidden"
                 animate="visible"
             >
-                <RegisterStatusFilter
-                    value={filters.status ?? ''}
-                    search={filters.q}
-                />
-
-                <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground">
-                    <span>
-                        {records.total}{' '}
-                        {records.total === 1 ? 'record' : 'records'}
-                        {hasSearch && (
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="text-sm text-muted-foreground">
+                        <span>
+                            {records.total}{' '}
+                            {records.total === 1 ? 'record' : 'records'}
+                            {hasSearch && (
+                                <>
+                                    {' '}
+                                    matching &ldquo;
+                                    <span className="font-medium text-foreground">
+                                        {filters.q}
+                                    </span>
+                                    &rdquo;
+                                </>
+                            )}
+                        </span>
+                        {(hasSearch || hasStatusFilter) && (
                             <>
-                                {' '}
-                                matching &ldquo;
-                                <span className="font-medium text-foreground">
-                                    {filters.q}
-                                </span>
-                                &rdquo;
+                                {' · '}
+                                <Link
+                                    href="/pc-register"
+                                    className="text-primary hover:underline"
+                                    preserveScroll
+                                >
+                                    Clear filters
+                                </Link>
                             </>
                         )}
-                    </span>
-                    {(hasSearch || hasStatusFilter) && (
-                        <Link
-                            href="/pc-register"
-                            className="text-primary hover:underline"
-                            preserveScroll
-                        >
-                            Clear filters
-                        </Link>
-                    )}
+                    </div>
+                    <RegisterStatusFilter
+                        value={filters.status ?? ''}
+                        search={filters.q}
+                        appearance="plain"
+                        className="sm:ml-auto"
+                    />
                 </div>
 
-                <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
+                <div className="overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border/60">
                     <div className="custom-scrollbar overflow-x-auto">
                         <table className="w-full border-collapse text-sm">
                             <thead>

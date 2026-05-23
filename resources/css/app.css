@@ -214,16 +214,28 @@
 
 /* SweetAlert2 — separated action buttons */
 @layer components {
+    .swal2-popup-gcaa .swal2-actions {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .swal2-popup-gcaa .swal2-deny,
+    .swal2-popup-gcaa .swal2-close {
+        display: none !important;
+    }
+
     .swal2-actions-gcaa {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: wrap !important;
         align-items: center !important;
-        justify-content: flex-end !important;
+        justify-content: center !important;
         gap: 0.75rem !important;
-        width: calc(100% - 2.5rem) !important;
-        margin: 0 1.25rem 1.25rem !important;
-        padding: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 1.25rem 1.25rem !important;
+        box-sizing: border-box !important;
     }
 
     .swal2-btn {

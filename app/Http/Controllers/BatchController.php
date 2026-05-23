@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBatchRequest;
+use App\Http\Requests\UpdateBatchRequest;
 use App\Models\Batch;
 use App\Services\BatchService;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +28,11 @@ class BatchController extends Controller
             ->orderByDesc('year')
             ->orderByDesc('id')
             ->get()
-            ->map(fn (Batch $batch) => $this->batches->serializeForList($batch));
+            ->map(fn (Batch $batch) => [
+                ...$this->batches->serializeForList($batch),
+                'can_delete' => $batch->pc_assets_count === 0,
+                'can_edit' => true,
+            ]);
 
         return Inertia::render('batches/index', [
             'batches' => $records,
@@ -69,6 +74,92 @@ class BatchController extends Controller
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => "Batch {$batch->batch_code} created. You can now add PCs to the register.",
+        ]);
+
+        return redirect()->route('batches.index');
+    }
+
+    public function show(Request $request, Batch $batch): Response
+    {
+        abort_unless($request->user()?->can('batch.create'), 403);
+
+        $batch->loadCount('pcAssets')->load('creator:id,name');
+
+        return Inertia::render('batches/show', [
+            'batch' => $this->batches->serializeForDetail($batch),
+            'meta' => [
+                'can_edit' => true,
+                'can_delete' => $batch->pc_assets_count === 0,
+            ],
+        ]);
+    }
+
+    public function edit(Request $request, Batch $batch): Response
+    {
+        abort_unless($request->user()?->can('batch.create'), 403);
+
+        $batch->loadCount('pcAssets');
+
+        return Inertia::render('batches/edit', [
+            'batch' => $batch->only([
+                'id', 'batch_code', 'year', 'total_pcs', 'serial_from', 'serial_to', 'notes',
+            ]),
+            'meta' => [
+                'has_pcs' => $batch->pc_assets_count > 0,
+            ],
+        ]);
+    }
+
+    public function update(UpdateBatchRequest $request, Batch $batch): RedirectResponse
+    {
+        $batch->loadCount('pcAssets');
+        $totalPcs = (int) $request->validated('total_pcs');
+
+        if ($batch->pc_assets_count > $totalPcs) {
+            Inertia::flash('toast', [
+                'type' => 'error',
+                'message' => "Total PCs cannot be less than {$batch->pc_assets_count} already registered.",
+            ]);
+
+            return redirect()->route('batches.edit', $batch);
+        }
+
+        $serialFrom = $request->validated('serial_from');
+
+        $batch->update([
+            'total_pcs' => $totalPcs,
+            'serial_from' => $serialFrom,
+            'serial_to' => $this->batches->computeSerialTo($serialFrom, $totalPcs),
+            'notes' => $request->validated('notes'),
+        ]);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => 'Batch updated.',
+        ]);
+
+        return redirect()->route('batches.show', $batch);
+    }
+
+    public function destroy(Request $request, Batch $batch): RedirectResponse
+    {
+        abort_unless($request->user()?->can('batch.create'), 403);
+
+        if ($batch->pcAssets()->exists()) {
+            Inertia::flash('toast', [
+                'type' => 'error',
+                'message' => 'Cannot delete a batch that has PCs in the register.',
+            ]);
+
+            return redirect()->route('batches.show', $batch);
+        }
+
+        $code = $batch->batch_code;
+        $batch->delete();
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => "Batch {$code} deleted.",
         ]);
 
         return redirect()->route('batches.index');

@@ -1,7 +1,6 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 import AppLogo from '@/components/app-logo';
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -13,52 +12,64 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { resolveNavIcon } from '@/lib/nav-icons';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import type { NavItem, SharedNavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'ICT Support',
-        href: '#',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Handover Guide',
-        href: '#',
-        icon: BookOpen,
-    },
-];
+function mapNavItems(items: SharedNavItem[]): NavItem[] {
+    return items.map((item) => ({
+        title: item.title,
+        href: item.href,
+        icon: resolveNavIcon(item.icon),
+        badge: item.badge,
+        children: item.children?.map((child) => ({
+            title: child.title,
+            href: child.href,
+            icon: resolveNavIcon(child.icon),
+        })),
+    }));
+}
 
 export function AppSidebar() {
+    const { navigation } = usePage().props;
+    const mainNavItems = mapNavItems(navigation?.main ?? []);
+
     return (
         <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
-                                <AppLogo />
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
+            <SidebarHeader className="border-b border-sidebar-border px-2 py-4">
+                <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                >
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton
+                                size="lg"
+                                asChild
+                                className="h-auto px-3 py-2 hover:bg-white/[0.06]"
+                            >
+                                <Link href={dashboard()} prefetch>
+                                    <AppLogo />
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </motion.div>
             </SidebarHeader>
 
-            <SidebarContent>
+            <SidebarContent className="custom-scrollbar overflow-y-auto">
                 <NavMain items={mainNavItems} />
             </SidebarContent>
 
-            <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
-                <NavUser />
+            <SidebarFooter className="border-t border-sidebar-border px-2 py-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.12, ease: [0.4, 0, 0.2, 1] }}
+                >
+                    <NavUser />
+                </motion.div>
             </SidebarFooter>
         </Sidebar>
     );

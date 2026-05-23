@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\DashboardService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,12 +36,25 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        $dashboard = app(DashboardService::class);
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user ? [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'username' => $user->username,
+                    'department_id' => $user->department_id,
+                    'is_active' => $user->is_active,
+                    'roles' => $user->getRoleNames(),
+                    'permissions' => $user->getAllPermissions()->pluck('name'),
+                    'primary_role' => $dashboard->resolvePrimaryRole($user),
+                ] : null,
             ],
+            'navigation' => $user ? $dashboard->navigationFor($user) : ['main' => [], 'footer' => []],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
+@import './brand.css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -60,6 +61,11 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+
     /* PC Handover Network Dashboard Animations */
     --animate-radar-sweep: radar-sweep 12s linear infinite;
     --animate-radar-ping: radar-ping 4s cubic-bezier(0, 0, 0.2, 1) infinite;
@@ -96,72 +102,6 @@
     --animate-edge-shimmer: edge-shimmer 4s ease-in-out infinite;
 }
 
-:root {
-    --background: oklch(0.985 0.005 240);
-    --foreground: oklch(0.15 0.03 245);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.15 0.03 245);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.15 0.03 245);
-    --primary: oklch(0.28 0.07 245);
-    --primary-foreground: oklch(0.985 0.005 240);
-    --secondary: oklch(0.94 0.015 245);
-    --secondary-foreground: oklch(0.28 0.07 245);
-    --muted: oklch(0.94 0.015 245);
-    --muted-foreground: oklch(0.45 0.03 245);
-    --accent: oklch(0.55 0.20 250);
-    --accent-foreground: oklch(0.985 0.005 240);
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.985 0 0);
-    --border: oklch(0.88 0.02 245);
-    --input: oklch(0.88 0.02 245);
-    --ring: oklch(0.28 0.07 245);
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
-    --radius: 0.75rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.15 0.03 245);
-    --sidebar-primary: oklch(0.28 0.07 245);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.94 0.015 245);
-    --sidebar-accent-foreground: oklch(0.28 0.07 245);
-    --sidebar-border: oklch(0.88 0.02 245);
-    --sidebar-ring: oklch(0.88 0.02 245);
-}
-
-.dark {
-    --background: oklch(0.11 0.025 245);
-    --foreground: oklch(0.97 0.01 245);
-    --card: oklch(0.14 0.025 245);
-    --card-foreground: oklch(0.97 0.01 245);
-    --popover: oklch(0.14 0.025 245);
-    --popover-foreground: oklch(0.97 0.01 245);
-    --primary: oklch(0.72 0.12 245);
-    --primary-foreground: oklch(0.11 0.025 245);
-    --secondary: oklch(0.18 0.025 245);
-    --secondary-foreground: oklch(0.97 0.01 245);
-    --muted: oklch(0.18 0.025 245);
-    --muted-foreground: oklch(0.65 0.02 245);
-    --accent: oklch(0.68 0.16 245);
-    --accent-foreground: oklch(0.11 0.025 245);
-    --destructive: oklch(0.396 0.141 25.723);
-    --destructive-foreground: oklch(0.97 0.01 245);
-    --border: oklch(0.22 0.03 245);
-    --input: oklch(0.22 0.03 245);
-    --ring: oklch(0.72 0.12 245);
-    --sidebar: oklch(0.13 0.025 245);
-    --sidebar-foreground: oklch(0.97 0.01 245);
-    --sidebar-primary: oklch(0.72 0.12 245);
-    --sidebar-primary-foreground: oklch(0.11 0.025 245);
-    --sidebar-accent: oklch(0.18 0.025 245);
-    --sidebar-accent-foreground: oklch(0.97 0.01 245);
-    --sidebar-border: oklch(0.22 0.03 245);
-    --sidebar-ring: oklch(0.22 0.03 245);
-}
-
 @layer base {
     * {
         @apply border-border;
@@ -170,6 +110,66 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    /* Custom scrollbars — sidebar + app */
+    [data-sidebar='content'],
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    }
+
+    [data-sidebar='content']::-webkit-scrollbar,
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+
+    [data-sidebar='content']::-webkit-scrollbar-track,
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: var(--scrollbar-track);
+        border-radius: 999px;
+        margin: 4px 0;
+    }
+
+    [data-sidebar='content']::-webkit-scrollbar-thumb,
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 999px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+    }
+
+    [data-sidebar='content']::-webkit-scrollbar-thumb:hover,
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover);
+        background-clip: padding-box;
+    }
+}
+
+/* Button hover — left-to-right fill */
+@layer components {
+    .btn-fill::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: var(--btn-fill, rgb(255 255 255 / 0.2));
+        transform: translateX(-101%);
+        transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-fill:hover::before {
+        transform: translateX(0);
+    }
+
+    .btn-fill:disabled::before {
+        display: none;
+    }
+}
+
+/* Dashboard card elevation — uses brand shadow token */
+.dashboard-card {
+    box-shadow: var(--dashboard-shadow);
 }
 
 /* Custom GCAA Theme Utilities */
@@ -231,22 +231,24 @@
 
 /* Tactical Glow & Grid Utilities */
 .text-glow-blue {
-    text-shadow: 0 0 8px oklch(0.68 0.16 245 / 0.5), 0 0 15px oklch(0.68 0.16 245 / 0.3);
+    text-shadow: 0 0 8px color-mix(in srgb, var(--brand-primary) 50%, transparent),
+        0 0 15px color-mix(in srgb, var(--brand-primary) 30%, transparent);
 }
 .text-glow-navy {
-    text-shadow: 0 0 8px oklch(0.55 0.20 250 / 0.5), 0 0 15px oklch(0.55 0.20 250 / 0.3);
+    text-shadow: 0 0 8px color-mix(in srgb, var(--brand-navy) 50%, transparent),
+        0 0 15px color-mix(in srgb, var(--brand-navy) 30%, transparent);
 }
 .border-glow-blue {
-    box-shadow: 0 0 12px oklch(0.68 0.16 245 / 0.25);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--brand-primary) 25%, transparent);
 }
 .border-glow-navy {
-    box-shadow: 0 0 12px oklch(0.55 0.20 250 / 0.25);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--brand-navy) 25%, transparent);
 }
 .bg-navy-grid {
-    background-image: 
-        radial-gradient(circle, oklch(0.55 0.20 250 / 0.05) 1px, transparent 1px),
-        linear-gradient(to right, oklch(0.55 0.20 250 / 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, oklch(0.55 0.20 250 / 0.02) 1px, transparent 1px);
+    background-image:
+        radial-gradient(circle, color-mix(in srgb, var(--brand-primary) 5%, transparent) 1px, transparent 1px),
+        linear-gradient(to right, color-mix(in srgb, var(--brand-primary) 2%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--brand-primary) 2%, transparent) 1px, transparent 1px);
     background-size: 40px 40px, 20px 20px, 20px 20px;
     background-position: center;
 }

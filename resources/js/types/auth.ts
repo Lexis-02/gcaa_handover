@@ -1,17 +1,21 @@
 export type User = {
     id: number;
     name: string;
-    email: string;
+    username: string;
+    department_id?: number | null;
+    is_active?: boolean;
+    roles: string[];
+    permissions: string[];
+    primary_role: string;
     avatar?: string;
-    email_verified_at: string | null;
+    email_verified_at?: string | null;
     two_factor_enabled?: boolean;
-    created_at: string;
-    updated_at: string;
-    [key: string]: unknown;
+    created_at?: string;
+    updated_at?: string;
 };
 
 export type Auth = {
-    user: User;
+    user: User | null;
 };
 
 /* @chisel-passkeys */

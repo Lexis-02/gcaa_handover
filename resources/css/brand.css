@@ -1,0 +1,116 @@
+/**
+ * GCAA Handover — Brand palette (single source of truth)
+ *
+ * Change ONLY the "Brand anchors" block. Semantic tokens derive from these.
+ */
+
+:root {
+    /* ── Brand anchors — edit here ───────────────────────────── */
+    --brand-primary: #0a3a53;
+    --brand-primary-dark: #0277b3;
+    --brand-primary-light: #5bc4f0;
+    --brand-sidebar: #0393d9;
+    --brand-sidebar-dark: #0284c7;
+    --brand-navy: #0c3d5c;
+    --brand-navy-muted: #155a7a;
+    --brand-surface: #f0f9fd;
+    --brand-card: #ffffff;
+    --brand-success: #16a34a;
+    --brand-warning: #ea580c;
+    --brand-danger: #dc2626;
+
+    /* ── Semantic tokens (derived) ───────────────────────────── */
+    --background: color-mix(in srgb, var(--brand-surface) 94%, white);
+    --foreground: var(--brand-navy);
+    --card: var(--brand-card);
+    --card-foreground: var(--brand-navy);
+    --popover: var(--brand-card);
+    --popover-foreground: var(--brand-navy);
+
+    --primary: var(--brand-primary);
+    --primary-foreground: #ffffff;
+    --secondary: color-mix(in srgb, var(--brand-primary) 10%, var(--brand-surface));
+    --secondary-foreground: var(--brand-navy);
+    --muted: color-mix(in srgb, var(--brand-navy) 6%, var(--brand-surface));
+    --muted-foreground: color-mix(in srgb, var(--brand-navy) 50%, transparent);
+    --accent: color-mix(in srgb, var(--brand-primary-light) 35%, white);
+    --accent-foreground: var(--brand-primary-dark);
+
+    --destructive: var(--brand-danger);
+    --destructive-foreground: #ffffff;
+    --success: var(--brand-success);
+    --success-foreground: #ffffff;
+    --warning: var(--brand-warning);
+    --warning-foreground: #ffffff;
+
+    --border: color-mix(in srgb, var(--brand-primary) 14%, transparent);
+    --input: color-mix(in srgb, var(--brand-navy) 12%, transparent);
+    --ring: var(--brand-primary);
+
+    --chart-1: var(--brand-primary);
+    --chart-2: var(--brand-success);
+    --chart-3: var(--brand-warning);
+    --chart-4: var(--brand-primary-light);
+    --chart-5: color-mix(in srgb, var(--brand-navy) 35%, #94a3b8);
+
+    --radius: 0.75rem;
+
+    --sidebar: var(--brand-sidebar);
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #ffffff;
+    --sidebar-primary-foreground: var(--brand-primary-dark);
+    --sidebar-accent: var(--brand-sidebar-dark);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgba(255, 255, 255, 0.18);
+    --sidebar-ring: rgba(255, 255, 255, 0.5);
+    --sidebar-active-bg: rgba(255, 255, 255, 0.14);
+    --sidebar-active-border: rgba(255, 255, 255, 0.65);
+
+    --scrollbar-track: rgba(255, 255, 255, 0.12);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.45);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.65);
+
+    --dashboard-shadow: 0 1px 3px color-mix(in srgb, var(--brand-navy) 6%, transparent),
+        0 8px 24px color-mix(in srgb, var(--brand-primary) 8%, transparent);
+    --dashboard-gradient: linear-gradient(
+        135deg,
+        var(--brand-primary) 0%,
+        var(--brand-primary-dark) 100%
+    );
+}
+
+.dark {
+    --brand-surface: #071a26;
+    --brand-card: #0c2433;
+
+    --background: var(--brand-surface);
+    --foreground: #f1f5f9;
+    --card: var(--brand-card);
+    --card-foreground: #f1f5f9;
+    --popover: var(--brand-card);
+    --popover-foreground: #f1f5f9;
+
+    --primary: var(--brand-primary-light);
+    --primary-foreground: var(--brand-navy);
+    --secondary: color-mix(in srgb, var(--brand-primary) 18%, var(--brand-card));
+    --secondary-foreground: #f1f5f9;
+    --muted: var(--brand-navy-muted);
+    --muted-foreground: #94a3b8;
+    --accent: color-mix(in srgb, var(--brand-primary) 25%, var(--brand-card));
+    --accent-foreground: #e2e8f0;
+
+    --border: color-mix(in srgb, white 10%, transparent);
+    --input: color-mix(in srgb, white 12%, transparent);
+    --ring: var(--brand-primary-light);
+
+    --sidebar: var(--brand-sidebar-dark);
+    --sidebar-foreground: #ffffff;
+    --sidebar-accent: color-mix(in srgb, black 15%, var(--brand-sidebar));
+    --sidebar-border: rgba(255, 255, 255, 0.12);
+
+    --scrollbar-track: rgba(0, 0, 0, 0.15);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.35);
+
+    --dashboard-shadow: 0 1px 3px rgba(0, 0, 0, 0.35),
+        0 8px 32px color-mix(in srgb, var(--brand-primary) 15%, transparent);
+}

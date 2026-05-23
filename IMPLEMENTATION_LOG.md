@@ -38,6 +38,7 @@ Track successes and failures so we can move faster. **Update this file on every 
 | 2026-05-23 | Dashboard cleared | Header only; cards removed for later sprint |
 | 2026-05-23 | Sidebar UX upgrade | Navy background, roomier padding, CRUD dropdowns (Add/View/Edit), framer-motion + date-fns |
 | 2026-05-23 | Brand refresh `#0393D9` | Sidebar sky blue, complementary palette in `brand.css`, fill-hover buttons, custom scrollbar |
+| 2026-05-23 | Official color scale | Primary 50–900 + semantic success/warning/info/danger in `brand.css` |
 | 2026-05-23 | App header toolbar | Search (Ctrl+K), notifications, theme toggle, Welcome user; dashboard cleared |
 | 2026-05-23 | Browser tab + logo | Title "PC Handover", favicon `/assets/logo.png` |
 

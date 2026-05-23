@@ -8,6 +8,7 @@ use App\Http\Requests\StorePcHandoverRequest;
 use App\Http\Requests\UpdatePcHandoverRequest;
 use App\Models\OldPcReturn;
 use App\Models\PcAsset;
+use App\Services\HandoverNotificationService;
 use App\Services\PcHandoverService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class PcHandoverController extends Controller
 {
     public function __construct(
         private readonly PcHandoverService $handover,
+        private readonly HandoverNotificationService $notifications,
     ) {}
 
     public function index(Request $request): Response
@@ -66,6 +68,10 @@ class PcHandoverController extends Controller
             ...$request->validated(),
             'staff_id' => $pc->assigned_staff_id,
         ]);
+
+        $this->notifications->notifyPendingSigners(
+            $pc->fresh(['handoverStages', 'assignedStaff', 'department', 'oldPcReturn']),
+        );
 
         Inertia::flash('toast', [
             'type' => 'success',

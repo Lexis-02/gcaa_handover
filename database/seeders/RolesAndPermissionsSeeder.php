@@ -46,6 +46,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'stage.manage-all',
             'reports.all',
             'forms.generate',
+            'pc.view',
         ]);
 
         $storesOfficer = Role::updateOrCreate(['name' => 'stores_officer'], ['guard_name' => 'web']);

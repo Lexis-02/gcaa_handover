@@ -1,20 +1,25 @@
+import { motion } from 'framer-motion';
 import { resolveKpiIcon } from '@/lib/nav-icons';
+import { pageItem } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import type { DashboardKpi } from '@/types';
 
 type KpiCardProps = {
     kpi: DashboardKpi;
+    index?: number;
     className?: string;
 };
 
-export function KpiCard({ kpi, className }: KpiCardProps) {
+export function KpiCard({ kpi, index = 0, className }: KpiCardProps) {
     const Icon = resolveKpiIcon(kpi.icon);
     const hasTrend = kpi.trend !== null && kpi.trend !== undefined;
 
     return (
-        <div
+        <motion.div
+            variants={pageItem}
+            transition={{ delay: index * 0.05 }}
             className={cn(
-                'dashboard-card flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-5 transition-shadow hover:shadow-md',
+                'flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-5 shadow-sm',
                 className,
             )}
         >
@@ -27,7 +32,7 @@ export function KpiCard({ kpi, className }: KpiCardProps) {
                 </span>
             </div>
             <div className="flex items-end justify-between gap-2">
-                <p className="text-3xl font-bold tracking-tight text-foreground">
+                <p className="font-mono text-3xl font-bold tracking-tight text-foreground">
                     {kpi.value.toLocaleString()}
                     {kpi.trend_suffix && (
                         <span className="text-lg font-semibold text-muted-foreground">
@@ -50,6 +55,6 @@ export function KpiCard({ kpi, className }: KpiCardProps) {
                     </span>
                 )}
             </div>
-        </div>
+        </motion.div>
     );
 }

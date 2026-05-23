@@ -13,14 +13,10 @@ class SecurityTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_security_page_is_displayed()
+    public function test_security_page_is_displayed(): void
     {
-        $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
+        $this->skipUnlessFortifyHas(Features::passkeys());
 
-        Features::twoFactorAuthentication([
-            'confirm' => true,
-            'confirmPassword' => true,
-        ]);
         Features::passkeys([
             'confirmPassword' => true,
         ]);
@@ -33,32 +29,22 @@ class SecurityTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('settings/security')
                 ->where('canManagePasskeys', true)
-                ->where('passkeys', [])
-                ->where('canManageTwoFactor', true)
-                ->where('twoFactorEnabled', false),
+                ->where('passkeys', []),
             );
     }
 
-    public function test_security_page_requires_password_confirmation_when_enabled()
+    public function test_security_page_requires_password_confirmation(): void
     {
-        $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
-
         $user = User::factory()->create();
 
-        Features::twoFactorAuthentication([
-            'confirm' => true,
-            'confirmPassword' => true,
-        ]);
-
-        $response = $this->actingAs($user)
-            ->get(route('security.edit'));
-
-        $response->assertRedirect(route('password.confirm'));
+        $this->actingAs($user)
+            ->get(route('security.edit'))
+            ->assertRedirect(route('password.confirm'));
     }
 
-    public function test_security_page_renders_without_two_factor_when_feature_is_disabled()
+    public function test_security_page_renders_without_passkeys_when_feature_is_disabled(): void
     {
-        $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
+        $this->skipUnlessFortifyHas(Features::passkeys());
 
         config(['fortify.features' => []]);
 
@@ -71,14 +57,11 @@ class SecurityTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('settings/security')
                 ->where('canManagePasskeys', false)
-                ->where('passkeys', [])
-                ->where('canManageTwoFactor', false)
-                ->missing('twoFactorEnabled')
-                ->missing('requiresConfirmation'),
+                ->where('passkeys', []),
             );
     }
 
-    public function test_password_can_be_updated()
+    public function test_password_can_be_updated(): void
     {
         $user = User::factory()->create();
 
@@ -98,7 +81,7 @@ class SecurityTest extends TestCase
         $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
     }
 
-    public function test_correct_password_must_be_provided_to_update_password()
+    public function test_correct_password_must_be_provided_to_update_password(): void
     {
         $user = User::factory()->create();
 

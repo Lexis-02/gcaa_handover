@@ -120,6 +120,19 @@ return [
             'icon' => 'layout-grid',
         ],
         [
+            'title' => 'Notifications',
+            'route' => 'notifications.index',
+            'icon' => 'bell',
+            'permissions' => [
+                'stage1.signoff',
+                'stage2.signoff',
+                'stage3.signoff',
+                'old-pc.submit',
+                'pc.manage',
+                'stage.manage-all',
+            ],
+        ],
+        [
             'title' => 'Batches',
             'slug' => 'batches',
             'icon' => 'package',
@@ -168,15 +181,10 @@ return [
             ],
         ],
         [
-            'title' => 'Summary or report',
-            'slug' => 'summary-report',
+            'title' => 'Summary',
+            'route' => 'summary.index',
             'icon' => 'bar-chart-3',
-            'permissions' => ['reports.all', 'reports.dept'],
-            'children' => [
-                ['title' => 'View', 'action' => 'view', 'icon' => 'eye'],
-                ['title' => 'Add', 'action' => 'add', 'icon' => 'plus'],
-                ['title' => 'Edit', 'action' => 'edit', 'icon' => 'pencil'],
-            ],
+            'permissions' => ['reports.all', 'reports.dept', 'stage.manage-all', 'pc.manage'],
         ],
         [
             'title' => 'Lookups',

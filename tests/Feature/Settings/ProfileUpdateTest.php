@@ -10,7 +10,7 @@ class ProfileUpdateTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_profile_page_is_displayed()
+    public function test_legacy_settings_profile_redirects_to_profile_page()
     {
         $user = User::factory()->create();
 
@@ -18,7 +18,7 @@ class ProfileUpdateTest extends TestCase
             ->actingAs($user)
             ->get(route('profile.edit'));
 
-        $response->assertOk();
+        $response->assertRedirect(route('profile.index'));
     }
 
     public function test_profile_information_can_be_updated()
@@ -34,7 +34,7 @@ class ProfileUpdateTest extends TestCase
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect(route('profile.edit'));
+            ->assertRedirect(route('profile.index'));
 
         $user->refresh();
 
@@ -66,14 +66,14 @@ class ProfileUpdateTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->from(route('profile.edit'))
+            ->from(route('profile.index'))
             ->delete(route('profile.destroy'), [
                 'password' => 'wrong-password',
             ]);
 
         $response
             ->assertSessionHasErrors('password')
-            ->assertRedirect(route('profile.edit'));
+            ->assertRedirect(route('profile.index'));
 
         $this->assertNotNull($user->fresh());
     }

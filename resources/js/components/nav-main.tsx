@@ -21,7 +21,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
     const { isCurrentUrl } = useCurrentUrl();
 
     return (
-        <SidebarGroup className="gap-2 px-3 py-4">
+        <SidebarGroup className="gap-2 overflow-visible px-3 py-4">
             <motion.div
                 variants={sidebarList}
                 initial="hidden"

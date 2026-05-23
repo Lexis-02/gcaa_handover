@@ -9,7 +9,19 @@ export type DashboardKpi = {
 export type PipelineSegment = {
     label: string;
     value: number;
-    color: string;
+    fill: string;
+};
+
+export type PipelineChartPoint = {
+    label: string;
+    count: number;
+    fill: string;
+};
+
+export type WeeklyActivityPoint = {
+    label: string;
+    date: string;
+    count: number;
 };
 
 export type RecentAsset = {
@@ -21,11 +33,21 @@ export type RecentAsset = {
     updated_at: string | null;
 };
 
+export type DashboardInsight = {
+    title: string;
+    body: string;
+    cta: string;
+    href: string;
+};
+
 export type DashboardStats = {
     role: string;
     kpis: DashboardKpi[];
     pipeline: PipelineSegment[];
-    recent: RecentAsset[];
+    pipeline_chart: PipelineChartPoint[];
+    weekly_activity: WeeklyActivityPoint[];
+    can_view_register: boolean;
+    insight: DashboardInsight;
     summary: {
         total_pcs: number;
         complete: number;
@@ -34,7 +56,17 @@ export type DashboardStats = {
         pending_stage_3: number;
         awaiting_return: number;
         completion_rate: number;
+        sign_off_queue: number;
+        unread_notifications: number;
     };
+};
+
+export type DashboardQuickLink = {
+    title: string;
+    description: string;
+    icon: string;
+    href: string;
+    badge: number | null;
 };
 
 export type DashboardMeta = {

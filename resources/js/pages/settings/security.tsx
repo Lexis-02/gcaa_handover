@@ -4,8 +4,6 @@ import SecurityController from '@/actions/App/Http/Controllers/Settings/Security
 import Heading from '@/components/heading';
 import type { Props as ManagePasskeysProps } from '@/components/manage-passkeys';
 import ManagePasskeys from '@/components/manage-passkeys';
-import type { Props as ManageTwoFactorProps } from '@/components/manage-two-factor';
-import ManageTwoFactor from '@/components/manage-two-factor';
 import { FormInput } from '@/components/form-input';
 import { Button } from '@/components/ui/button';
 import { edit } from '@/routes/security';
@@ -13,8 +11,7 @@ import { Lock } from 'lucide-react';
 
 type Props = {
     passwordRules: string;
-} & ManagePasskeysProps &
-    ManageTwoFactorProps;
+} & ManagePasskeysProps;
 
 export default function Security(props: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
@@ -24,9 +21,13 @@ export default function Security(props: Props) {
         <>
             <Head title="Security settings" />
 
-            <h1 className="sr-only">Security settings</h1>
+            <div className="mx-auto max-w-2xl space-y-8 px-4 py-6">
+                <Heading
+                    title="Security"
+                    description="Update your password and manage passkeys"
+                />
 
-            <div className="space-y-6">
+                <div className="space-y-6">
                 <Heading
                     variant="small"
                     title="Update password"
@@ -105,18 +106,13 @@ export default function Security(props: Props) {
                         </>
                     )}
                 </Form>
+                </div>
+
+                <ManagePasskeys
+                    canManagePasskeys={props.canManagePasskeys}
+                    passkeys={props.passkeys}
+                />
             </div>
-
-            <ManageTwoFactor
-                canManageTwoFactor={props.canManageTwoFactor}
-                requiresConfirmation={props.requiresConfirmation}
-                twoFactorEnabled={props.twoFactorEnabled}
-            />
-
-            <ManagePasskeys
-                canManagePasskeys={props.canManagePasskeys}
-                passkeys={props.passkeys}
-            />
         </>
     );
 }

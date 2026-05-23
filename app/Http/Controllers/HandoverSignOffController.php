@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SignOffPcHandoverRequest;
 use App\Models\PcAsset;
+use App\Services\HandoverNotificationService;
 use App\Services\HandoverSignOffService;
 use App\Services\PcRegisterService;
 use Illuminate\Http\RedirectResponse;
@@ -18,6 +19,7 @@ class HandoverSignOffController extends Controller
     public function __construct(
         private readonly HandoverSignOffService $signOff,
         private readonly PcRegisterService $register,
+        private readonly HandoverNotificationService $notifications,
     ) {}
 
     public function index(Request $request): Response
@@ -50,7 +52,10 @@ class HandoverSignOffController extends Controller
             $request->validated('notes'),
         );
 
-        $stage = $this->signOff->pendingStageFor($pc_register->fresh(['handoverStages']));
+        $fresh = $pc_register->fresh(['handoverStages', 'assignedStaff', 'department', 'oldPcReturn']);
+        $this->notifications->notifyPendingSigners($fresh);
+
+        $stage = $this->signOff->pendingStageFor($fresh);
 
         Inertia::flash('toast', [
             'type' => 'success',

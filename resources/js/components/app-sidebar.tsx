@@ -59,7 +59,7 @@ export function AppSidebar() {
                 </motion.div>
             </SidebarHeader>
 
-            <SidebarContent className="custom-scrollbar overflow-y-auto">
+            <SidebarContent className="custom-scrollbar overflow-x-visible overflow-y-auto">
                 <NavMain items={mainNavItems} />
             </SidebarContent>
 

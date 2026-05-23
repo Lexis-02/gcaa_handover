@@ -15,35 +15,32 @@ type PageProps = {
 export default function PcHandoverEdit({ record, options }: PageProps) {
     return (
         <>
-            <Head title="Edit PC handover" />
+            <Head title={`Edit ${record.ref_no ?? 'handover'}`} />
             <motion.div
-                className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-4 md:p-6"
+                className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 p-4 md:p-6"
                 variants={pageEnter}
                 initial="hidden"
                 animate="visible"
             >
-                <p className="text-sm text-muted-foreground">
-                    Update old PC return details for this handover.{' '}
-                    <Link
-                        href="/pc-handover"
-                        className="text-primary hover:underline"
-                    >
-                        Back to PC Handover
-                    </Link>
-                </p>
-
                 <HandoverForm
                     action={`/pc-handover/${record.id}`}
                     method="put"
                     record={record}
                     options={options}
-                    submitLabel="Update handover details"
+                    submitLabel="Save changes"
                 />
+
+                <Link
+                    href="/pc-handover"
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                    ← Back to PC Handover
+                </Link>
             </motion.div>
         </>
     );
 }
 
 PcHandoverEdit.layout = {
-    title: 'Edit PC handover',
+    title: 'Edit',
 };

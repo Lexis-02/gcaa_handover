@@ -1,18 +1,15 @@
 import { Form } from '@inertiajs/react';
 import { FormInput } from '@/components/form-input';
+import {
+    PcAssetCombobox,
+    type PcAssetOption,
+} from '@/components/pc-asset-combobox';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 export type HandoverFormOptions = {
-    pcs?: {
-        id: number;
-        ref_no: string;
-        serial_number: string;
-        make_model: string;
-        end_user: string | null;
-        department: string | null;
-    }[];
+    pcs?: PcAssetOption[];
     old_pc_conditions: string[];
     yes_no_options: string[];
 };
@@ -70,42 +67,11 @@ export function HandoverForm({
             {({ processing, errors }) => (
                 <>
                     {showPcSelect && options.pcs && (
-                        <div className="space-y-2">
-                            <Label className={formLabelClassName}>
-                                New PC (ref / serial)
-                            </Label>
-                            <select
-                                name="pc_asset_id"
-                                defaultValue={record.pc_asset_id ?? ''}
-                                required
-                                className={selectClassName}
-                            >
-                                <option value="" disabled>
-                                    Select a PC…
-                                </option>
-                                {options.pcs.map((pc) => (
-                                    <option key={pc.id} value={pc.id}>
-                                        {pc.ref_no} · {pc.serial_number} —{' '}
-                                        {pc.end_user ?? 'Unassigned'}
-                                        {pc.department
-                                            ? ` (${pc.department})`
-                                            : ''}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.pc_asset_id && (
-                                <p className="text-sm text-destructive">
-                                    {errors.pc_asset_id}
-                                </p>
-                            )}
-                            {options.pcs.length === 0 && (
-                                <p className="text-sm text-muted-foreground">
-                                    No PCs are available. Assign an end user in
-                                    the register first, and ensure old PC
-                                    details have not already been recorded.
-                                </p>
-                            )}
-                        </div>
+                        <PcAssetCombobox
+                            pcs={options.pcs}
+                            defaultValue={record.pc_asset_id}
+                            error={errors.pc_asset_id}
+                        />
                     )}
 
                     {!showPcSelect && record.ref_no && (

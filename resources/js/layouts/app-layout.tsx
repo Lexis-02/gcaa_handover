@@ -1,4 +1,5 @@
 import { FlashAlerts } from '@/components/flash-alerts';
+import { HandoverNotificationListener } from '@/components/handover-notification-listener';
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -16,6 +17,7 @@ export default function AppLayout({
 
     return (
         <AppLayoutTemplate pageTitle={pageTitle}>
+            <HandoverNotificationListener />
             <FlashAlerts />
             {children}
         </AppLayoutTemplate>

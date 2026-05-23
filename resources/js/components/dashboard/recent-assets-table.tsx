@@ -1,4 +1,8 @@
+import { Link } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { pageItem } from '@/lib/motion';
 import type { RecentAsset } from '@/types';
 
 const statusLabels: Record<string, string> = {
@@ -14,24 +18,35 @@ const statusLabels: Record<string, string> = {
 type RecentAssetsTableProps = {
     items: RecentAsset[];
     title?: string;
+    showViewAll?: boolean;
 };
 
 export function RecentAssetsTable({
     items,
     title = 'Recent PC activity',
+    showViewAll = true,
 }: RecentAssetsTableProps) {
     return (
-        <div className="dashboard-card overflow-hidden rounded-2xl border border-border/60 bg-card">
-            <div className="border-b border-border/60 px-6 py-4">
-                <h3 className="text-base font-semibold">{title}</h3>
-                <p className="text-sm text-muted-foreground">
-                    Latest updates across your scope
-                </p>
+        <motion.div
+            variants={pageItem}
+            className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm"
+        >
+            <div className="flex items-center justify-between border-b border-border/60 px-6 py-4">
+                <div>
+                    <h3 className="text-base font-semibold">{title}</h3>
+                    <p className="text-sm text-muted-foreground">
+                        Latest updates in your scope
+                    </p>
+                </div>
+                {showViewAll && (
+                    <Button asChild variant="outline" size="sm" className="rounded-xl">
+                        <Link href="/pc-register">View all</Link>
+                    </Button>
+                )}
             </div>
             {items.length === 0 ? (
                 <div className="px-6 py-12 text-center text-sm text-muted-foreground">
-                    No PC assets yet. Seed data or create a batch to get
-                    started.
+                    No PC assets in your scope yet.
                 </div>
             ) : (
                 <div className="overflow-x-auto">
@@ -48,9 +63,15 @@ export function RecentAssetsTable({
                             </tr>
                         </thead>
                         <tbody>
-                            {items.map((item) => (
-                                <tr
+                            {items.map((item, index) => (
+                                <motion.tr
                                     key={item.id}
+                                    initial={{ opacity: 0, y: 6 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{
+                                        delay: 0.1 + index * 0.05,
+                                        duration: 0.3,
+                                    }}
                                     className="border-b border-border/40 last:border-0"
                                 >
                                     <td className="px-6 py-3 font-mono text-xs font-medium">
@@ -72,12 +93,12 @@ export function RecentAssetsTable({
                                     <td className="px-6 py-3 text-muted-foreground">
                                         {item.updated_at ?? '—'}
                                     </td>
-                                </tr>
+                                </motion.tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 }

@@ -49,6 +49,14 @@ class DashboardTest extends TestCase
             ->component('dashboard/index')
             ->where('role', 'ict_admin')
             ->has('meta.title')
+            ->has('stats.kpis', 4)
+            ->has('stats.pipeline', 5)
+            ->has('stats.pipeline_chart', 5)
+            ->has('stats.weekly_activity')
+            ->has('stats.insight')
+            ->has('quick_links')
+            ->has('filters.from')
+            ->has('filters.to')
         );
     }
 
@@ -116,8 +124,9 @@ class DashboardTest extends TestCase
         $response = $this->get(route('dashboard'));
 
         $response->assertInertia(fn ($page) => $page
-            ->where('navigation.main.1.title', 'Batches')
-            ->where('navigation.main.2.title', 'Register')
+            ->where('navigation.main.1.title', 'Notifications')
+            ->where('navigation.main.2.title', 'Batches')
+            ->where('navigation.main.3.title', 'Register')
         );
     }
 
@@ -130,7 +139,7 @@ class DashboardTest extends TestCase
 
         $this->get(route('dashboard'))
             ->assertInertia(fn ($page) => $page
-                ->has('navigation.main', 6)
-                ->where('navigation.main.4.title', 'PC Handover'));
+                ->has('navigation.main', 7)
+                ->where('navigation.main.5.title', 'PC Handover'));
     }
 }

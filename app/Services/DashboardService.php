@@ -5,12 +5,19 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Batch;
+use App\Models\HandoverStage;
 use App\Models\PcAsset;
 use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 class DashboardService
 {
+    public function __construct(
+        private readonly HandoverSignOffService $signOff,
+    ) {}
+
     /**
      * Resolve the primary dashboard role for a user.
      */
@@ -40,7 +47,7 @@ class DashboardService
     /**
      * @return array<string, mixed>
      */
-    public function statsFor(User $user, string $role): array
+    public function statsFor(User $user, string $role, Carbon $from, Carbon $to): array
     {
         $pcBase = PcAsset::query();
         $statusCounts = (clone $pcBase)
@@ -60,27 +67,28 @@ class DashboardService
 
         $batchCount = Batch::query()->count();
 
+        $stage1 = (int) ($statusCounts['stage_1_complete'] ?? 0);
+        $stage2 = (int) ($statusCounts['stage_2_complete'] ?? 0);
+        $stage3 = (int) ($statusCounts['stage_3_complete'] ?? 0);
+
         $pipeline = [
-            ['label' => 'Pending', 'value' => $pending, 'color' => 'chart-3'],
-            ['label' => 'Stage 1', 'value' => (int) ($statusCounts['stage_1_complete'] ?? 0), 'color' => 'chart-1'],
-            ['label' => 'Stage 2', 'value' => (int) ($statusCounts['stage_2_complete'] ?? 0), 'color' => 'chart-2'],
-            ['label' => 'Stage 3', 'value' => (int) ($statusCounts['stage_3_complete'] ?? 0), 'color' => 'chart-4'],
-            ['label' => 'Complete', 'value' => $complete, 'color' => 'chart-2'],
+            ['label' => 'Pending', 'value' => $pending, 'fill' => '#f97316'],
+            ['label' => 'Stage 1', 'value' => $stage1, 'fill' => '#1990cf'],
+            ['label' => 'Stage 2', 'value' => $stage2, 'fill' => '#14b8a6'],
+            ['label' => 'Stage 3', 'value' => $stage3, 'fill' => '#8b5cf6'],
+            ['label' => 'Complete', 'value' => $complete, 'fill' => '#10b981'],
         ];
 
-        $recent = (clone $pcBase)
-            ->with(['department:id,name', 'assignedStaff:id,full_name'])
-            ->latest('updated_at')
-            ->limit(5)
-            ->get(['id', 'ref_no', 'make_model', 'status', 'department_id', 'assigned_staff_id', 'updated_at'])
-            ->map(fn (PcAsset $asset) => [
-                'id' => $asset->ref_no,
-                'name' => $asset->make_model,
-                'status' => $asset->status,
-                'department' => $asset->department?->name,
-                'assignee' => $asset->assignedStaff?->full_name,
-                'updated_at' => $asset->updated_at?->diffForHumans(),
-            ]);
+        $pipelineChart = collect($pipeline)
+            ->map(fn (array $segment) => [
+                'label' => $segment['label'],
+                'count' => $segment['value'],
+                'fill' => $segment['fill'],
+            ])
+            ->values()
+            ->all();
+
+        $weeklyActivity = $this->activityForRange($pcBase, $from, $to);
 
         $roleKpis = match ($role) {
             'stores_officer' => [
@@ -115,11 +123,29 @@ class DashboardService
             ],
         };
 
+        $signOffQueue = $this->signOff->queueCountFor($user);
+        $unreadNotifications = $user->unreadNotifications()->count();
+
+        $insights = config('dashboard.insights', []);
+        $insight = $insights[$role] ?? $insights[config('dashboard.default_role', 'end_user')] ?? [];
+
         return [
             'role' => $role,
             'kpis' => $roleKpis,
             'pipeline' => $pipeline,
-            'recent' => $recent,
+            'pipeline_chart' => $pipelineChart,
+            'weekly_activity' => $weeklyActivity,
+            'can_view_register' => $user->can('pc.view')
+                || $user->can('pc.view-dept')
+                || $user->can('pc.view-own')
+                || $user->can('stage.manage-all')
+                || $user->can('pc.manage'),
+            'insight' => [
+                'title' => $insight['title'] ?? 'Handover overview',
+                'body' => $insight['body'] ?? 'Track progress across your assigned scope.',
+                'cta' => $insight['cta'] ?? 'Get started',
+                'href' => isset($insight['route']) ? route($insight['route']) : route('dashboard'),
+            ],
             'summary' => [
                 'total_pcs' => $totalPcs,
                 'complete' => $complete,
@@ -128,8 +154,49 @@ class DashboardService
                 'pending_stage_3' => $pendingStage3,
                 'awaiting_return' => $awaitingReturn,
                 'completion_rate' => $totalPcs > 0 ? round(($complete / $totalPcs) * 100, 1) : 0,
+                'sign_off_queue' => $signOffQueue,
+                'unread_notifications' => $unreadNotifications,
             ],
         ];
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public function quickLinksFor(User $user, string $role): array
+    {
+        $definitions = config("dashboard.quick_links.{$role}")
+            ?? config('dashboard.quick_links.default', []);
+
+        $permissions = $user->getAllPermissions()->pluck('name');
+        $badges = [
+            'sign_off_queue' => $this->signOff->queueCountFor($user),
+            'unread_notifications' => $user->unreadNotifications()->count(),
+        ];
+
+        return collect($definitions)
+            ->filter(function (array $link) use ($permissions) {
+                $required = $link['permissions'] ?? null;
+                if ($required === null) {
+                    return true;
+                }
+
+                return $permissions->intersect($required)->isNotEmpty();
+            })
+            ->map(function (array $link) use ($badges) {
+                $badgeKey = $link['badge_key'] ?? null;
+                $badge = $badgeKey !== null ? ($badges[$badgeKey] ?? 0) : 0;
+
+                return [
+                    'title' => $link['title'],
+                    'description' => $link['description'],
+                    'icon' => $link['icon'],
+                    'href' => route($link['route']),
+                    'badge' => $badge > 0 ? $badge : null,
+                ];
+            })
+            ->values()
+            ->all();
     }
 
     /**
@@ -191,6 +258,50 @@ class DashboardService
                 }
 
                 return true;
+            })
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Sign-off actions per day within the selected date range.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<PcAsset>  $pcBase
+     * @return list<array{label: string, date: string, count: int}>
+     */
+    private function activityForRange($pcBase, Carbon $from, Carbon $to): array
+    {
+        $fromDay = $from->copy()->startOfDay();
+        $toDay = $to->copy()->startOfDay();
+
+        $period = CarbonPeriod::create($fromDay, '1 day', $toDay);
+        $days = iterator_to_array($period, false);
+
+        if (count($days) > 31) {
+            $days = array_slice($days, -31);
+        }
+
+        $assetIds = (clone $pcBase)->pluck('id');
+
+        $countsByDay = collect();
+        if ($assetIds->isNotEmpty()) {
+            $countsByDay = HandoverStage::query()
+                ->whereIn('pc_asset_id', $assetIds)
+                ->whereBetween('actioned_at', [$fromDay, $to->copy()->endOfDay()])
+                ->selectRaw('DATE(actioned_at) as activity_date, COUNT(*) as total')
+                ->groupBy('activity_date')
+                ->pluck('total', 'activity_date');
+        }
+
+        return collect($days)
+            ->map(function (Carbon $day) use ($countsByDay) {
+                $key = $day->toDateString();
+
+                return [
+                    'label' => $day->format('d M'),
+                    'date' => $key,
+                    'count' => (int) ($countsByDay[$key] ?? 0),
+                ];
             })
             ->values()
             ->all();

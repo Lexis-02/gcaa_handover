@@ -8,6 +8,7 @@ use App\Http\Requests\StorePcRegisterRequest;
 use App\Http\Requests\UpdatePcRegisterRequest;
 use App\Models\Batch;
 use App\Models\PcAsset;
+use App\Services\HandoverNotificationService;
 use App\Services\HandoverSignOffService;
 use App\Services\PcRegisterService;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +21,7 @@ class PcRegisterController extends Controller
     public function __construct(
         private readonly PcRegisterService $register,
         private readonly HandoverSignOffService $signOff,
+        private readonly HandoverNotificationService $notifications,
     ) {}
 
     public function index(Request $request): Response
@@ -77,11 +79,15 @@ class PcRegisterController extends Controller
             ? 'faulty_on_arrival'
             : 'pending';
 
-        PcAsset::query()->create([
+        $asset = PcAsset::query()->create([
             ...$request->validated(),
             'ref_no' => $this->register->generateRefNo($batch),
             'status' => $status,
         ]);
+
+        if ($status === 'pending') {
+            $this->notifications->notifyPendingSigners($asset->fresh(['assignedStaff', 'department']));
+        }
 
         Inertia::flash('toast', [
             'type' => 'success',

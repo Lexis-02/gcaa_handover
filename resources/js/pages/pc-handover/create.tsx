@@ -13,24 +13,13 @@ type PageProps = {
 export default function PcHandoverCreate({ options }: PageProps) {
     return (
         <>
-            <Head title="Add PC handover" />
+            <Head title="Add old PC details" />
             <motion.div
-                className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-4 md:p-6"
+                className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 p-4 md:p-6"
                 variants={pageEnter}
                 initial="hidden"
                 animate="visible"
             >
-                <p className="text-sm text-muted-foreground">
-                    Record details for the old PC being replaced. The new PC
-                    must already be in the register with an assigned end user.{' '}
-                    <Link
-                        href="/pc-handover"
-                        className="text-primary hover:underline"
-                    >
-                        Back to PC Handover
-                    </Link>
-                </p>
-
                 <HandoverForm
                     action="/pc-handover"
                     method="post"
@@ -38,11 +27,18 @@ export default function PcHandoverCreate({ options }: PageProps) {
                     submitLabel="Save handover details"
                     showPcSelect
                 />
+
+                <Link
+                    href="/pc-handover"
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                    ← Back to PC Handover
+                </Link>
             </motion.div>
         </>
     );
 }
 
 PcHandoverCreate.layout = {
-    title: 'Add PC handover',
+    title: 'Add',
 };

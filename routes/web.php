@@ -8,7 +8,10 @@ use App\Http\Controllers\HandoverSignOffController;
 use App\Http\Controllers\Lookups\BuildingController;
 use App\Http\Controllers\Lookups\DepartmentController;
 use App\Http\Controllers\Lookups\LookupValueController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProfilePageController;
 use App\Http\Controllers\PcHandoverController;
+use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\PcRegisterController;
 use App\Http\Middleware\EnsureValidInvitation;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
@@ -22,6 +25,14 @@ Route::middleware(['web', EnsureValidInvitation::class])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('profile', [ProfilePageController::class, 'show'])->name('profile.index');
+    Route::patch('profile', [ProfilePageController::class, 'update'])->name('profile.update');
+
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+    Route::post('notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 
     Route::resource('batches', BatchController::class);
     Route::resource('users', UserController::class);
@@ -46,6 +57,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('pc-handover.edit');
     Route::put('pc-handover/{pc_handover}', [PcHandoverController::class, 'update'])
         ->name('pc-handover.update');
+
+    Route::get('summary', [SummaryController::class, 'index'])->name('summary.index');
 
     Route::prefix('lookups')->name('lookups.')->group(function () {
         Route::resource('departments', DepartmentController::class);

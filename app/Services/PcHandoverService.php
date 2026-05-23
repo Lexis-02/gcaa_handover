@@ -78,12 +78,10 @@ class PcHandoverService
             'new_make_model' => $asset->make_model,
             'end_user_name' => $asset->assignedStaff?->full_name,
             'department' => $asset->department?->only(['id', 'name', 'code']),
-            'old_asset_tag' => $old?->old_asset_tag,
-            'old_make_model' => $old?->old_make_model,
-            'old_serial_no' => $old?->old_serial_no,
-            'year_of_purchase' => $old?->year_of_purchase,
-            'condition' => $old?->condition,
-            'reason_for_replacement' => $old?->reason_for_replacement,
+            'old_pc_summary' => $old
+                ? trim($old->old_make_model.' · '.$old->old_serial_no)
+                : null,
+            'old_pc_condition' => $old?->condition,
             'data_wiped' => $old?->data_wiped,
             'returned_to_stores' => $old?->returned_to_stores,
             'has_old_pc_return' => $old !== null,

@@ -1,7 +1,8 @@
 import { usePage } from '@inertiajs/react';
-import { Bell, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { HeaderIconButton } from '@/components/header-icon-button';
 import { HeaderSearch } from '@/components/header-search';
+import { NotificationBell } from '@/components/notification-bell';
 import { ThemeToggleIcon } from '@/components/theme-toggle-icon';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { SidebarTrigger } from '@/components/ui/sidebar';
@@ -47,12 +48,7 @@ export function AppSidebarHeader({ pageTitle = '' }: { pageTitle?: string }) {
                             className="size-8 lg:hidden"
                             onClick={focusSearch}
                         />
-                        <HeaderIconButton
-                            icon={Bell}
-                            label="Notifications"
-                            showDot
-                            className="size-8"
-                        />
+                        <NotificationBell className="size-8" />
                         <ThemeToggleIcon className="size-8" />
                     </div>
 

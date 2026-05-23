@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Services\DashboardService;
+use App\Services\HandoverNotificationService;
+use App\Services\HandoverSignOffService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -38,10 +40,16 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
         $dashboard = app(DashboardService::class);
+        $signOff = app(HandoverSignOffService::class);
 
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'notifications' => $user ? [
+                'unread_count' => $user->unreadNotifications()->count(),
+                'latest_id' => $user->notifications()->latest()->value('id'),
+                'sign_off_queue' => $signOff->queueCountFor($user),
+            ] : null,
             'auth' => [
                 'user' => $user ? [
                     'id' => $user->id,

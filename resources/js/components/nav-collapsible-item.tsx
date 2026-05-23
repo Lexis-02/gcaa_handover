@@ -21,7 +21,7 @@ import { isNavChildActive } from '@/lib/nav-active';
 import {
     dropdownChild,
     dropdownPanel,
-    springSoft,
+    springSnappy,
 } from '@/lib/motion';
 import {
     sidebarLinkBase,

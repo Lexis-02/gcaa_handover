@@ -99,19 +99,17 @@ export default function BatchesCreate({ defaults }: PageProps) {
                                 />
                             </div>
 
-                            <Button type="submit" disabled={processing}>
-                                Create batch
-                            </Button>
+                            <div className="flex items-center gap-3 pt-2">
+                                <Button type="submit" disabled={processing}>
+                                    Create batch
+                                </Button>
+                                <Button asChild variant="outline">
+                                    <Link href="/batches">Cancel</Link>
+                                </Button>
+                            </div>
                         </>
                     )}
                 </Form>
-
-                <Link
-                    href="/batches"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                    ← Back to batches
-                </Link>
             </motion.div>
         </>
     );

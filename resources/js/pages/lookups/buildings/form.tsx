@@ -68,18 +68,17 @@ export default function BuildingForm({
                                     Active
                                 </Label>
                             </div>
-                            <Button type="submit" disabled={processing}>
-                                {isEdit ? 'Save changes' : 'Add building'}
-                            </Button>
+                            <div className="flex items-center gap-3 pt-2">
+                                <Button type="submit" disabled={processing}>
+                                    {isEdit ? 'Save changes' : 'Add building'}
+                                </Button>
+                                <Button asChild variant="outline">
+                                    <Link href="/lookups/buildings">Cancel</Link>
+                                </Button>
+                            </div>
                         </>
                     )}
                 </Form>
-                <Link
-                    href="/lookups/buildings"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                    ← Back to buildings
-                </Link>
             </motion.div>
         </>
     );

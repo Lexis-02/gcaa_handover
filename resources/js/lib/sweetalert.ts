@@ -67,6 +67,7 @@ export async function confirmDelete(itemLabel: string): Promise<boolean> {
         text: `"${itemLabel}" will be permanently removed.`,
         confirmText: 'Yes, delete',
         icon: 'warning',
+        isDestructive: true,
     });
 }
 
@@ -85,6 +86,7 @@ export async function confirmAction(options: {
     confirmText?: string;
     cancelText?: string;
     icon?: 'warning' | 'question' | 'info';
+    isDestructive?: boolean;
 }): Promise<boolean> {
     const result = await base.fire({
         icon: options.icon ?? 'question',
@@ -97,6 +99,9 @@ export async function confirmAction(options: {
         cancelButtonText: options.cancelText ?? 'Cancel',
         reverseButtons: true,
         focusCancel: true,
+        customClass: options.isDestructive ? {
+            confirmButton: `swal2-btn swal2-btn-confirm ${buttonVariants({ variant: 'destructive' })}`,
+        } : undefined,
     });
 
     return result.isConfirmed;

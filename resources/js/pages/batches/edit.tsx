@@ -93,19 +93,17 @@ export default function BatchesEdit({
                                 />
                             </div>
 
-                            <Button type="submit" disabled={processing}>
-                                Save changes
-                            </Button>
+                            <div className="flex items-center gap-3 pt-2">
+                                <Button type="submit" disabled={processing}>
+                                    Save changes
+                                </Button>
+                                <Button asChild variant="outline">
+                                    <Link href={`/batches/${batch.id}`}>Cancel</Link>
+                                </Button>
+                            </div>
                         </>
                     )}
                 </Form>
-
-                <Link
-                    href={`/batches/${batch.id}`}
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                    ← Back to batch
-                </Link>
             </motion.div>
         </>
     );

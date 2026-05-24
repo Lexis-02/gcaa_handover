@@ -27,12 +27,6 @@ export default function PcRegisterCreate({ options }: PageProps) {
                     submitLabel="Add to register"
                 />
 
-                <Link
-                    href="/pc-register"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                    ← Back to register
-                </Link>
             </motion.div>
         </>
     );

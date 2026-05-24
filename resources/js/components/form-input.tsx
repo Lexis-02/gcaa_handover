@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 export interface FormInputProps extends React.ComponentProps<'input'> {
     label: string;
     error?: string;
+    hint?: string;
     icon?: LucideIcon;
     containerClassName?: string;
     labelClassName?: string;
@@ -15,55 +16,74 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         {
             label,
             error,
+            hint,
             icon: Icon,
             type = 'text',
             className,
             containerClassName,
             labelClassName,
             id,
+            required,
             ...props
         },
         ref
     ) => {
         const [showPassword, setShowPassword] = React.useState(false);
         const [isFocused, setIsFocused] = React.useState(false);
-        
+
         const isPassword = type === 'password';
         const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
-        
+        const hasError = !!error;
+
         return (
-            <div className={cn("grid gap-1.5 w-full relative group", containerClassName)}>
-                <div className="flex justify-between items-center px-0.5">
+            <div className={cn('flex flex-col gap-1.5 w-full', containerClassName)}>
+                {/* Label row */}
+                <div className="flex items-center justify-between px-0.5">
                     <label
                         htmlFor={id}
                         className={cn(
-                            'text-sm font-medium text-foreground transition-colors duration-200',
-                            isFocused && 'text-primary',
-                            error && 'text-destructive',
+                            'text-[13px] font-semibold tracking-wide transition-colors duration-200 select-none',
+                            isFocused && !hasError
+                                ? 'text-primary'
+                                : 'text-foreground/80',
+                            hasError && 'text-destructive',
                             labelClassName,
                         )}
                     >
                         {label}
+                        {required && (
+                            <span className="ml-1 text-destructive/70">*</span>
+                        )}
                     </label>
+                    {hint && !error && (
+                        <span className="text-[11px] text-muted-foreground">
+                            {hint}
+                        </span>
+                    )}
                 </div>
-                
+
+                {/* Input wrapper */}
                 <div className="relative flex items-center">
-                    {/* Left Icon */}
+                    {/* Left icon */}
                     {Icon && (
-                        <div className={cn(
-                            "absolute left-3.5 flex items-center justify-center pointer-events-none transition-colors duration-200",
-                            isFocused 
-                                ? "text-accent" 
-                                : "text-slate-400 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-400"
-                        )}>
-                            <Icon className="h-4 w-4" />
+                        <div
+                            className={cn(
+                                'pointer-events-none absolute left-3.5 flex items-center justify-center transition-colors duration-200',
+                                isFocused && !hasError
+                                    ? 'text-primary'
+                                    : 'text-muted-foreground/60',
+                                hasError && 'text-destructive/60',
+                            )}
+                        >
+                            <Icon className="size-4" />
                         </div>
                     )}
-                    
+
                     <input
                         ref={ref}
                         id={id}
                         type={inputType}
+                        required={required}
                         onFocus={(e) => {
                             setIsFocused(true);
                             props.onFocus?.(e);
@@ -73,47 +93,73 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                             props.onBlur?.(e);
                         }}
                         className={cn(
-                            "w-full h-11 text-sm rounded-xl border bg-slate-50/50 dark:bg-slate-950/40 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 outline-none transition-all duration-300",
-                            Icon ? "pl-11" : "pl-4",
-                            isPassword ? "pr-11" : "pr-4",
-                            // Default border styling
-                            "border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700",
-                            // Focus states with subtle navy glowing ring
-                            "focus:border-accent/80 dark:focus:border-accent/80 focus:ring-4 focus:ring-accent/10 dark:focus:ring-accent/5 focus:bg-white dark:focus:bg-slate-950/80",
-                            // Error states
-                            error && "border-destructive dark:border-destructive/80 focus:border-destructive focus:ring-destructive/10 dark:focus:ring-destructive/5",
-                            className
+                            // Layout & base
+                            'w-full h-11 rounded-xl border text-sm outline-none',
+                            'transition-all duration-200 ease-in-out',
+                            // Typography & bg
+                            'bg-background/80 text-foreground placeholder:text-muted-foreground/50',
+                            // Padding
+                            Icon ? 'pl-10' : 'pl-3.5',
+                            isPassword ? 'pr-11' : 'pr-3.5',
+                            // Default border
+                            'border-border/60 hover:border-border',
+                            // Focus — glowing ring matching primary accent
+                            !hasError && 'focus:border-primary/60 focus:ring-4 focus:ring-primary/[0.08] focus:bg-background',
+                            // Error
+                            hasError && [
+                                'border-destructive/60 bg-destructive/[0.02]',
+                                'focus:border-destructive/80 focus:ring-4 focus:ring-destructive/[0.08]',
+                            ],
+                            // Disabled
+                            'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted/30',
+                            className,
                         )}
                         {...props}
                     />
-                    
-                    {/* Password Eye Toggle */}
+
+                    {/* Password toggle */}
                     {isPassword && (
                         <button
                             type="button"
-                            onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute right-3.5 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:text-slate-600 dark:hover:text-slate-400 focus:outline-none transition-colors"
+                            onClick={() => setShowPassword((p) => !p)}
                             tabIndex={-1}
+                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            className={cn(
+                                'absolute right-3 flex items-center justify-center',
+                                'rounded-md p-0.5 text-muted-foreground/50',
+                                'hover:text-foreground hover:bg-accent/40',
+                                'focus:outline-none transition-all duration-150',
+                            )}
                         >
                             {showPassword ? (
-                                <EyeOff className="h-4 w-4" />
+                                <EyeOff className="size-4" />
                             ) : (
-                                <Eye className="h-4 w-4" />
+                                <Eye className="size-4" />
                             )}
                         </button>
                     )}
                 </div>
-                
-                {/* Error Message */}
-                {error && (
-                    <p className="text-[11px] text-destructive font-medium mt-0.5 px-0.5 animate-in fade-in-50 duration-200">
+
+                {/* Error / helper */}
+                {error ? (
+                    <p
+                        role="alert"
+                        className="flex items-center gap-1 px-0.5 text-[11.5px] font-medium text-destructive animate-in fade-in-50 slide-in-from-top-1 duration-200"
+                    >
+                        <svg
+                            className="size-3 shrink-0"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM7.25 4.75a.75.75 0 0 1 1.5 0v3.5a.75.75 0 0 1-1.5 0v-3.5zm.75 6.5a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z" />
+                        </svg>
                         {error}
                     </p>
-                )}
+                ) : null}
             </div>
         );
     }
 );
 
 FormInput.displayName = 'FormInput';
-

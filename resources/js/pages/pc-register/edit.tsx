@@ -30,12 +30,6 @@ export default function PcRegisterEdit({ record, options }: PageProps) {
                     submitLabel="Save changes"
                 />
 
-                <Link
-                    href={`/pc-register/${record.id}`}
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                    ← Back to record
-                </Link>
             </motion.div>
         </>
     );

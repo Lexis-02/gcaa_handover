@@ -279,9 +279,19 @@ export function RegisterForm({
                         />
                     </section>
 
-                    <Button type="submit" disabled={processing}>
-                        {submitLabel}
-                    </Button>
+                    <div className="flex items-center gap-3 pt-2">
+                        <Button type="submit" disabled={processing}>
+                            {submitLabel}
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => window.history.back()}
+                            disabled={processing}
+                        >
+                            Cancel
+                        </Button>
+                    </div>
                 </>
             )}
         </Form>

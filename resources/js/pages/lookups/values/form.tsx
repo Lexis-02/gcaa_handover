@@ -72,18 +72,17 @@ export default function LookupValueForm({
                                     Active
                                 </Label>
                             </div>
-                            <Button type="submit" disabled={processing}>
-                                {isEdit ? 'Save changes' : 'Add value'}
-                            </Button>
+                            <div className="flex items-center gap-3 pt-2">
+                                <Button type="submit" disabled={processing}>
+                                    {isEdit ? 'Save changes' : 'Add value'}
+                                </Button>
+                                <Button asChild variant="outline">
+                                    <Link href={base}>Cancel</Link>
+                                </Button>
+                            </div>
                         </>
                     )}
                 </Form>
-                <Link
-                    href={base}
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                    ← Back to {title}
-                </Link>
             </motion.div>
         </>
     );

@@ -3,6 +3,7 @@ import { FlashAlerts } from '@/components/flash-alerts';
 import { useAppearance } from '@/hooks/use-appearance';
 import { Moon, Sun } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { Button } from '@/components/ui/button';
 
 const SLIDE_IMAGES = [
     '/assets/computer.png',
@@ -157,12 +158,14 @@ export default function AuthLayout({
             >
                 {/* Dark / light mode icon toggle */}
                 <div className="flex justify-end">
-                    <button
+                    <Button
+                        variant="outline"
+                        size="icon"
                         onClick={() => updateAppearance(isDark ? 'light' : 'dark')}
-                        className={`flex items-center justify-center w-9 h-9 rounded-full border transition-all duration-300 cursor-pointer ${
+                        className={`rounded-full transition-all duration-300 ${
                             isDark
-                                ? 'bg-slate-800 border-slate-700 text-amber-400 hover:bg-slate-700 hover:text-amber-300 hover:border-slate-600'
-                                : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 shadow-sm'
+                                ? 'bg-slate-800 border-slate-700 text-amber-400 hover:bg-slate-700 hover:text-amber-300'
+                                : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700'
                         }`}
                         title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                     >
@@ -171,7 +174,7 @@ export default function AuthLayout({
                         ) : (
                             <Moon className="h-4 w-4 transition-transform duration-300 hover:-rotate-12" />
                         )}
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Auth form — centred vertically */}

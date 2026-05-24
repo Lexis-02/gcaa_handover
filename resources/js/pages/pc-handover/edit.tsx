@@ -30,12 +30,6 @@ export default function PcHandoverEdit({ record, options }: PageProps) {
                     submitLabel="Save changes"
                 />
 
-                <Link
-                    href="/pc-handover"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                    ← Back to PC Handover
-                </Link>
             </motion.div>
         </>
     );

@@ -73,18 +73,17 @@ export default function DepartmentForm({
                                     Active
                                 </Label>
                             </div>
-                            <Button type="submit" disabled={processing}>
-                                {isEdit ? 'Save changes' : 'Add department'}
-                            </Button>
+                            <div className="flex items-center gap-3 pt-2">
+                                <Button type="submit" disabled={processing}>
+                                    {isEdit ? 'Save changes' : 'Add department'}
+                                </Button>
+                                <Button asChild variant="outline">
+                                    <Link href="/lookups/departments">Cancel</Link>
+                                </Button>
+                            </div>
                         </>
                     )}
                 </Form>
-                <Link
-                    href="/lookups/departments"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                    ← Back to departments
-                </Link>
             </motion.div>
         </>
     );

@@ -232,17 +232,9 @@ export function HandoverForm({
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 pt-2">
+                    <div className="flex justify-end gap-3">
                         <Button type="submit" disabled={processing}>
                             {submitLabel}
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => window.history.back()}
-                            disabled={processing}
-                        >
-                            Cancel
                         </Button>
                     </div>
                 </>

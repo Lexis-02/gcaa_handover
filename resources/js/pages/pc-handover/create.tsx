@@ -28,6 +28,12 @@ export default function PcHandoverCreate({ options }: PageProps) {
                     showPcSelect
                 />
 
+                <Link
+                    href="/pc-handover"
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                    ← Back to PC Handover
+                </Link>
             </motion.div>
         </>
     );

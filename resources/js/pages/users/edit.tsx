@@ -60,6 +60,12 @@ export default function UsersEdit({
                     </Form>
                 </section>
 
+                <Link
+                    href={`/users/${record.id}`}
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                    ← Back to user
+                </Link>
             </motion.div>
         </>
     );

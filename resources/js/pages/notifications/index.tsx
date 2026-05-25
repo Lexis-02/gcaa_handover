@@ -273,14 +273,15 @@ export default function NotificationsIndex({
                                                 <ChevronRight className="size-4" />
                                             </Link>
                                             {unread && (
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => markRead(item.id)}
-                                                    className="h-8 text-xs text-muted-foreground hover:text-foreground"
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        markRead(item.id)
+                                                    }
+                                                    className="text-xs text-muted-foreground hover:text-foreground"
                                                 >
                                                     Dismiss
-                                                </Button>
+                                                </button>
                                             )}
                                         </div>
                                     </div>

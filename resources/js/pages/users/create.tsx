@@ -55,6 +55,12 @@ export default function UsersCreate({
                     </Form>
                 </section>
 
+                <Link
+                    href="/users"
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                    ← Back to users
+                </Link>
             </motion.div>
         </>
     );

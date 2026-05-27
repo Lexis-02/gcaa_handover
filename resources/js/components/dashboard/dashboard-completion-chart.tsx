@@ -56,8 +56,8 @@ export function DashboardCompletionChart({
                     </div>
                 ) : (
                     <>
-                        <div className="h-52 w-full">
-                            <ResponsiveContainer width="100%" height="100%">
+                        <div className="h-52 min-h-52 w-full min-w-0">
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                                 <PieChart>
                                     <Pie
                                         data={chartData}

@@ -3,8 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Services\DashboardService;
-use App\Services\HandoverNotificationService;
-use App\Services\HandoverSignOffService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -40,29 +38,28 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
         $dashboard = app(DashboardService::class);
-        $signOff = app(HandoverSignOffService::class);
+        $snapshot = $user ? $dashboard->userSnapshot($user) : null;
 
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'notifications' => $user ? [
-                'unread_count' => $user->unreadNotifications()->count(),
-                'latest_id' => $user->notifications()->latest()->value('id'),
-                'sign_off_queue' => $signOff->queueCountFor($user),
+            'notifications' => $snapshot ? [
+                'unread_count' => $snapshot['unread_count'],
+                'latest_id' => $snapshot['latest_notification_id'],
+                'sign_off_queue' => $snapshot['sign_off_queue'],
             ] : null,
             'auth' => [
-                'user' => $user ? [
+                'user' => $snapshot ? [
                     'id' => $user->id,
                     'name' => $user->name,
                     'username' => $user->username,
                     'department_id' => $user->department_id,
                     'is_active' => $user->is_active,
-                    'roles' => $user->getRoleNames(),
-                    'permissions' => $user->getAllPermissions()->pluck('name'),
-                    'primary_role' => $dashboard->resolvePrimaryRole($user),
+                    'roles' => $snapshot['roles'],
+                    'primary_role' => $snapshot['primary_role'],
                 ] : null,
             ],
-            'navigation' => $user ? $dashboard->navigationFor($user) : ['main' => [], 'footer' => []],
+            'navigation' => $snapshot ? $dashboard->navigationFor($user) : ['main' => [], 'footer' => []],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

@@ -120,6 +120,11 @@ class PcRegisterController extends Controller
             'meta' => [
                 'can_edit' => $user->can('pc.manage') && $pc_register->status === 'pending',
                 'can_delete' => $this->userCanDelete($user, $pc_register),
+                'can_manage_old_pc' => $user->can('old-pc.submit')
+                    || $user->can('stage1.signoff')
+                    || $user->can('pc.manage')
+                    || $user->can('stage.manage-all'),
+                'old_pc_return_id' => $pc_register->oldPcReturn?->id,
                 'sign_off' => $this->signOff->signOffActionFor($user, $pc_register),
                 'handover_oversight' => $this->signOff->oversightFor($user, $pc_register),
             ],

@@ -1,7 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { DashboardActivityChart } from '@/components/dashboard/dashboard-activity-chart';
-import { DashboardCompletionChart } from '@/components/dashboard/dashboard-completion-chart';
+import { lazy, Suspense } from 'react';
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { DashboardPipelinePanel } from '@/components/dashboard/dashboard-pipeline-panel';
 import { DashboardQuickLinks } from '@/components/dashboard/dashboard-quick-links';
@@ -12,6 +11,26 @@ import type {
     DashboardQuickLink,
     DashboardStats,
 } from '@/types';
+
+const DashboardActivityChart = lazy(() =>
+    import('@/components/dashboard/dashboard-activity-chart').then((m) => ({
+        default: m.DashboardActivityChart,
+    })),
+);
+const DashboardCompletionChart = lazy(() =>
+    import('@/components/dashboard/dashboard-completion-chart').then((m) => ({
+        default: m.DashboardCompletionChart,
+    })),
+);
+
+function ChartFallback() {
+    return (
+        <div
+            className="min-h-[220px] animate-pulse rounded-xl border border-border/60 bg-muted/30"
+            aria-hidden
+        />
+    );
+}
 
 type DashboardFilters = {
     from: string;
@@ -63,15 +82,19 @@ export default function DashboardIndex({
                             totalPcs={stats.summary.total_pcs}
                         />
                     </div>
-                    <DashboardCompletionChart
-                        completionRate={stats.summary.completion_rate}
-                        totalPcs={stats.summary.total_pcs}
-                        complete={stats.summary.complete}
-                        inPipeline={inPipeline}
-                    />
+                    <Suspense fallback={<ChartFallback />}>
+                        <DashboardCompletionChart
+                            completionRate={stats.summary.completion_rate}
+                            totalPcs={stats.summary.total_pcs}
+                            complete={stats.summary.complete}
+                            inPipeline={inPipeline}
+                        />
+                    </Suspense>
                 </div>
 
-                <DashboardActivityChart data={stats.weekly_activity} />
+                <Suspense fallback={<ChartFallback />}>
+                    <DashboardActivityChart data={stats.weekly_activity} />
+                </Suspense>
 
                 <DashboardQuickLinks links={quick_links} />
             </motion.div>

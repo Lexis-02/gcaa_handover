@@ -55,8 +55,15 @@ class PcHandoverController extends Controller
     {
         abort_unless($this->canManage($request), 403);
 
+        $selectedPcAssetId = $request->integer('pc_asset_id');
+        if ($selectedPcAssetId > 0
+            && ! $this->handover->pcsEligibleForOldReturn()->contains('id', $selectedPcAssetId)) {
+            $selectedPcAssetId = 0;
+        }
+
         return Inertia::render('pc-handover/create', [
             'options' => $this->handover->formOptions(),
+            'selected_pc_asset_id' => $selectedPcAssetId > 0 ? $selectedPcAssetId : null,
         ]);
     }
 

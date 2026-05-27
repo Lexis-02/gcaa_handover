@@ -5,8 +5,9 @@ import {
     unlockHandoverAlertSound,
 } from '@/lib/handover-alert-sound';
 
-/** Fast poll so new sign-off alerts are detected within a few seconds. */
-const POLL_MS = 3_000;
+/** Poll interval for sign-off alerts (deferred after login to keep dashboard fast). */
+const POLL_MS = 15_000;
+const INITIAL_POLL_DELAY_MS = 10_000;
 /** Re-alert while unread handover notifications remain (until sign-off / dismiss). */
 const REMINDER_MS = 120_000;
 const SOUND_ENABLED_KEY = 'gcaa-handover-alert-sound';
@@ -77,6 +78,7 @@ export function useHandoverNotificationAlerts(): void {
     const lastReminderAt = useRef(0);
     const pendingLoginAlert = useRef(false);
     const previousUserId = useRef<number | null>(null);
+    const skipNotificationPollOnMount = useRef(true);
     const userId = auth.user?.id;
     const unreadCount = notifications?.unread_count ?? 0;
 
@@ -91,8 +93,12 @@ export function useHandoverNotificationAlerts(): void {
         if (!userId) {
             previousUserId.current = null;
             pendingLoginAlert.current = false;
+            skipNotificationPollOnMount.current = true;
+
             return;
         }
+
+        skipNotificationPollOnMount.current = true;
 
         const justSignedIn = previousUserId.current !== userId;
         previousUserId.current = userId;
@@ -214,7 +220,10 @@ export function useHandoverNotificationAlerts(): void {
 
         document.addEventListener('visibilitychange', onVisible);
 
-        void poll();
+        const initialPoll = window.setTimeout(() => {
+            void poll();
+        }, INITIAL_POLL_DELAY_MS);
+
         const interval = window.setInterval(() => {
             void poll();
         }, POLL_MS);
@@ -223,13 +232,20 @@ export function useHandoverNotificationAlerts(): void {
             document.removeEventListener('click', onUserGesture);
             document.removeEventListener('keydown', onUserGesture);
             document.removeEventListener('visibilitychange', onVisible);
+            window.clearTimeout(initialPoll);
             window.clearInterval(interval);
         };
     }, [userId, poll, tryPlayLoginAlert]);
 
-    /** Poll immediately when shared notification props change (e.g. after navigation). */
+    /** Poll when notification props change after navigation (skip first mount — shared data is fresh). */
     useEffect(() => {
         if (!userId) {
+            return;
+        }
+
+        if (skipNotificationPollOnMount.current) {
+            skipNotificationPollOnMount.current = false;
+
             return;
         }
 

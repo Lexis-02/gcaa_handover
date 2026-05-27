@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardService
 {
@@ -19,14 +20,53 @@ class DashboardService
     ) {}
 
     /**
+     * Per-request cached user context (roles, permissions, counts).
+     *
+     * @return array{
+     *     roles: Collection<int, string>,
+     *     permissions: Collection<int, string>,
+     *     primary_role: string,
+     *     unread_count: int,
+     *     latest_notification_id: string|null,
+     *     sign_off_queue: int
+     * }
+     */
+    public function userSnapshot(User $user): array
+    {
+        return once(function () use ($user): array {
+            $roles = $user->getRoleNames();
+            $permissions = $user->getAllPermissions()->pluck('name');
+
+            return [
+                'roles' => $roles,
+                'permissions' => $permissions,
+                'primary_role' => $this->resolvePrimaryRoleFromRoles($roles),
+                'unread_count' => $user->unreadNotifications()->count(),
+                'latest_notification_id' => $user->notifications()->latest()->value('id'),
+                'sign_off_queue' => Cache::remember(
+                    "dashboard.sign_off_queue.{$user->id}",
+                    60,
+                    fn () => $this->signOff->queueCountFor($user),
+                ),
+            ];
+        });
+    }
+
+    /**
      * Resolve the primary dashboard role for a user.
      */
     public function resolvePrimaryRole(User $user): string
     {
-        $userRoles = $user->getRoleNames();
+        return $this->userSnapshot($user)['primary_role'];
+    }
 
+    /**
+     * @param  Collection<int, string>  $roles
+     */
+    private function resolvePrimaryRoleFromRoles(Collection $roles): string
+    {
         foreach (config('dashboard.role_priority', []) as $role) {
-            if ($userRoles->contains($role)) {
+            if ($roles->contains($role)) {
                 return $role;
             }
         }
@@ -49,23 +89,24 @@ class DashboardService
      */
     public function statsFor(User $user, string $role, Carbon $from, Carbon $to): array
     {
-        $pcBase = PcAsset::query();
-        $statusCounts = (clone $pcBase)
-            ->selectRaw('status, COUNT(*) as total')
-            ->groupBy('status')
-            ->pluck('total', 'status');
+        $statusCounts = Cache::remember('dashboard.pc_status_counts', 60, function () {
+            return PcAsset::query()
+                ->selectRaw('status, COUNT(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status');
+        });
 
         $totalPcs = (int) $statusCounts->sum();
         $complete = (int) ($statusCounts['complete'] ?? 0);
         $pending = (int) ($statusCounts['pending'] ?? 0);
         $inProgress = $totalPcs - $complete - $pending - (int) ($statusCounts['faulty_on_arrival'] ?? 0);
 
-        $pendingStage1 = (clone $pcBase)->where('status', 'pending')->count();
-        $pendingStage2 = (clone $pcBase)->where('status', 'stage_1_complete')->count();
-        $pendingStage3 = (clone $pcBase)->where('status', 'stage_2_complete')->count();
-        $awaitingReturn = (clone $pcBase)->where('status', 'stage_3_complete')->count();
+        $pendingStage1 = (int) ($statusCounts['pending'] ?? 0);
+        $pendingStage2 = (int) ($statusCounts['stage_1_complete'] ?? 0);
+        $pendingStage3 = (int) ($statusCounts['stage_2_complete'] ?? 0);
+        $awaitingReturn = (int) ($statusCounts['stage_3_complete'] ?? 0);
 
-        $batchCount = Batch::query()->count();
+        $batchCount = (int) Cache::remember('dashboard.batch_count', 60, fn () => Batch::query()->count());
 
         $stage1 = (int) ($statusCounts['stage_1_complete'] ?? 0);
         $stage2 = (int) ($statusCounts['stage_2_complete'] ?? 0);
@@ -88,7 +129,7 @@ class DashboardService
             ->values()
             ->all();
 
-        $weeklyActivity = $this->activityForRange($pcBase, $from, $to);
+        $weeklyActivity = $this->activityForRange($from, $to);
 
         $roleKpis = match ($role) {
             'stores_officer' => [
@@ -123,8 +164,12 @@ class DashboardService
             ],
         };
 
-        $signOffQueue = $this->signOff->queueCountFor($user);
-        $unreadNotifications = $user->unreadNotifications()->count();
+        $snapshot = $this->userSnapshot($user);
+        $permissions = $snapshot['permissions'];
+        $signOffQueue = $snapshot['sign_off_queue'];
+        $unreadNotifications = $snapshot['unread_count'];
+
+        $registerPermissions = ['pc.view', 'pc.view-dept', 'pc.view-own', 'stage.manage-all', 'pc.manage'];
 
         $insights = config('dashboard.insights', []);
         $insight = $insights[$role] ?? $insights[config('dashboard.default_role', 'end_user')] ?? [];
@@ -135,11 +180,7 @@ class DashboardService
             'pipeline' => $pipeline,
             'pipeline_chart' => $pipelineChart,
             'weekly_activity' => $weeklyActivity,
-            'can_view_register' => $user->can('pc.view')
-                || $user->can('pc.view-dept')
-                || $user->can('pc.view-own')
-                || $user->can('stage.manage-all')
-                || $user->can('pc.manage'),
+            'can_view_register' => $permissions->intersect($registerPermissions)->isNotEmpty(),
             'insight' => [
                 'title' => $insight['title'] ?? 'Handover overview',
                 'body' => $insight['body'] ?? 'Track progress across your assigned scope.',
@@ -168,10 +209,11 @@ class DashboardService
         $definitions = config("dashboard.quick_links.{$role}")
             ?? config('dashboard.quick_links.default', []);
 
-        $permissions = $user->getAllPermissions()->pluck('name');
+        $snapshot = $this->userSnapshot($user);
+        $permissions = $snapshot['permissions'];
         $badges = [
-            'sign_off_queue' => $this->signOff->queueCountFor($user),
-            'unread_notifications' => $user->unreadNotifications()->count(),
+            'sign_off_queue' => $snapshot['sign_off_queue'],
+            'unread_notifications' => $snapshot['unread_count'],
         ];
 
         return collect($definitions)
@@ -204,12 +246,11 @@ class DashboardService
      */
     public function navigationFor(User $user): array
     {
-        $permissions = $user->getAllPermissions()->pluck('name');
-        $roles = $user->getRoleNames();
+        $snapshot = $this->userSnapshot($user);
 
         return [
-            'main' => $this->filterNavItems(config('navigation.main', []), $roles, $permissions, []),
-            'footer' => $this->filterNavItems(config('navigation.footer', []), $roles, $permissions, []),
+            'main' => $this->filterNavItems(config('navigation.main', []), $snapshot['roles'], $snapshot['permissions'], []),
+            'footer' => $this->filterNavItems(config('navigation.footer', []), $snapshot['roles'], $snapshot['permissions'], []),
         ];
     }
 
@@ -266,10 +307,9 @@ class DashboardService
     /**
      * Sign-off actions per day within the selected date range.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<PcAsset>  $pcBase
      * @return list<array{label: string, date: string, count: int}>
      */
-    private function activityForRange($pcBase, Carbon $from, Carbon $to): array
+    private function activityForRange(Carbon $from, Carbon $to): array
     {
         $fromDay = $from->copy()->startOfDay();
         $toDay = $to->copy()->startOfDay();
@@ -281,17 +321,11 @@ class DashboardService
             $days = array_slice($days, -31);
         }
 
-        $assetIds = (clone $pcBase)->pluck('id');
-
-        $countsByDay = collect();
-        if ($assetIds->isNotEmpty()) {
-            $countsByDay = HandoverStage::query()
-                ->whereIn('pc_asset_id', $assetIds)
-                ->whereBetween('actioned_at', [$fromDay, $to->copy()->endOfDay()])
-                ->selectRaw('DATE(actioned_at) as activity_date, COUNT(*) as total')
-                ->groupBy('activity_date')
-                ->pluck('total', 'activity_date');
-        }
+        $countsByDay = HandoverStage::query()
+            ->whereBetween('actioned_at', [$fromDay, $to->copy()->endOfDay()])
+            ->selectRaw('DATE(actioned_at) as activity_date, COUNT(*) as total')
+            ->groupBy('activity_date')
+            ->pluck('total', 'activity_date');
 
         return collect($days)
             ->map(function (Carbon $day) use ($countsByDay) {

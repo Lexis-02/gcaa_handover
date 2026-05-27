@@ -51,7 +51,7 @@ export function DashboardActivityChart({ data }: DashboardActivityChartProps) {
             </div>
 
             <motion.div
-                className="h-56 w-full px-2 pb-4 pt-2 md:px-4"
+                className="h-56 min-h-56 w-full min-w-0 px-2 pb-4 pt-2 md:px-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.15, duration: 0.4 }}
@@ -61,7 +61,7 @@ export function DashboardActivityChart({ data }: DashboardActivityChartProps) {
                         No sign-off activity in this period.
                     </div>
                 ) : (
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                         <AreaChart
                             data={data}
                             margin={{ top: 8, right: 12, left: 0, bottom: 0 }}

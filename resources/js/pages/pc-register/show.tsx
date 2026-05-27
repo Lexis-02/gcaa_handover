@@ -51,6 +51,7 @@ type RegisterRecord = {
     end_user_receipt_date: string | null;
     form_3_signed: boolean;
     old_pc_returned: boolean;
+    old_pc_return_id?: number | null;
     stage_progress: StageProgress;
     next_signer: string | null;
 };
@@ -67,6 +68,8 @@ type PageProps = {
     meta: {
         can_edit: boolean;
         can_delete: boolean;
+        can_manage_old_pc: boolean;
+        old_pc_return_id: number | null;
         sign_off: SignOffAction | null;
         handover_oversight: HandoverOversight | null;
     };
@@ -387,9 +390,27 @@ export default function PcRegisterShow({
                             <DetailCell
                                 label="Old PC returned"
                                 value={
-                                    <SignedBadge
-                                        signed={record.old_pc_returned}
-                                    />
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <SignedBadge
+                                            signed={record.old_pc_returned}
+                                        />
+                                        {meta.can_manage_old_pc &&
+                                            (meta.old_pc_return_id ? (
+                                                <Link
+                                                    href={`/pc-handover/${meta.old_pc_return_id}/edit`}
+                                                    className="text-xs font-medium text-primary hover:underline"
+                                                >
+                                                    View old PC details
+                                                </Link>
+                                            ) : (
+                                                <Link
+                                                    href={`/pc-handover/create?pc_asset_id=${record.id}`}
+                                                    className="text-xs font-medium text-primary hover:underline"
+                                                >
+                                                    Add old PC details
+                                                </Link>
+                                            ))}
+                                    </div>
                                 }
                             />
                         </dl>

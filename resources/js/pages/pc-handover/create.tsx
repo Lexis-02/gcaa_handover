@@ -8,9 +8,13 @@ import {
 
 type PageProps = {
     options: HandoverFormOptions;
+    selected_pc_asset_id?: number | null;
 };
 
-export default function PcHandoverCreate({ options }: PageProps) {
+export default function PcHandoverCreate({
+    options,
+    selected_pc_asset_id = null,
+}: PageProps) {
     return (
         <>
             <Head title="Add old PC details" />
@@ -24,6 +28,11 @@ export default function PcHandoverCreate({ options }: PageProps) {
                     action="/pc-handover"
                     method="post"
                     options={options}
+                    record={
+                        selected_pc_asset_id
+                            ? { pc_asset_id: selected_pc_asset_id }
+                            : undefined
+                    }
                     submitLabel="Save handover details"
                     showPcSelect
                 />

@@ -48,6 +48,29 @@ function compactYesNo(value: string | null): string {
     return value === 'Yes' ? '✓' : value === 'No' ? '✗' : 'N/A';
 }
 
+/** Row links: handover edit when recorded; register view + create when pending. */
+function handoverRowLinks(row: HandoverRow, canCreate: boolean) {
+    const registerHref = `/pc-register/${row.id}`;
+
+    if (row.old_pc_return_id) {
+        const handoverHref = `/pc-handover/${row.old_pc_return_id}/edit`;
+
+        return {
+            refHref: handoverHref,
+            viewHref: handoverHref,
+            editHref: handoverHref,
+        };
+    }
+
+    return {
+        refHref: registerHref,
+        viewHref: registerHref,
+        editHref: canCreate
+            ? `/pc-handover/create?pc_asset_id=${row.id}`
+            : undefined,
+    };
+}
+
 export default function PcHandoverIndex({
     records,
     filters,
@@ -144,7 +167,13 @@ export default function PcHandoverIndex({
                                         </td>
                                     </tr>
                                 ) : (
-                                    records.data.map((row) => (
+                                    records.data.map((row) => {
+                                        const links = handoverRowLinks(
+                                            row,
+                                            meta.can_create,
+                                        );
+
+                                        return (
                                         <tr
                                             key={row.id}
                                             className="border-b border-border/40 align-middle hover:bg-muted/20"
@@ -154,7 +183,7 @@ export default function PcHandoverIndex({
                                             </td>
                                             <td className="px-4 py-3">
                                                 <Link
-                                                    href={`/pc-register/${row.id}`}
+                                                    href={links.refHref}
                                                     className="font-mono text-xs font-semibold text-primary hover:underline"
                                                 >
                                                     {row.ref_no}
@@ -177,9 +206,12 @@ export default function PcHandoverIndex({
                                             <td className="px-4 py-3">
                                                 {row.has_old_pc_return ? (
                                                     <>
-                                                        <p className="font-medium">
+                                                        <Link
+                                                            href={links.refHref}
+                                                            className="font-medium text-primary hover:underline"
+                                                        >
                                                             {row.old_pc_summary}
-                                                        </p>
+                                                        </Link>
                                                         <p className="text-xs text-muted-foreground">
                                                             {row.old_pc_condition}
                                                         </p>
@@ -232,25 +264,20 @@ export default function PcHandoverIndex({
                                             </td>
                                             <td className="px-4 py-3">
                                                 <ListRowActions
-                                                    viewHref={
-                                                        row.old_pc_return_id
-                                                            ? `/pc-handover/${row.old_pc_return_id}/edit`
-                                                            : `/pc-register/${row.id}`
-                                                    }
-                                                    editHref={
-                                                        row.old_pc_return_id
-                                                            ? `/pc-handover/${row.old_pc_return_id}/edit`
-                                                            : meta.can_create
-                                                              ? '/pc-handover/create'
-                                                              : undefined
-                                                    }
+                                                    viewHref={links.viewHref}
+                                                    editHref={links.editHref}
                                                     itemLabel={row.ref_no}
-                                                    showEdit={meta.can_create}
+                                                    showEdit={
+                                                        meta.can_create &&
+                                                        links.editHref !==
+                                                            undefined
+                                                    }
                                                     showDelete={false}
                                                 />
                                             </td>
                                         </tr>
-                                    ))
+                                        );
+                                    })
                                 )}
                             </tbody>
                         </table>

@@ -19,6 +19,7 @@ $registerChildren = [
         'title' => 'Add',
         'route' => 'pc-register.create',
         'icon' => 'plus',
+        'match' => 'exact',
         'permissions' => ['pc.manage'],
     ],
     [
@@ -176,6 +177,7 @@ return [
                     'title' => 'Add',
                     'route' => 'pc-handover.create',
                     'icon' => 'plus',
+                    'match' => 'exact',
                     'permissions' => ['stage1.signoff', 'old-pc.submit', 'pc.manage', 'stage.manage-all'],
                 ],
                 [

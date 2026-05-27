@@ -1,5 +1,7 @@
 import { Form } from '@inertiajs/react';
+import { BatchCombobox } from '@/components/batch-combobox';
 import { FormInput } from '@/components/form-input';
+import { StaffCombobox } from '@/components/staff-combobox';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -81,34 +83,12 @@ export function RegisterForm({
                     )}
 
                     <section className="grid gap-4 md:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="batch_id" className={formLabelClassName}>
-                                Batch
-                            </Label>
-                            <select
-                                id="batch_id"
-                                name="batch_id"
-                                required
-                                disabled={!!record.id}
-                                defaultValue={record.batch_id ?? ''}
-                                className={selectClassName}
-                            >
-                                <option value="" disabled>
-                                    Select batch
-                                </option>
-                                {options.batches.map((b) => (
-                                    <option key={b.id} value={b.id}>
-                                        {b.batch_code} ({b.year}) — {b.total_pcs}{' '}
-                                        PCs
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.batch_id && (
-                                <p className="text-sm text-destructive">
-                                    {errors.batch_id}
-                                </p>
-                            )}
-                        </div>
+                        <BatchCombobox
+                            batches={options.batches}
+                            defaultValue={record.batch_id}
+                            disabled={!!record.id}
+                            error={errors.batch_id}
+                        />
 
                         <FormInput
                             id="asset_tag"
@@ -202,28 +182,19 @@ export function RegisterForm({
                     </section>
 
                     <section className="grid gap-4 md:grid-cols-2">
-                        <div className="space-y-2 md:col-span-2">
-                            <Label
-                                htmlFor="assigned_staff_id"
-                                className={formLabelClassName}
-                            >
-                                End-user (staff)
-                            </Label>
-                            <select
-                                id="assigned_staff_id"
-                                name="assigned_staff_id"
-                                defaultValue={
-                                    record.assigned_staff_id ?? ''
-                                }
-                                className={selectClassName}
-                            >
-                                <option value="">Unassigned</option>
-                                {options.staff.map((s) => (
-                                    <option key={s.id} value={s.id}>
-                                        {s.full_name} ({s.staff_number})
-                                    </option>
-                                ))}
-                            </select>
+                        <div className="md:col-span-2">
+                            <StaffCombobox
+                                staff={options.staff.map((member) => ({
+                                    ...member,
+                                    department_name:
+                                        options.departments.find(
+                                            (d) =>
+                                                d.id === member.department_id,
+                                        )?.name ?? null,
+                                }))}
+                                defaultValue={record.assigned_staff_id}
+                                error={errors.assigned_staff_id}
+                            />
                         </div>
 
                         <div className="space-y-2">

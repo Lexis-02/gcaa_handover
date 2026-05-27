@@ -11,7 +11,15 @@ export function isNavChildActive(
     const match = child.match ?? 'exact';
 
     if (match === 'edit') {
-        return /^\/pc-register\/\d+\/edit$/.test(path);
+        if (hrefPath.startsWith('/pc-handover')) {
+            return /^\/pc-handover\/\d+\/edit$/.test(path);
+        }
+
+        if (hrefPath.startsWith('/pc-register')) {
+            return /^\/pc-register\/\d+\/edit$/.test(path);
+        }
+
+        return false;
     }
 
     if (match === 'exact') {

@@ -1,18 +1,12 @@
 import Swal from 'sweetalert2';
 import type { FlashToast } from '@/types/ui';
-import { buttonVariants } from '@/components/ui/button';
 
+/** Popup shell only — action buttons use SweetAlert2 default colors and `.swal2-styled` styles. */
 const base = Swal.mixin({
-    buttonsStyling: false,
     customClass: {
-        container: 'swal2-gcaa',
         popup: 'swal2-popup-gcaa border border-border/60 bg-background',
         title: 'swal2-title-gcaa text-lg font-semibold text-foreground',
         htmlContainer: 'swal2-html-gcaa text-sm text-muted-foreground',
-        actions: 'swal2-actions-gcaa flex gap-3 mt-4 justify-center',
-        confirmButton: `swal2-btn swal2-btn-confirm ${buttonVariants({ variant: 'default' })}`,
-        cancelButton: `swal2-btn swal2-btn-cancel ${buttonVariants({ variant: 'outline' })}`,
-        denyButton: `swal2-btn swal2-btn-cancel ${buttonVariants({ variant: 'destructive' })}`,
     },
 });
 
@@ -99,9 +93,7 @@ export async function confirmAction(options: {
         cancelButtonText: options.cancelText ?? 'Cancel',
         reverseButtons: true,
         focusCancel: true,
-        customClass: options.isDestructive ? {
-            confirmButton: `swal2-btn swal2-btn-confirm ${buttonVariants({ variant: 'destructive' })}`,
-        } : undefined,
+        ...(options.isDestructive && { confirmButtonColor: '#dc3741' }),
     });
 
     return result.isConfirmed;

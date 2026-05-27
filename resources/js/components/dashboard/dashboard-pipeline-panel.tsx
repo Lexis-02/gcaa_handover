@@ -124,12 +124,12 @@ export function DashboardPipelinePanel({
                 </p>
                 {total > 0 ? (
                     <motion.div
-                        className="h-56 w-full"
+                        className="h-56 min-h-56 w-full min-w-0"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.4 }}
                     >
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                             <BarChart
                                 data={chartData}
                                 margin={{ top: 8, right: 12, left: 0, bottom: 0 }}

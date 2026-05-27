@@ -189,12 +189,12 @@ export default function UsersIndex({ records, filters }: PageProps) {
                                                 >
                                                     {row.name}
                                                 </Link>
-                                                {row.staff?.full_name && (
+                                                {/* {row.staff?.full_name && (
                                                     <p className="text-xs text-muted-foreground">
                                                         Staff:{' '}
                                                         {row.staff.full_name}
                                                     </p>
-                                                )}
+                                                )} */}
                                             </td>
                                             <td className="px-4 py-3 font-mono text-xs">
                                                 {row.username}

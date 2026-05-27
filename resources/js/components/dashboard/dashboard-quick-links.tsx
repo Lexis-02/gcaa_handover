@@ -30,7 +30,7 @@ export function DashboardQuickLinks({ links }: DashboardQuickLinksProps) {
                         >
                             <Link
                                 href={link.href}
-                                className="flex items-center gap-3 rounded-xl border border-border/60 bg-card p-4 shadow-sm transition-colors"
+                                className="flex items-center gap-3 rounded-xl border border-border/60 bg-card p-4 shadow-sm"
                             >
                                 <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted/80 text-muted-foreground">
                                     {Icon && <Icon className="size-5" />}

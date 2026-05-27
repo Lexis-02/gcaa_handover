@@ -147,16 +147,16 @@ export default function PcRegisterIndex({
                                             {!hasSearch &&
                                                 !hasStatusFilter &&
                                                 meta.can_create && (
-                                                <>
-                                                    {' '}
-                                                    <Link
-                                                        href="/pc-register/create"
-                                                        className="font-medium text-primary underline-offset-4 hover:underline"
-                                                    >
-                                                        Add the first record
-                                                    </Link>
-                                                </>
-                                            )}
+                                                    <>
+                                                        {' '}
+                                                        <Link
+                                                            href="/pc-register/create"
+                                                            className="font-medium text-primary underline-offset-4 hover:underline"
+                                                        >
+                                                            Add the first record
+                                                        </Link>
+                                                    </>
+                                                )}
                                         </td>
                                     </tr>
                                 ) : (

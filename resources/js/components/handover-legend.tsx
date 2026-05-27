@@ -29,13 +29,12 @@ export function HandoverLegend({
                 </p>
             )}
             {isGuide && (
-                <div className="border-b border-border/60 bg-primary/5 px-5 py-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                <div className="border-b border-border/60 px-6 py-5">
+                    <p className="text-sm font-semibold text-foreground">
                         Stages &amp; signatories
                     </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                        Who must sign before the handover is approved as
-                        Complete
+                    <p className="mt-0.5 text-sm text-muted-foreground">
+                        Who must sign before the handover is approved as Complete
                     </p>
                 </div>
             )}

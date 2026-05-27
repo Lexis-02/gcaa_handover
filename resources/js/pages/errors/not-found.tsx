@@ -1,6 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Home, LayoutDashboard, SearchX } from 'lucide-react';
+import { ArrowLeft, Home, LayoutDashboard } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { Button } from '@/components/ui/button';
 import { dashboard } from '@/routes';
@@ -33,83 +33,81 @@ export default function NotFound({
     return (
         <>
             <Head title={titleForStatus(status)} />
-            <div className="relative flex min-h-svh flex-col overflow-hidden bg-background">
-                <div
-                    className="pointer-events-none absolute inset-0 opacity-40"
-                    style={{
-                        background:
-                            'radial-gradient(ellipse 80% 50% at 50% -20%, color-mix(in srgb, var(--color-primary-400) 35%, transparent), transparent)',
-                    }}
-                />
-                <div className="pointer-events-none absolute -right-24 top-1/3 size-72 rounded-full bg-primary/10 blur-3xl" />
-                <div className="pointer-events-none absolute -left-16 bottom-1/4 size-56 rounded-full bg-primary/5 blur-3xl" />
-
-                <header className="relative z-10 border-b border-border/50 px-4 py-4 md:px-8">
-                    <Link
-                        href={isAuthenticated ? dashboard() : '/login'}
-                        className="inline-flex max-w-xs items-center"
+            <div className="flex min-h-svh bg-background">
+                {/* Left Side - Content */}
+                <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:flex-none lg:w-[48rem] lg:px-20 xl:px-24">
+                    <motion.div 
+                        className="mx-auto w-full max-w-md lg:max-w-xl"
+                        variants={pageEnter}
+                        initial="hidden"
+                        animate="visible"
                     >
-                        <AppLogo />
-                    </Link>
-                </header>
+                        <header className="mb-16">
+                            <Link
+                                href={isAuthenticated ? dashboard() : '/login'}
+                                className="inline-flex items-center cursor-pointer"
+                            >
+                                <AppLogo variant="auth" />
+                            </Link>
+                        </header>
 
-                <motion.main
-                    className="relative z-10 mx-auto flex flex-1 flex-col items-center justify-center px-4 py-16 text-center md:px-8"
-                    variants={pageEnter}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
-                        className="mb-6 flex size-24 items-center justify-center rounded-3xl bg-primary/10 text-primary ring-1 ring-primary/20"
-                    >
-                        <SearchX className="size-12" strokeWidth={1.5} />
+                        <div>
+                            <p className="font-mono text-sm font-semibold tracking-widest text-primary uppercase mb-3">
+                                Error {status}
+                            </p>
+                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+                                {titleForStatus(status)}
+                            </h1>
+                            <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-lg">
+                                {message}
+                            </p>
+                        </div>
+
+                        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                className="w-full sm:w-auto gap-2 cursor-pointer"
+                                onClick={() => window.history.back()}
+                            >
+                                <ArrowLeft className="size-4" />
+                                Go back
+                            </Button>
+                            {isAuthenticated ? (
+                                <Button asChild size="lg" className="w-full sm:w-auto gap-2 cursor-pointer">
+                                    <Link href={dashboard()}>
+                                        <LayoutDashboard className="size-4" />
+                                        Dashboard
+                                    </Link>
+                                </Button>
+                            ) : (
+                                <Button asChild size="lg" className="w-full sm:w-auto gap-2 cursor-pointer">
+                                    <Link href="/login">
+                                        <Home className="size-4" />
+                                        Sign in
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
+
+                        <footer className="mt-24 text-sm text-muted-foreground border-t border-border/50 pt-8">
+                            &copy; {new Date().getFullYear()} Ghana Civil Aviation Authority — PC Handover System
+                        </footer>
                     </motion.div>
+                </div>
 
-                    <p className="font-mono text-sm font-semibold tracking-widest text-primary uppercase">
-                        Error {status}
-                    </p>
-                    <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                        {titleForStatus(status)}
-                    </h1>
-                    <p className="mt-4 max-w-md text-base text-muted-foreground">
-                        {message}
-                    </p>
-
-                    <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="lg"
-                            className="gap-2"
-                            onClick={() => window.history.back()}
-                        >
-                            <ArrowLeft className="size-4" />
-                            Go back
-                        </Button>
-                        {isAuthenticated ? (
-                            <Button asChild size="lg" className="gap-2">
-                                <Link href={dashboard()}>
-                                    <LayoutDashboard className="size-4" />
-                                    Dashboard
-                                </Link>
-                            </Button>
-                        ) : (
-                            <Button asChild size="lg" className="gap-2">
-                                <Link href="/login">
-                                    <Home className="size-4" />
-                                    Sign in
-                                </Link>
-                            </Button>
-                        )}
+                {/* Right Side - Visual */}
+                <div className="relative hidden w-0 flex-1 lg:block bg-muted/20 border-l border-border/50 overflow-hidden">
+                    {/* Abstract grid pattern */}
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808015_1px,transparent_1px),linear-gradient(to_bottom,#80808015_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+                    
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-[20rem] xl:text-[28rem] font-black tracking-tighter text-muted/30 select-none drop-shadow-sm">
+                            {status}
+                        </span>
                     </div>
-                </motion.main>
-
-                <footer className="relative z-10 border-t border-border/50 px-4 py-4 text-center text-xs text-muted-foreground">
-                    Ghana Civil Aviation Authority — PC Handover System
-                </footer>
+                </div>
             </div>
         </>
     );

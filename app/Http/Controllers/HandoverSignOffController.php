@@ -48,6 +48,9 @@ class HandoverSignOffController extends Controller
 
     public function store(SignOffPcHandoverRequest $request, PcAsset $pc_register): RedirectResponse
     {
+        // Capture the stage that is about to be signed (before the sign-off is recorded).
+        $justSignedStage = $this->signOff->pendingStageFor($pc_register) ?? 0;
+
         $this->signOff->recordSignOff(
             $request->user(),
             $pc_register,
@@ -55,13 +58,20 @@ class HandoverSignOffController extends Controller
         );
 
         $fresh = $pc_register->fresh(['handoverStages', 'assignedStaff', 'department', 'oldPcReturn']);
+
+        // Notify the next signer (existing behaviour).
         $this->notifications->notifyPendingSigners($fresh);
 
-        $stage = $this->signOff->pendingStageFor($fresh);
+        // Notify ICT admins that a stage was completed.
+        if ($justSignedStage > 0) {
+            $this->notifications->notifyIctAdminsOfSignOff($fresh, $request->user(), $justSignedStage);
+        }
+
+        $nextStage = $this->signOff->pendingStageFor($fresh);
 
         Inertia::flash('toast', [
-            'type' => 'success',
-            'message' => $stage === null
+            'type'    => 'success',
+            'message' => $nextStage === null
                 ? 'Handover stage signed off successfully.'
                 : 'Form signed. The handover moves to the next stage.',
         ]);
@@ -70,8 +80,8 @@ class HandoverSignOffController extends Controller
 
         return match ($redirect) {
             'register' => redirect()->route('pc-register.show', $pc_register),
-            'queue' => redirect()->route('handover-sign-offs.index'),
-            default => redirect()->route('handover-sign-offs.index'),
+            'queue'    => redirect()->route('handover-sign-offs.index'),
+            default    => redirect()->route('handover-sign-offs.index'),
         };
     }
 

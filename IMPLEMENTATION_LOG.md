@@ -2,7 +2,6 @@
 
 Track successes and failures so we can move faster. **Update this file on every major change or completed task.**
 
----
 
 ## How to use
 
@@ -12,7 +11,6 @@ Track successes and failures so we can move faster. **Update this file on every 
 | **Failures** | Blocked, reverted, bug found, approach abandoned (note why) |
 | **In progress** | Current sprint / active work (remove when done) |
 
----
 
 ## In progress
 

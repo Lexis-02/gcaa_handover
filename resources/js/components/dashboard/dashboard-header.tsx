@@ -16,29 +16,28 @@ export function DashboardHeader({ meta, role }: DashboardHeaderProps) {
 
     return (
         <motion.div
-            className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+            className="flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between"
             variants={pageStagger}
             initial="hidden"
             animate="visible"
         >
             <motion.div variants={pageItem} className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-primary">
-                    {meta.greeting}
-                </p>
-                <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-                    Hello, {firstName}
-                </h1>
-                <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-3">
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+                        {meta.greeting}, {firstName}
+                    </h1>
+                    <motion.span
+                        className="text-sm font-medium text-muted-foreground"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.15, duration: 0.3 }}
+                    >
+                        {/* {formatRoleLabel(role)} · {meta.title} */}
+                    </motion.span>
+                </div>
+                <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
                     {meta.subtitle}
                 </p>
-                <motion.span
-                    className="mt-3 inline-flex rounded-lg border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.15, duration: 0.3 }}
-                >
-                    {formatRoleLabel(role)} · {meta.title}
-                </motion.span>
             </motion.div>
 
             <motion.div variants={pageItem} className="shrink-0">

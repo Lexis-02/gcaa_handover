@@ -31,12 +31,12 @@ export function DashboardActivityChart({ data }: DashboardActivityChartProps) {
             variants={pageItem}
             className="rounded-2xl border border-border/60 bg-card shadow-sm"
         >
-            <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border/60 px-5 py-4 md:px-6">
+            <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border/50 px-6 py-5 md:px-8">
                 <div>
-                    <h3 className="text-base font-semibold tracking-tight">
+                    <h3 className="text-lg font-semibold tracking-tight text-foreground">
                         Handover activity
                     </h3>
-                    <p className="mt-0.5 text-sm text-muted-foreground">
+                    <p className="mt-1 text-sm text-muted-foreground">
                         Sign-off actions in the selected date range
                     </p>
                 </div>

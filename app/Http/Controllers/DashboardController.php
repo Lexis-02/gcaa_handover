@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $from = Carbon::parse(
             $request->filled('from')
                 ? (string) $request->input('from')
-                : now()->subDays(29)->toDateString(),
+                : now()->subDays(6)->toDateString(),
         )->startOfDay();
 
         if ($from->gt($to)) {

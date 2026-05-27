@@ -39,13 +39,13 @@ export function DashboardPipelinePanel({
             variants={pageItem}
             className="flex flex-col rounded-2xl border border-border/60 bg-card shadow-sm"
         >
-            <div className="border-b border-border/60 px-5 py-4 md:px-6">
+            <div className="border-b border-border/50 px-6 py-5 md:px-8">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                        <h3 className="text-base font-semibold tracking-tight">
+                        <h3 className="text-lg font-semibold tracking-tight text-foreground">
                             Handover pipeline
                         </h3>
-                        <p className="mt-0.5 text-sm text-muted-foreground">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             PCs by stage in your scope
                         </p>
                     </div>

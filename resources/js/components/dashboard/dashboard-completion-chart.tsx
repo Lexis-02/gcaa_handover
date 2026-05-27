@@ -40,11 +40,11 @@ export function DashboardCompletionChart({
             variants={pageItem}
             className="flex h-full flex-col rounded-2xl border border-border/60 bg-card shadow-sm"
         >
-            <div className="border-b border-border/60 px-5 py-4">
-                <h3 className="text-base font-semibold tracking-tight">
+            <div className="border-b border-border/50 px-6 py-5">
+                <h3 className="text-lg font-semibold tracking-tight text-foreground">
                     Completion overview
                 </h3>
-                <p className="mt-0.5 text-sm text-muted-foreground">
+                <p className="mt-1 text-sm text-muted-foreground">
                     Finished vs still in progress
                 </p>
             </div>

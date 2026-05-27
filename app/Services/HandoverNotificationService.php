@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Models\PcAsset;
 use App\Models\User;
 use App\Notifications\HandoverActionRequired;
+use App\Notifications\HandoverCompletedStage;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Collection;
 
@@ -106,6 +107,73 @@ class HandoverNotificationService
     }
 
     /**
+     * Notify all active ICT admins (pc.manage) that a handover stage was signed off.
+     * Skips the signer so they don't receive their own action.
+     */
+    public function notifyIctAdminsOfSignOff(PcAsset $asset, User $signer, int $stage): void
+    {
+        $stageConfig = config("handover.stages.{$stage}", []);
+        $headline    = 'Handover signed — '.$asset->ref_no;
+        $message     = sprintf(
+            '%s has completed %s (%s) for %s.',
+            $signer->name,
+            $stageConfig['description'] ?? "stage {$stage}",
+            $stageConfig['label'] ?? "Stage {$stage}",
+            $asset->ref_no,
+        );
+        $actionUrl = route('pc-register.show', $asset);
+
+        $admins = User::query()
+            ->where('is_active', true)
+            ->where('id', '!=', $signer->id)
+            ->permission('pc.manage')
+            ->get();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new HandoverCompletedStage(
+                $asset,
+                $signer,
+                $stage,
+                $headline,
+                $message,
+                $actionUrl,
+            ));
+        }
+    }
+
+    /**
+     * Notify ICT admins that an old PC return has been recorded.
+     */
+    public function notifyIctAdminsOfOldPcHandover(PcAsset $asset, User $actor): void
+    {
+        $headline  = 'Old PC return recorded — '.$asset->ref_no;
+        $message   = sprintf(
+            '%s recorded old PC return details for %s (%s).',
+            $actor->name,
+            $asset->ref_no,
+            $asset->assignedStaff?->full_name ?? 'unknown user',
+        );
+        $actionUrl = route('pc-register.show', $asset);
+
+        $admins = User::query()
+            ->where('is_active', true)
+            ->where('id', '!=', $actor->id)
+            ->permission('pc.manage')
+            ->get();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new HandoverCompletedStage(
+                $asset,
+                $actor,
+                0,
+                $headline,
+                $message,
+                $actionUrl,
+            ));
+        }
+    }
+
+    /**
      * @return Collection<int, User>
      */
     private function usersForStage(PcAsset $asset, int $stage): Collection
@@ -181,9 +249,13 @@ class HandoverNotificationService
             ->latest()
             ->get()
             ->map(fn (DatabaseNotification $n) => [
-            'id' => $n->id,
-            'created_at' => $n->created_at?->toIso8601String(),
-            ...$n->data,
-        ])->all();
+                'id'                => $n->id,
+                'created_at'        => $n->created_at?->toIso8601String(),
+                // Expose the notification class type so the frontend can decide
+                // whether to play a sound (only for HandoverActionRequired).
+                'notification_type' => $n->data['notification_type']
+                    ?? ($n->type === HandoverActionRequired::class ? 'action_required' : 'stage_completed'),
+                ...$n->data,
+            ])->all();
     }
 }

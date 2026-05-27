@@ -22,7 +22,7 @@ type NotificationsShared = {
 
 type PollResponse = {
     unread_count: number;
-    new: { id: string }[];
+    new: { id: string; notification_type?: string }[];
     latest_id: string | null;
 };
 
@@ -140,8 +140,13 @@ export function useHandoverNotificationAlerts(): void {
 
             const data = (await response.json()) as PollResponse;
             const soundOn = isHandoverAlertSoundEnabled();
+            // Only play sound for sign-off prompting notifications (action_required).
+            // ICT admin completion notifications (stage_completed) are always silent.
             const unplayed = data.new.filter(
-                (item) => !playedIds.current.has(item.id),
+                (item) =>
+                    !playedIds.current.has(item.id) &&
+                    (item.notification_type === 'action_required' ||
+                        !item.notification_type),
             );
             const now = Date.now();
             let played = false;
@@ -160,8 +165,16 @@ export function useHandoverNotificationAlerts(): void {
                 data.unread_count > 0 &&
                 now - lastReminderAt.current >= REMINDER_MS
             ) {
-                void playHandoverAlertSound();
-                lastReminderAt.current = now;
+                // Reminder only fires if there are unread action_required items.
+                const hasActionRequired = data.new.some(
+                    (item) =>
+                        item.notification_type === 'action_required' ||
+                        !item.notification_type,
+                );
+                if (hasActionRequired) {
+                    void playHandoverAlertSound();
+                    lastReminderAt.current = now;
+                }
             }
 
             if (data.latest_id) {

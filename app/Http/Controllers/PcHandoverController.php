@@ -80,8 +80,14 @@ class PcHandoverController extends Controller
             $pc->fresh(['handoverStages', 'assignedStaff', 'department', 'oldPcReturn']),
         );
 
+        // Notify ICT admins that old PC return details were recorded.
+        $this->notifications->notifyIctAdminsOfOldPcHandover(
+            $pc->fresh(['assignedStaff', 'department']),
+            $request->user(),
+        );
+
         Inertia::flash('toast', [
-            'type' => 'success',
+            'type'    => 'success',
             'message' => 'Old PC handover details recorded.',
         ]);
 

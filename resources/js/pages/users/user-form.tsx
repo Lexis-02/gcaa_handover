@@ -1,4 +1,5 @@
 import { FormInput } from '@/components/form-input';
+import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -173,6 +174,7 @@ export function UserFormFields({
             )}
 
             <Button type="submit" disabled={processing}>
+                <Save className="size-4" />
                 {isEdit ? 'Save changes' : 'Create user'}
             </Button>
         </>

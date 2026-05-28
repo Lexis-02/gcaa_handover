@@ -2,6 +2,7 @@ import { Form } from '@inertiajs/react';
 import { BatchCombobox } from '@/components/batch-combobox';
 import { FormInput } from '@/components/form-input';
 import { StaffCombobox } from '@/components/staff-combobox';
+import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -252,6 +253,7 @@ export function RegisterForm({
 
                     <div className="flex items-center gap-3 pt-2">
                         <Button type="submit" disabled={processing}>
+                            <Save className="size-4" />
                             {submitLabel}
                         </Button>
                         <Button

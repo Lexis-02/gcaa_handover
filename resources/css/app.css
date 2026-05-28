@@ -158,6 +158,10 @@
         background: var(--scrollbar-thumb-hover);
         background-clip: padding-box;
     }
+
+    button, .btn, [role="button"] {
+        cursor: pointer;
+    }
 }
 
 /* Button hover — left-to-right fill (text stays above fill via z-10 span) */

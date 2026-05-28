@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import { Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { pageEnter } from '@/lib/motion';
 
@@ -50,7 +51,10 @@ export default function LookupValueShow({
                 </dl>
                 <div className="flex gap-2">
                     <Button asChild variant="outline">
-                        <Link href={`${base}/${record.id}/edit`}>Edit</Link>
+                        <Link href={`${base}/${record.id}/edit`}>
+                            <Pencil className="size-4 mr-2" />
+                            Edit
+                        </Link>
                     </Button>
                     <Button asChild variant="ghost">
                         <Link href={base}>Back</Link>

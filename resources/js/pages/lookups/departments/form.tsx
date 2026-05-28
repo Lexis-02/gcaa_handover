@@ -1,6 +1,7 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { FormInput } from '@/components/form-input';
+import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { pageEnter } from '@/lib/motion';
@@ -75,6 +76,7 @@ export default function DepartmentForm({
                             </div>
                             <div className="flex items-center gap-3 pt-2">
                                 <Button type="submit" disabled={processing}>
+                                    <Save className="size-4" />
                                     {isEdit ? 'Save changes' : 'Add department'}
                                 </Button>
                                 <Button asChild variant="outline">

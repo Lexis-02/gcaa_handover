@@ -5,6 +5,7 @@ import {
     type PcAssetOption,
 } from '@/components/pc-asset-combobox';
 import { Button } from '@/components/ui/button';
+import { Save } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
@@ -234,6 +235,7 @@ export function HandoverForm({
 
                     <div className="flex justify-end gap-3">
                         <Button type="submit" disabled={processing}>
+                            <Save className="size-4" />
                             {submitLabel}
                         </Button>
                     </div>

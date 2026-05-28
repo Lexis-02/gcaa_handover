@@ -41,7 +41,7 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'mysql') {
-            DB::statement('ALTER TABLE old_pc_returns MODIFY condition VARCHAR(255) NOT NULL');
+            DB::statement('ALTER TABLE old_pc_returns MODIFY `condition` VARCHAR(255) NOT NULL');
         }
     }
 

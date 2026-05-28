@@ -22,32 +22,30 @@ export function HandoverOversightBadge({
     return (
         <div
             className={cn(
-                'inline-flex max-w-full items-start gap-2 rounded-full border border-sky-500/35',
-                'bg-gradient-to-r from-sky-500/12 to-sky-500/5 text-sky-950 dark:text-sky-50',
-                compact ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm',
+                'inline-flex max-w-full items-start gap-3 rounded-xl border border-sky-500/20',
+                'bg-sky-50/50 text-sky-950 shadow-sm dark:bg-sky-500/10 dark:text-sky-50',
+                compact ? 'px-3 py-2 text-xs' : 'px-4 py-3 text-sm',
             )}
             title="You oversee the register; another role must sign this form."
         >
-            <ClipboardList
-                className={cn(
-                    'shrink-0 text-sky-700 dark:text-sky-300',
-                    compact ? 'mt-0.5 size-3.5' : 'mt-0.5 size-4',
-                )}
-                aria-hidden
-            />
-            <span className="min-w-0 text-left leading-snug">
-                <span className="font-semibold">
+            <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-sky-100 text-sky-600 dark:bg-sky-500/20 dark:text-sky-400">
+                <ClipboardList className="size-4" aria-hidden />
+            </div>
+            <div className="flex min-w-0 flex-col py-0.5">
+                <span className="font-semibold text-sky-900 dark:text-sky-100">
                     {oversight.stage_label} — {oversight.stage_description}
                 </span>
-                <span className="block text-[11px] font-medium uppercase tracking-wide text-sky-800/75 dark:text-sky-200/75">
-                    Monitoring only
-                </span>
-                {awaiting && (
-                    <span className="mt-0.5 block text-xs font-medium normal-case tracking-normal text-sky-900/90 dark:text-sky-100/90">
-                        Awaiting {awaiting}
+                <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                    <span className="inline-flex rounded-md bg-sky-100/80 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-sky-700 dark:bg-sky-500/20 dark:text-sky-300">
+                        Monitoring only
                     </span>
-                )}
-            </span>
+                    {awaiting && (
+                        <span className="text-xs font-medium text-sky-700/80 dark:text-sky-300/80">
+                            Awaiting {awaiting}
+                        </span>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

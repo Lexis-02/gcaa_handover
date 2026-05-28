@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfilePageController;
 use App\Http\Controllers\PcHandoverController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\PcRegisterController;
+use App\Http\Controllers\InsightController;
 use App\Http\Middleware\EnsureValidInvitation;
 use App\Http\Controllers\RegisterInvitationController;
 
@@ -68,6 +69,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('pc-handover.update');
 
     Route::get('summary', [SummaryController::class, 'index'])->name('summary.index');
+
+    Route::prefix('insights')->name('insights.')->group(function () {
+        Route::get('/', [InsightController::class, 'index'])->name('index');
+        Route::get('/export/pdf', [InsightController::class, 'exportPdf'])->name('export.pdf');
+        Route::get('/export/excel', [InsightController::class, 'exportExcel'])->name('export.excel');
+    });
 
     Route::prefix('lookups')->name('lookups.')->group(function () {
         Route::resource('departments', DepartmentController::class);

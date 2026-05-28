@@ -196,6 +196,12 @@ return [
             'permissions' => ['reports.all', 'reports.dept', 'stage.manage-all', 'pc.manage'],
         ],
         [
+            'title' => 'Insights & Analytics',
+            'route' => 'insights.index',
+            'icon' => 'line-chart',
+            'roles' => ['super_admin', 'director'],
+        ],
+        [
             'title' => 'Lookups',
             'slug' => 'lookups',
             'icon' => 'search',

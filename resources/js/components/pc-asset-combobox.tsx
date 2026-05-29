@@ -47,7 +47,7 @@ export function PcAssetCombobox({
             name={name}
             label={label}
             placeholder="Type end-user name to search…"
-            emptyMessage="No PCs available — assign an end user in the register first."
+            emptyMessage="No eligible PCs available."
             noMatchMessage="No match. Try another name or ref no."
             defaultValue={defaultValue}
             required={required}

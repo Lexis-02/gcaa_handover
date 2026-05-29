@@ -14,6 +14,7 @@ return [
         'stores_officer',
         'director',
         'auditor',
+        'registry_clerk',
         'end_user',
     ],
 
@@ -47,6 +48,11 @@ return [
             'title' => 'My Handover',
             'subtitle' => 'Your assigned PC, acknowledgements, and old PC return.',
             'greeting' => 'My workspace',
+        ],
+        'registry_clerk' => [
+            'title' => 'PC Registry',
+            'subtitle' => 'Enter new PCs and track handover progress.',
+            'greeting' => 'Clerk dashboard',
         ],
         'auditor' => [
             'title' => 'Audit & Compliance',
@@ -92,6 +98,12 @@ return [
             'body' => 'Acknowledge receipt and complete old PC return when prompted.',
             'cta' => 'View my PCs',
             'route' => 'pc-register.index',
+        ],
+        'registry_clerk' => [
+            'title' => 'Registry management',
+            'body' => 'Enter PCs and monitor the completion of their handover stages.',
+            'cta' => 'Register PC',
+            'route' => 'pc-register.create',
         ],
         'auditor' => [
             'title' => 'Compliance view',
@@ -235,6 +247,22 @@ return [
                 'icon' => 'package',
                 'route' => 'batches.index',
                 'permissions' => ['batch.create'],
+            ],
+        ],
+        'registry_clerk' => [
+            [
+                'title' => 'Register new PC',
+                'description' => 'Add a new asset to the registry',
+                'icon' => 'monitor',
+                'route' => 'pc-register.create',
+                'permissions' => ['pc.manage'],
+            ],
+            [
+                'title' => 'Notifications',
+                'description' => 'Handover reminders',
+                'icon' => 'bell',
+                'route' => 'notifications.index',
+                'badge_key' => 'unread_notifications',
             ],
         ],
         'super_admin' => [

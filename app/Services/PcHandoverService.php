@@ -98,9 +98,15 @@ class PcHandoverService
         return PcAsset::query()
             ->with(['assignedStaff:id,full_name,staff_number', 'department:id,name'])
             ->whereDoesntHave('oldPcReturn')
-            ->whereHas('assignedStaff')
+            ->where(function ($query) {
+                $query->whereNotNull('assigned_staff_id')
+                      ->orWhere(function ($q) {
+                          $q->whereNotNull('assigned_user_name')
+                            ->where('assigned_user_name', '!=', '');
+                      });
+            })
             ->orderBy('ref_no')
-            ->get(['id', 'ref_no', 'serial_number', 'make_model', 'assigned_staff_id', 'department_id']);
+            ->get(['id', 'ref_no', 'serial_number', 'make_model', 'assigned_staff_id', 'assigned_user_name', 'department_id']);
     }
 
     /**
@@ -114,7 +120,7 @@ class PcHandoverService
                 'ref_no' => $asset->ref_no,
                 'serial_number' => $asset->serial_number,
                 'make_model' => $asset->make_model,
-                'end_user' => $asset->assignedStaff?->full_name,
+                'end_user' => $asset->assigned_user_name ?: $asset->assignedStaff?->full_name,
                 'department' => $asset->department?->name,
             ])->values()->all(),
             'old_pc_conditions' => $this->lookups->oldPcConditions(),

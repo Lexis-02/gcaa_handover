@@ -51,9 +51,10 @@ export default function DashboardIndex({
     stats,
     quick_links,
 }: DashboardPageProps) {
-    const inPipeline = Math.max(
+    const isClerk = role === 'registry_clerk';
+    const inPipeline = isClerk ? 0 : Math.max(
         0,
-        stats.summary.total_pcs - stats.summary.complete,
+        (stats as any).summary?.total_pcs - (stats as any).summary?.complete,
     );
 
     return (
@@ -67,34 +68,57 @@ export default function DashboardIndex({
             >
                 <DashboardHeader meta={meta} role={role} />
 
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                    {stats.kpis.map((kpi, index) => (
-                        <KpiCard key={kpi.label} kpi={kpi} index={index} />
-                    ))}
-                </div>
-
-                <div className="grid gap-6 lg:grid-cols-3">
-                    <div className="lg:col-span-2">
-                        <DashboardPipelinePanel
-                            segments={stats.pipeline}
-                            chartData={stats.pipeline_chart}
-                            completionRate={stats.summary.completion_rate}
-                            totalPcs={stats.summary.total_pcs}
+                {isClerk ? (
+                    <div className="grid gap-4 sm:grid-cols-2">
+                        <KpiCard
+                            kpi={{
+                                label: 'Total PCs Entered',
+                                value: (stats as any).total_entered ?? 0,
+                                trend: null,
+                                icon: 'database',
+                            }}
+                        />
+                        <KpiCard
+                            kpi={{
+                                label: 'Handovers Worked On',
+                                value: (stats as any).total_handover ?? 0,
+                                trend: null,
+                                icon: 'rotate-ccw',
+                            }}
                         />
                     </div>
-                    <Suspense fallback={<ChartFallback />}>
-                        <DashboardCompletionChart
-                            completionRate={stats.summary.completion_rate}
-                            totalPcs={stats.summary.total_pcs}
-                            complete={stats.summary.complete}
-                            inPipeline={inPipeline}
-                        />
-                    </Suspense>
-                </div>
+                ) : (
+                    <>
+                        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                            {stats.kpis?.map((kpi, index) => (
+                                <KpiCard key={kpi.label} kpi={kpi} index={index} />
+                            ))}
+                        </div>
 
-                <Suspense fallback={<ChartFallback />}>
-                    <DashboardActivityChart data={stats.weekly_activity} />
-                </Suspense>
+                        <div className="grid gap-6 lg:grid-cols-3">
+                            <div className="lg:col-span-2">
+                                <DashboardPipelinePanel
+                                    segments={stats.pipeline}
+                                    chartData={stats.pipeline_chart}
+                                    completionRate={stats.summary.completion_rate}
+                                    totalPcs={stats.summary.total_pcs}
+                                />
+                            </div>
+                            <Suspense fallback={<ChartFallback />}>
+                                <DashboardCompletionChart
+                                    completionRate={stats.summary.completion_rate}
+                                    totalPcs={stats.summary.total_pcs}
+                                    complete={stats.summary.complete}
+                                    inPipeline={inPipeline}
+                                />
+                            </Suspense>
+                        </div>
+
+                        <Suspense fallback={<ChartFallback />}>
+                            <DashboardActivityChart data={stats.weekly_activity} />
+                        </Suspense>
+                    </>
+                )}
 
                 <DashboardQuickLinks links={quick_links} />
             </motion.div>

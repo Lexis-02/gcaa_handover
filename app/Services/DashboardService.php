@@ -89,14 +89,22 @@ class DashboardService
      */
     public function statsFor(User $user, string $role, Carbon $from, Carbon $to): array
     {
-        $statusCounts = Cache::remember('dashboard.pc_status_counts', 60, function () {
+        if ($role === 'registry_clerk') {
+            return [
+                'total_entered' => \App\Models\PcAsset::count(),
+                'total_handover' => \App\Models\OldPcReturn::count(),
+            ];
+        }
+
+        $statusCounts = Cache::remember('dashboard.pc_status_counts_v2', 60, function () {
             return PcAsset::query()
                 ->selectRaw('status, COUNT(*) as total')
                 ->groupBy('status')
-                ->pluck('total', 'status');
+                ->pluck('total', 'status')
+                ->all();
         });
 
-        $totalPcs = (int) $statusCounts->sum();
+        $totalPcs = (int) array_sum($statusCounts);
         $complete = (int) ($statusCounts['complete'] ?? 0);
         $pending = (int) ($statusCounts['pending'] ?? 0);
         $inProgress = $totalPcs - $complete - $pending - (int) ($statusCounts['faulty_on_arrival'] ?? 0);
@@ -266,10 +274,20 @@ class DashboardService
             })
             ->map(function (array $item) use ($badges, $permissions, $roles) {
                 $slug = $item['slug'] ?? str($item['title'])->slug()->toString();
+                
+                $route = $item['route'] ?? null;
+                if ($item['title'] === 'Dashboard') {
+                    if ($roles->contains('ict_admin')) {
+                        $route = 'admin.dashboard';
+                    } elseif ($roles->contains('registry_clerk')) {
+                        $route = 'clerk.dashboard';
+                    }
+                }
+
                 $nav = [
                     'title' => $item['title'],
                     'icon' => $item['icon'],
-                    'href' => isset($item['route']) ? route($item['route']) : ($item['href'] ?? '#'),
+                    'href' => $route !== null ? route($route) : ($item['href'] ?? '#'),
                 ];
 
                 if (! empty($item['children'])) {

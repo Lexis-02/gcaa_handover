@@ -29,6 +29,8 @@ Route::middleware(['web', EnsureValidInvitation::class])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('register-clerk/dashboard', [DashboardController::class, 'index'])->name('clerk.dashboard');
 
     Route::get('profile', [ProfilePageController::class, 'show'])->name('profile.index');
     Route::patch('profile', [ProfilePageController::class, 'update'])->name('profile.update');
@@ -81,7 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('buildings', BuildingController::class);
 
         Route::prefix('values/{type}')
-            ->where(['type' => 'pc-conditions|old-pc-conditions|yes-no'])
+            ->where(['type' => 'pc-conditions|old-pc-conditions|yes-no|operating-systems'])
             ->group(function () {
                 Route::get('/', [LookupValueController::class, 'index'])->name('values.index');
                 Route::get('/create', [LookupValueController::class, 'create'])->name('values.create');

@@ -302,13 +302,15 @@ export default function ProfileIndex({
                                 <h3 className="text-sm font-semibold tracking-tight">Quick links</h3>
                             </div>
                             <div className="flex flex-col divide-y divide-border/40">
-                                <QuickLink
-                                    href="/handover-sign-offs"
-                                    icon={ClipboardCheck}
-                                    title="Sign-offs"
-                                    description="PCs waiting for your signature"
-                                    badge={stats.sign_off_queue}
-                                />
+                                {profile.primary_role !== 'registry_clerk' && (
+                                    <QuickLink
+                                        href="/handover-sign-offs"
+                                        icon={ClipboardCheck}
+                                        title="Sign-offs"
+                                        description="PCs waiting for your signature"
+                                        badge={stats.sign_off_queue}
+                                    />
+                                )}
                                 <QuickLink
                                     href="/notifications"
                                     icon={Bell}

@@ -95,7 +95,6 @@ class UserManagementService
                 ->where('is_active', true)
                 ->orderBy('full_name')
                 ->get(['id', 'full_name', 'staff_number', 'department_id']),
-            'invitation_expiry_days' => config('invitations.expiry_days', 7),
         ];
     }
 

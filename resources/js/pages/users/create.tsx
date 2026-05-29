@@ -30,16 +30,6 @@ export default function UsersCreate({
                     </div>
                 </div>
 
-                <p className="text-sm text-muted-foreground">
-                    Prefer self-registration?{' '}
-                    <Link
-                        href="/users/invitations"
-                        className="font-medium text-primary hover:underline"
-                    >
-                        Generate a registration link
-                    </Link>{' '}
-                    instead.
-                </p>
 
                 <section className="mt-4">
                     <Form action="/users" method="post" className="space-y-6">

@@ -71,20 +71,37 @@ export default function UsersIndex({ records, filters }: PageProps) {
                                 </p>
                             </div>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                            <Button asChild size="sm" variant="outline">
-                                <Link href="/users/invitations">
-                                    <Link2 className="size-4" />
-                                    Registration links
-                                </Link>
+                        <form
+                            onSubmit={submitSearch}
+                            className="flex w-full max-w-sm gap-2"
+                        >
+                            <div className="relative min-w-0 flex-1">
+                                <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                                <input
+                                    type="search"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    placeholder="Search name or username…"
+                                    className="h-9 w-full rounded-lg border border-border/60 bg-background pr-3 pl-9 text-sm outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/15"
+                                />
+                            </div>
+                            <Button type="submit" size="sm">
+                                Search
                             </Button>
-                            <Button asChild size="sm">
-                                <Link href="/users/create">
-                                    <UserPlus className="size-4" />
-                                    Add user
-                                </Link>
-                            </Button>
-                        </div>
+                            {filters.q && (
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => {
+                                        setSearch('');
+                                        router.get('/users', {}, { preserveScroll: true });
+                                    }}
+                                >
+                                    Clear
+                                </Button>
+                            )}
+                        </form>
                     </div>
                 </div>
 
@@ -103,37 +120,7 @@ export default function UsersIndex({ records, filters }: PageProps) {
                             </>
                         )}
                     </p>
-                    <form
-                        onSubmit={submitSearch}
-                        className="flex w-full max-w-sm gap-2 sm:ml-auto"
-                    >
-                        <div className="relative min-w-0 flex-1">
-                            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-                            <input
-                                type="search"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Search name or username…"
-                                className="h-9 w-full rounded-lg border border-border/60 bg-background pr-3 pl-9 text-sm outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/15"
-                            />
-                        </div>
-                        <Button type="submit" size="sm">
-                            Search
-                        </Button>
-                        {filters.q && (
-                            <Button
-                                type="button"
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => {
-                                    setSearch('');
-                                    router.get('/users', {}, { preserveScroll: true });
-                                }}
-                            >
-                                Clear
-                            </Button>
-                        )}
-                    </form>
+
                 </div>
 
                 <div className="overflow-hidden">
@@ -165,13 +152,6 @@ export default function UsersIndex({ records, filters }: PageProps) {
                                                 className="font-medium text-primary hover:underline"
                                             >
                                                 Add a user
-                                            </Link>{' '}
-                                            or{' '}
-                                            <Link
-                                                href="/users/invitations"
-                                                className="font-medium text-primary hover:underline"
-                                            >
-                                                generate a registration link
                                             </Link>
                                             .
                                         </td>

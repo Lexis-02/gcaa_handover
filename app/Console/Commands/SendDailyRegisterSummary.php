@@ -18,7 +18,7 @@ class SendDailyRegisterSummary extends Command
     {
         $today = Carbon::today();
         
-        $count = clone PcAsset::query()
+        $count = PcAsset::query()
             ->withoutGlobalScopes()
             ->whereDate('created_at', $today)
             ->count();

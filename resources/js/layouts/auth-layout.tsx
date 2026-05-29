@@ -10,6 +10,9 @@ const SLIDE_IMAGES = [
     '/assets/slide2.jpg',
     '/assets/slide3.jpg',
     '/assets/slide4.jpg',
+    '/assets/login_bg_desk.png',
+    '/assets/login_bg_server.png',
+    '/assets/login_bg_laptop.png',
 ];
 
 const SLIDE_INTERVAL = 6000;

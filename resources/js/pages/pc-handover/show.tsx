@@ -1,0 +1,162 @@
+import { Head, Link } from '@inertiajs/react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, Laptop, AlertCircle, Settings2, Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { pageEnter } from '@/lib/motion';
+import { cn } from '@/lib/utils';
+
+type HandoverRecord = {
+    id: number;
+    pc_asset_id: number;
+    ref_no: string;
+    end_user_name: string | null;
+    department_name: string | null;
+    old_asset_tag: string | null;
+    old_make_model: string;
+    old_serial_no: string;
+    year_of_purchase: string | null;
+    condition: string;
+    reason_for_replacement: string;
+    data_wiped: string;
+    returned_to_stores: string;
+    return_action: string;
+    return_action_label: string;
+    created_at: string;
+    updated_at: string;
+};
+
+type PageProps = {
+    record: HandoverRecord;
+    meta: {
+        can_edit: boolean;
+    };
+};
+
+function DetailCell({
+    label,
+    value,
+    className,
+}: {
+    label: string;
+    value: React.ReactNode;
+    className?: string;
+}) {
+    return (
+        <div className={cn('rounded-lg border border-border/50 bg-muted/15 px-4 py-3', className)}>
+            <dt className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {label}
+            </dt>
+            <dd className="mt-1.5 text-sm font-medium leading-snug text-foreground">
+                {value ?? '—'}
+            </dd>
+        </div>
+    );
+}
+
+function SectionCard({
+    title,
+    icon: Icon,
+    children,
+}: {
+    title: string;
+    icon: any;
+    children: React.ReactNode;
+}) {
+    return (
+        <section className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
+            <div className="flex items-center gap-3 border-b border-border/50 bg-muted/25 px-5 py-3.5">
+                <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Icon className="size-4" />
+                </span>
+                <h2 className="text-sm font-semibold tracking-tight">{title}</h2>
+            </div>
+            <div className="p-5">{children}</div>
+        </section>
+    );
+}
+
+export default function PcHandoverShow({ record, meta }: PageProps) {
+    return (
+        <>
+            <Head title={`Handover details for ${record.old_make_model}`} />
+            <motion.div
+                className="mx-auto flex w-full max-w-4xl flex-1 flex-col"
+                variants={pageEnter}
+                initial="hidden"
+                animate="visible"
+            >
+                <header
+                    className={cn(
+                        'sticky top-0 z-20 -mx-4 border-b border-border/60 px-4 py-4 md:-mx-6 md:px-6',
+                        'bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80',
+                        'shadow-[0_1px_0_0_rgba(0,0,0,0.04)]',
+                    )}
+                >
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="min-w-0 space-y-2">
+                            <Button
+                                asChild
+                                variant="ghost"
+                                size="sm"
+                                className="-ml-2 h-8 px-2 text-muted-foreground"
+                            >
+                                <Link href="/pc-handover">
+                                    <ChevronLeft className="size-4" />
+                                    Back to handovers
+                                </Link>
+                            </Button>
+                            <h1 className="font-mono text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+                                {record.old_make_model}
+                            </h1>
+                            <p className="text-sm text-muted-foreground">
+                                Linked PC: <Link href={`/pc-register/${record.pc_asset_id}`} className="text-primary hover:underline">{record.ref_no}</Link>
+                            </p>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            {meta.can_edit && (
+                                <Button asChild variant="outline" size="default">
+                                    <Link href={`/pc-handover/${record.id}/edit`}>
+                                        <Pencil className="size-4" />
+                                        Edit
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+                </header>
+
+                <div className="flex flex-col gap-6 px-4 py-6 md:px-6">
+                    <SectionCard title="Old PC Details" icon={Laptop}>
+                        <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            <DetailCell label="Asset tag" value={record.old_asset_tag} />
+                            <DetailCell label="Make / model" value={record.old_make_model} />
+                            <DetailCell label="Serial number" value={record.old_serial_no} />
+                            <DetailCell label="Year of purchase" value={record.year_of_purchase} />
+                            <DetailCell label="End user" value={record.end_user_name} />
+                            <DetailCell label="Department" value={record.department_name} />
+                        </dl>
+                    </SectionCard>
+
+                    <SectionCard title="Status & Condition" icon={AlertCircle}>
+                        <dl className="grid gap-3 sm:grid-cols-2">
+                            <DetailCell label="Condition" value={record.condition} />
+                            <DetailCell label="Reason for replacement" value={record.reason_for_replacement} />
+                        </dl>
+                    </SectionCard>
+
+                    <SectionCard title="Action & Return" icon={Settings2}>
+                        <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            <DetailCell label="Data wiped" value={record.data_wiped} />
+                            <DetailCell label="Returned to stores" value={record.returned_to_stores} />
+                            <DetailCell label="Action taken" value={record.return_action_label} />
+                        </dl>
+                    </SectionCard>
+                </div>
+            </motion.div>
+        </>
+    );
+}
+
+PcHandoverShow.layout = {
+    title: 'View Handover',
+};

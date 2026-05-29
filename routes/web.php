@@ -65,6 +65,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('pc-handover.create');
     Route::post('pc-handover', [PcHandoverController::class, 'store'])
         ->name('pc-handover.store');
+    Route::get('pc-handover/{pc_handover}', [PcHandoverController::class, 'show'])
+        ->name('pc-handover.show');
     Route::get('pc-handover/{pc_handover}/edit', [PcHandoverController::class, 'edit'])
         ->name('pc-handover.edit');
     Route::put('pc-handover/{pc_handover}', [PcHandoverController::class, 'update'])

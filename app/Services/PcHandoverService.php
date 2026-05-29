@@ -156,4 +156,22 @@ class PcHandoverService
             'return_action' => $return->return_action,
         ];
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function serializeForShow(OldPcReturn $return): array
+    {
+        $base = $this->serializeForForm($return);
+
+        return array_merge($base, [
+            'created_at' => $return->created_at?->format('Y-m-d H:i'),
+            'updated_at' => $return->updated_at?->format('Y-m-d H:i'),
+            'return_action_label' => match ($return->return_action) {
+                'return_to_stores' => 'Return to Stores',
+                'given_to_user' => 'Given to another user',
+                default => $return->return_action,
+            },
+        ]);
+    }
 }

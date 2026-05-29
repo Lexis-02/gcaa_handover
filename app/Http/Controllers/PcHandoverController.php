@@ -94,6 +94,18 @@ class PcHandoverController extends Controller
         return redirect()->route('pc-handover.index');
     }
 
+    public function show(Request $request, OldPcReturn $pc_handover): Response
+    {
+        abort_unless($this->canView($request), 403);
+
+        return Inertia::render('pc-handover/show', [
+            'record' => $this->handover->serializeForShow($pc_handover),
+            'meta' => [
+                'can_edit' => $this->canManage($request),
+            ],
+        ]);
+    }
+
     public function edit(Request $request, OldPcReturn $pc_handover): Response
     {
         abort_unless($this->canManage($request), 403);

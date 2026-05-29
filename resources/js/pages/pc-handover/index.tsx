@@ -53,12 +53,13 @@ function handoverRowLinks(row: HandoverRow, canCreate: boolean) {
     const registerHref = `/pc-register/${row.id}`;
 
     if (row.old_pc_return_id) {
-        const handoverHref = `/pc-handover/${row.old_pc_return_id}/edit`;
+        const handoverHref = `/pc-handover/${row.old_pc_return_id}`;
+        const editHref = `/pc-handover/${row.old_pc_return_id}/edit`;
 
         return {
             refHref: handoverHref,
             viewHref: handoverHref,
-            editHref: handoverHref,
+            editHref: editHref,
         };
     }
 

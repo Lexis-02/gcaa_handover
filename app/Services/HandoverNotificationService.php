@@ -125,7 +125,7 @@ class HandoverNotificationService
         $admins = User::query()
             ->where('is_active', true)
             ->where('id', '!=', $signer->id)
-            ->permission('pc.manage')
+            ->permission('stage.manage-all')
             ->get();
 
         foreach ($admins as $admin) {
@@ -157,7 +157,7 @@ class HandoverNotificationService
         $admins = User::query()
             ->where('is_active', true)
             ->where('id', '!=', $actor->id)
-            ->permission('pc.manage')
+            ->permission('stage.manage-all')
             ->get();
 
         foreach ($admins as $admin) {

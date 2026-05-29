@@ -75,14 +75,14 @@ class UserManagementService
         return [
             'roles' => Role::query()
                 ->where('guard_name', 'web')
-                ->where('name', 'registry_clerk')
+                ->whereIn('name', ['ict_admin', 'registry_clerk'])
                 ->orderBy('name')
                 ->pluck('name')
                 ->values()
                 ->all(),
             'role_labels' => Role::query()
                 ->where('guard_name', 'web')
-                ->where('name', 'registry_clerk')
+                ->whereIn('name', ['ict_admin', 'registry_clerk'])
                 ->orderBy('name')
                 ->pluck('name')
                 ->mapWithKeys(fn (string $name) => [$name => $this->roleLabel($name)])

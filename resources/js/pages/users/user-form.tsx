@@ -27,8 +27,11 @@ type UserRecord = {
 };
 
 const selectClassName = cn(
-    'h-11 w-full rounded-xl border border-border/60 bg-background px-3 text-sm',
-    'outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/15',
+    'h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm',
+    'text-slate-900 outline-none transition-all duration-300',
+    'focus:border-accent/80 focus:bg-white focus:ring-4 focus:ring-accent/10',
+    'dark:border-slate-800/80 dark:bg-slate-950/40 dark:text-slate-100',
+    'dark:focus:border-accent/80 dark:focus:bg-slate-950/80',
 );
 
 export function UserFormFields({
@@ -97,43 +100,7 @@ export function UserFormFields({
                 )}
             </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="department_id" className="text-sm font-medium">
-                    Department
-                </Label>
-                <select
-                    id="department_id"
-                    name="department_id"
-                    defaultValue={record?.department_id ?? ''}
-                    className={selectClassName}
-                >
-                    <option value="">None</option>
-                    {options.departments.map((d) => (
-                        <option key={d.id} value={d.id}>
-                            {d.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="staff_id" className="text-sm font-medium">
-                    Linked staff record
-                </Label>
-                <select
-                    id="staff_id"
-                    name="staff_id"
-                    defaultValue={record?.staff_id ?? ''}
-                    className={selectClassName}
-                >
-                    <option value="">None</option>
-                    {options.staff.map((s) => (
-                        <option key={s.id} value={s.id}>
-                            {s.full_name} ({s.staff_number})
-                        </option>
-                    ))}
-                </select>
-            </div>
 
             <FormInput
                 id="password"
@@ -173,10 +140,20 @@ export function UserFormFields({
                 </div>
             )}
 
-            <Button type="submit" disabled={processing}>
-                <Save className="size-4" />
-                {isEdit ? 'Save changes' : 'Create user'}
-            </Button>
+            <div className="flex items-center gap-3 pt-2">
+                <Button type="submit" disabled={processing}>
+                    <Save className="size-4" />
+                    {isEdit ? 'Save changes' : 'Create user'}
+                </Button>
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => window.history.back()}
+                    disabled={processing}
+                >
+                    Cancel
+                </Button>
+            </div>
         </>
     );
 }

@@ -12,14 +12,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-    isHandoverAlertSoundEnabled,
-    setHandoverAlertSoundEnabled,
-} from '@/hooks/use-handover-notification-alerts';
-import {
-    playHandoverAlertSound,
-    unlockHandoverAlertSound,
-} from '@/lib/handover-alert-sound';
+
 import { pageEnter } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
@@ -100,16 +93,7 @@ export default function NotificationsIndex({
     unread_count,
     stages,
 }: PageProps) {
-    const [soundOn, setSoundOn] = useState(isHandoverAlertSoundEnabled);
 
-    const toggleSound = () => {
-        const next = !soundOn;
-        setSoundOn(next);
-        setHandoverAlertSoundEnabled(next);
-        if (next) {
-            void unlockHandoverAlertSound().then(() => playHandoverAlertSound());
-        }
-    };
 
     const markAllRead = () => {
         router.post('/notifications/read-all', {}, { preserveScroll: true });
@@ -144,25 +128,11 @@ export default function NotificationsIndex({
                     </div>
                     
                     <div className="flex shrink-0 items-center gap-3">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={toggleSound}
-                            className="gap-2"
-                        >
-                            {soundOn ? (
-                                <Volume2 className="size-4 text-muted-foreground" />
-                            ) : (
-                                <VolumeX className="size-4 text-muted-foreground" />
-                            )}
-                            {soundOn ? 'Sound on' : 'Muted'}
-                        </Button>
                         {unread_count > 0 && (
                             <Button
                                 type="button"
                                 size="sm"
-                                variant="secondary"
+                                variant="outline"
                                 onClick={markAllRead}
                                 className="gap-2"
                             >

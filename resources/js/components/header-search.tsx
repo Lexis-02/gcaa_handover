@@ -19,18 +19,12 @@ const HANDOVER_SEARCH_PATH = '/pc-handover';
 
 type SearchableList = 'register' | 'handover' | null;
 
-function resolveListPage(component: string, urlPath: string): SearchableList {
-    if (
-        component === 'pc-register/index' ||
-        urlPath === REGISTER_SEARCH_PATH
-    ) {
+function resolveSearchContext(component: string, urlPath: string): SearchableList {
+    if (component.startsWith('pc-register') || urlPath.startsWith(REGISTER_SEARCH_PATH)) {
         return 'register';
     }
 
-    if (
-        component === 'pc-handover/index' ||
-        urlPath === HANDOVER_SEARCH_PATH
-    ) {
+    if (component.startsWith('pc-handover') || urlPath.startsWith(HANDOVER_SEARCH_PATH)) {
         return 'handover';
     }
 
@@ -45,8 +39,10 @@ export function HeaderSearch({
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const page = usePage<ListPageFilters>();
     const urlPath = page.url.split('?')[0];
-    const listPage = resolveListPage(page.component, urlPath);
-    const queryFromServer = listPage
+    const searchContext = resolveSearchContext(page.component, urlPath);
+    const isIndexPage = page.component === 'pc-register/index' || page.component === 'pc-handover/index';
+
+    const queryFromServer = isIndexPage
         ? (page.props.filters?.q ?? '')
         : '';
     const [value, setValue] = useState(queryFromServer);
@@ -60,7 +56,7 @@ export function HeaderSearch({
     });
 
     const searchPath =
-        listPage === 'handover'
+        searchContext === 'handover'
             ? HANDOVER_SEARCH_PATH
             : REGISTER_SEARCH_PATH;
 
@@ -84,7 +80,7 @@ export function HeaderSearch({
     const handleChange = (next: string) => {
         setValue(next);
 
-        if (!listPage) {
+        if (!isIndexPage) {
             return;
         }
 
@@ -106,23 +102,23 @@ export function HeaderSearch({
             clearTimeout(debounceRef.current);
         }
 
-        if (listPage) {
+        if (isIndexPage) {
             runSearch(value);
             return;
         }
 
-        router.get(REGISTER_SEARCH_PATH, {
+        router.get(searchPath, {
             q: value.trim() || undefined,
         });
     };
 
     const defaultPlaceholder = (() => {
-        if (listPage === 'register') {
-            return 'Search ref no., asset tag, user, department…';
+        if (searchContext === 'register') {
+            return isIndexPage ? 'Search ref no., asset tag, user, department…' : 'Search PCs — press Enter to search';
         }
 
-        if (listPage === 'handover') {
-            return 'Search ref, user, department, old PC…';
+        if (searchContext === 'handover') {
+            return isIndexPage ? 'Search ref, user, department, old PC…' : 'Search handovers — press Enter to search';
         }
 
         return 'Search PCs — press Enter to open register';

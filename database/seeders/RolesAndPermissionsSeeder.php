@@ -44,7 +44,6 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $registryClerk = Role::updateOrCreate(['name' => 'registry_clerk'], ['guard_name' => 'web']);
         $registryClerk->syncPermissions([
-            'batch.create',
             'pc.manage',
             'pc.view',
         ]);

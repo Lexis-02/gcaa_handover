@@ -84,6 +84,7 @@ class PcHandoverService
             'old_pc_condition' => $old?->condition,
             'data_wiped' => $old?->data_wiped,
             'returned_to_stores' => $old?->returned_to_stores,
+            'return_action' => $old?->return_action,
             'has_old_pc_return' => $old !== null,
             'can_edit' => $old !== null,
         ];
@@ -118,6 +119,10 @@ class PcHandoverService
             ])->values()->all(),
             'old_pc_conditions' => $this->lookups->oldPcConditions(),
             'yes_no_options' => $this->lookups->yesNoOptions(),
+            'return_actions' => [
+                ['value' => 'return_to_stores', 'label' => 'Return to Stores'],
+                ['value' => 'given_to_user', 'label' => 'Given to another user'],
+            ],
         ];
     }
 
@@ -132,7 +137,7 @@ class PcHandoverService
             'id' => $return->id,
             'pc_asset_id' => $return->pc_asset_id,
             'ref_no' => $return->pcAsset?->ref_no,
-            'end_user_name' => $return->pcAsset?->assignedStaff?->full_name,
+            'end_user_name' => $return->pcAsset?->assigned_user_name ?? $return->pcAsset?->assignedStaff?->full_name,
             'department_name' => $return->pcAsset?->department?->name,
             'old_asset_tag' => $return->old_asset_tag,
             'old_make_model' => $return->old_make_model,
@@ -142,6 +147,7 @@ class PcHandoverService
             'reason_for_replacement' => $return->reason_for_replacement,
             'data_wiped' => $return->data_wiped,
             'returned_to_stores' => $return->returned_to_stores,
+            'return_action' => $return->return_action,
         ];
     }
 }

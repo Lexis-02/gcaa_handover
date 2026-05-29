@@ -80,7 +80,6 @@ class HandoverNotificationService
 
         $endUsers = User::query()
             ->where('is_active', true)
-            ->where('staff_id', $asset->assigned_staff_id)
             ->permission('old-pc.submit')
             ->get();
 
@@ -182,14 +181,8 @@ class HandoverNotificationService
 
         return match ($stage) {
             1 => $query->permission('stage1.signoff')->get(),
-            2 => $query
-                ->permission('stage2.signoff')
-                ->where('department_id', $asset->department_id)
-                ->get(),
-            3 => $query
-                ->where('staff_id', $asset->assigned_staff_id)
-                ->permission('stage3.signoff')
-                ->get(),
+            2 => $query->permission('stage2.signoff')->get(),
+            3 => $query->permission('stage3.signoff')->get(),
             default => collect(),
         };
     }

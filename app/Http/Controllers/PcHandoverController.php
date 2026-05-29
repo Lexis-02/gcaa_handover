@@ -73,7 +73,7 @@ class PcHandoverController extends Controller
 
         OldPcReturn::query()->create([
             ...$request->validated(),
-            'staff_id' => $pc->assigned_staff_id,
+            'staff_id' => $pc->assigned_staff_id ?? null,
         ]);
 
         $this->notifications->notifyPendingSigners(

@@ -56,52 +56,7 @@ export async function unlockHandoverAlertSound(): Promise<void> {
     }
 }
 
-/**
- * Classic PC-style triple beep — alerts the signer that action is required.
- */
 export async function playHandoverAlertSound(): Promise<void> {
-    const ctx = getContext();
-    if (!ctx) {
-        return;
-    }
-
-    try {
-        if (ctx.state === 'suspended') {
-            await ctx.resume();
-        }
-
-        if (ctx.state !== 'running') {
-            return;
-        }
-
-        const now = ctx.currentTime;
-        const beeps = [
-            { start: 0, freq: 880 },
-            { start: 0.18, freq: 988 },
-            { start: 0.36, freq: 1175 },
-        ];
-
-        beeps.forEach(({ start, freq }) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(freq, now + start);
-
-            const attack = now + start + 0.015;
-            const release = now + start + BEEP_DURATION_S;
-
-            gain.gain.setValueAtTime(0.0001, now + start);
-            gain.gain.exponentialRampToValueAtTime(PEAK_GAIN, attack);
-            gain.gain.exponentialRampToValueAtTime(0.0001, release);
-
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.start(now + start);
-            osc.stop(release + 0.02);
-        });
-    } catch {
-        // Ignore playback errors (e.g. autoplay still blocked).
-    }
+    // Sound disabled per new update.
+    return;
 }

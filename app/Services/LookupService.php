@@ -44,6 +44,11 @@ class LookupService
         return $this->labels('yes_no');
     }
 
+    public function osOptions(): array
+    {
+        return $this->labels('os');
+    }
+
     /**
      * @return Collection<int, LookupValue>
      */

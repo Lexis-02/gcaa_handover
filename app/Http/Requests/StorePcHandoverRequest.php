@@ -40,6 +40,7 @@ class StorePcHandoverRequest extends FormRequest
             'reason_for_replacement' => ['nullable', 'string', 'max:2000'],
             'data_wiped' => ['required', 'string', Rule::in($lookups->yesNoOptions())],
             'returned_to_stores' => ['required', 'string', Rule::in($lookups->yesNoOptions())],
+            'return_action' => ['required', 'string', 'in:return_to_stores,given_to_user'],
         ];
     }
 
@@ -48,7 +49,7 @@ class StorePcHandoverRequest extends FormRequest
         $validator->after(function ($validator): void {
             $pc = PcAsset::query()->find($this->input('pc_asset_id'));
 
-            if ($pc && ! $pc->assigned_staff_id) {
+            if ($pc && ! $pc->assigned_staff_id && ! $pc->assigned_user_name) {
                 $validator->errors()->add(
                     'pc_asset_id',
                     'The selected PC must have an assigned end user before recording old PC details.',

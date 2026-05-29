@@ -45,6 +45,7 @@ class PcRegisterService
                     ->orWhere('condition_on_issue', 'like', $like)
                     ->orWhereHas('department', fn ($q) => $q->where('name', 'like', $like))
                     ->orWhereHas('building', fn ($q) => $q->where('name', 'like', $like))
+                    ->orWhere('assigned_user_name', 'like', $like)
                     ->orWhereHas('assignedStaff', fn ($q) => $q->where('full_name', 'like', $like)
                         ->orWhere('staff_number', 'like', $like));
             });
@@ -112,7 +113,7 @@ class PcRegisterService
         }
 
         if (! $progress['stage_3']) {
-            $name = $asset->assignedStaff?->full_name;
+            $name = $asset->assigned_user_name ?? $asset->assignedStaff?->full_name;
 
             return $name
                 ? 'Assigned end user ('.$name.')'
@@ -164,11 +165,15 @@ class PcRegisterService
             'batch' => $asset->batch?->only(['id', 'batch_code', 'year']),
             'department' => $asset->department?->only(['id', 'name', 'code']),
             'building' => $asset->building?->only(['id', 'name']),
-            'assignee' => $asset->assignedStaff ? [
+            'assignee' => $asset->assigned_user_name ? [
+                'full_name' => $asset->assigned_user_name,
+                'staff_number' => null,
+                'designation' => null,
+            ] : ($asset->assignedStaff ? [
                 'full_name' => $asset->assignedStaff->full_name,
                 'staff_number' => $asset->assignedStaff->staff_number,
                 'designation' => $asset->assignedStaff->designation,
-            ] : null,
+            ] : null),
             'stores_issue_date' => $stages->get(1)?->actioned_at?->format('Y-m-d'),
             'form_1_signed' => $stages->has(1),
             'director_receipt_date' => $stages->get(2)?->actioned_at?->format('Y-m-d'),
@@ -192,9 +197,8 @@ class PcRegisterService
             'batches' => Batch::query()->orderByDesc('year')->get(['id', 'batch_code', 'year', 'total_pcs']),
             'departments' => \App\Models\Department::query()->where('is_active', true)->orderBy('name')->get(['id', 'name', 'code']),
             'buildings' => \App\Models\Building::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
-            'staff' => \App\Models\Staff::query()->where('is_active', true)->orderBy('full_name')->get(['id', 'full_name', 'staff_number', 'department_id']),
             'conditions' => $this->lookups->pcConditions(),
-            'os_options' => config('handover.os_options', []),
+            'os_options' => $this->lookups->osOptions(),
         ];
     }
 }

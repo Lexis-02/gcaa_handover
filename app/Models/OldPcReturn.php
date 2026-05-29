@@ -20,7 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'data_wiped_by',
     'data_wiped_at',
     'returned_to_stores',
-    'returned_at'
+    'returned_at',
+    'return_action'
 ])]
 class OldPcReturn extends Model
 {

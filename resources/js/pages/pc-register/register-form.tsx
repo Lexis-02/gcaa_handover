@@ -11,12 +11,6 @@ export type RegisterFormOptions = {
     batches: { id: number; batch_code: string; year: number; total_pcs: number }[];
     departments: { id: number; name: string; code: string }[];
     buildings: { id: number; name: string }[];
-    staff: {
-        id: number;
-        full_name: string;
-        staff_number: string;
-        department_id: number | null;
-    }[];
     conditions: string[];
     os_options: string[];
 };
@@ -31,7 +25,7 @@ export type RegisterFormData = {
     hostname?: string | null;
     os?: string;
     condition_on_issue?: string;
-    assigned_staff_id?: number | null;
+    assigned_user_name?: string | null;
     department_id?: number | null;
     building_id?: number | null;
     room_ext?: string | null;
@@ -184,17 +178,12 @@ export function RegisterForm({
 
                     <section className="grid gap-4 md:grid-cols-2">
                         <div className="md:col-span-2">
-                            <StaffCombobox
-                                staff={options.staff.map((member) => ({
-                                    ...member,
-                                    department_name:
-                                        options.departments.find(
-                                            (d) =>
-                                                d.id === member.department_id,
-                                        )?.name ?? null,
-                                }))}
-                                defaultValue={record.assigned_staff_id}
-                                error={errors.assigned_staff_id}
+                            <FormInput
+                                id="assigned_user_name"
+                                label="Assigned End User Name"
+                                name="assigned_user_name"
+                                defaultValue={record.assigned_user_name ?? ''}
+                                error={errors.assigned_user_name}
                             />
                         </div>
 

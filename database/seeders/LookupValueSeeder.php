@@ -27,6 +27,12 @@ class LookupValueSeeder extends Seeder
                 'No',
                 'N/A',
             ],
+            'os' => [
+                'Windows 10 Pro',
+                'Windows 11 Pro',
+                'macOS',
+                'Ubuntu Linux',
+            ],
         ];
 
         foreach ($sets as $type => $labels) {

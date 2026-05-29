@@ -178,7 +178,7 @@ class PcRegisterController extends Controller
         return Inertia::render('pc-register/edit', [
             'record' => $pc_register->only([
                 'id', 'ref_no', 'batch_id', 'asset_tag', 'make_model', 'serial_number',
-                'hostname', 'os', 'condition_on_issue', 'assigned_staff_id',
+                'hostname', 'os', 'condition_on_issue', 'assigned_user_name',
                 'department_id', 'building_id', 'room_ext',
             ]),
             'options' => $this->register->formOptions(),

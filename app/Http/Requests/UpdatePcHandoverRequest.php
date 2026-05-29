@@ -33,6 +33,7 @@ class UpdatePcHandoverRequest extends FormRequest
             'reason_for_replacement' => ['nullable', 'string', 'max:2000'],
             'data_wiped' => ['required', 'string', Rule::in($lookups->yesNoOptions())],
             'returned_to_stores' => ['required', 'string', Rule::in($lookups->yesNoOptions())],
+            'return_action' => ['required', 'string', 'in:return_to_stores,given_to_user'],
         ];
     }
 }

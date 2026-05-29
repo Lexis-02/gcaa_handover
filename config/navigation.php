@@ -117,6 +117,13 @@ $lookupChildren = [
         'match' => 'exact',
         'permissions' => ['config.manage'],
     ],
+    [
+        'title' => 'Operating Systems',
+        'route' => 'lookups.values.index',
+        'route_params' => ['type' => 'operating-systems'],
+        'icon' => 'eye',
+        'permissions' => ['config.manage'],
+    ],
 ];
 
 return [

@@ -13,6 +13,7 @@ export type HandoverFormOptions = {
     pcs?: PcAssetOption[];
     old_pc_conditions: string[];
     yes_no_options: string[];
+    return_actions: { value: string; label: string }[];
 };
 
 export type HandoverFormData = {
@@ -28,6 +29,7 @@ export type HandoverFormData = {
     reason_for_replacement?: string | null;
     data_wiped?: string;
     returned_to_stores?: string;
+    return_action?: string;
 };
 
 const formLabelClassName =
@@ -227,6 +229,35 @@ export function HandoverForm({
                                 {errors.returned_to_stores && (
                                     <p className="text-sm text-destructive">
                                         {errors.returned_to_stores}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                            <div className="space-y-2">
+                                <Label className={formLabelClassName}>
+                                    Return Action
+                                </Label>
+                                <select
+                                    name="return_action"
+                                    defaultValue={
+                                        record.return_action ?? ''
+                                    }
+                                    required
+                                    className={selectClassName}
+                                >
+                                    <option value="" disabled>
+                                        Select return action…
+                                    </option>
+                                    {options.return_actions?.map((opt) => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.return_action && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.return_action}
                                     </p>
                                 )}
                             </div>

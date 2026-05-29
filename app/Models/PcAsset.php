@@ -21,6 +21,7 @@ use App\Models\Scopes\DepartmentScope;
     'condition_on_issue',
     'status',
     'assigned_staff_id',
+    'assigned_user_name',
     'department_id',
     'building_id',
     'room_ext'

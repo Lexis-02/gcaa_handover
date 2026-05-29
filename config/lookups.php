@@ -15,6 +15,10 @@ return [
             'title' => 'Yes / No',
             'slug' => 'yes-no',
         ],
+        'os' => [
+            'title' => 'Operating System',
+            'slug' => 'operating-systems',
+        ],
     ],
 
     'fallbacks' => [
@@ -34,6 +38,12 @@ return [
             'Yes',
             'No',
             'N/A',
+        ],
+        'os' => [
+            'Windows 10 Pro',
+            'Windows 11 Pro',
+            'macOS',
+            'Ubuntu Linux',
         ],
     ],
 ];

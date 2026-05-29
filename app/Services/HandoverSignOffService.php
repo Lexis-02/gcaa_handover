@@ -45,6 +45,10 @@ class HandoverSignOffService
             return null;
         }
 
+        if ($user->can('stage.manage-all')) {
+            return $pendingStage;
+        }
+
         return match ($pendingStage) {
             1 => $user->can('stage1.signoff') ? 1 : null,
             2 => $this->directorMaySignStage2($user, $asset) ? 2 : null,
@@ -226,6 +230,7 @@ class HandoverSignOffService
         }
 
         return $user->staff_id !== null
+            && $asset->assigned_staff_id !== null
             && (int) $user->staff_id === (int) $asset->assigned_staff_id;
     }
 }

@@ -7,6 +7,8 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -27,6 +29,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->configureRouteBindings();
+
+        Event::listen(function (Login $event) {
+            $event->user->update([
+                'last_login_at' => now(),
+            ]);
+        });
     }
 
     protected function configureRouteBindings(): void

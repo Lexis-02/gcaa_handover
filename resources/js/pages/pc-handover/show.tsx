@@ -114,7 +114,7 @@ export default function PcHandoverShow({ record, meta }: PageProps) {
                         </div>
                         <div className="flex shrink-0 items-center gap-2">
                             {meta.can_edit && (
-                                <Button asChild variant="outline" size="default">
+                                <Button asChild variant="default" size="default">
                                     <Link href={`/pc-handover/${record.id}/edit`}>
                                         <Pencil className="size-4" />
                                         Edit

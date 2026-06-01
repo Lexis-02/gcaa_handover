@@ -95,11 +95,11 @@ export default function BatchesEdit({
                             </div>
 
                             <div className="flex items-center gap-3 pt-2">
-                                <Button type="submit" disabled={processing}>
+                                <Button type="submit" variant="success" disabled={processing}>
                                     <Save className="size-4" />
                                     Save changes
                                 </Button>
-                                <Button asChild variant="outline">
+                                <Button asChild variant="secondary">
                                     <Link href={`/batches/${batch.id}`}>Cancel</Link>
                                 </Button>
                             </div>

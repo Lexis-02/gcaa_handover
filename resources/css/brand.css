@@ -35,9 +35,9 @@
     --color-danger-hover: #dc2626;
     --color-danger-active: #b91c1c;
 
-    --color-secondary: #6b7280;
-    --color-secondary-hover: #4b5563;
-    --color-secondary-active: #374151;
+    --color-slate: #6b7280;
+    --color-slate-hover: #4b5563;
+    --color-slate-active: #374151;
 
     /* ── Legacy aliases (used across components) ─────────────── */
     --brand-primary: var(--color-primary-500);
@@ -68,7 +68,7 @@
     --secondary: var(--color-primary-50);
     --secondary-foreground: var(--color-primary-700);
     --muted: color-mix(in srgb, var(--color-primary-100) 50%, white);
-    --muted-foreground: var(--color-secondary);
+    --muted-foreground: var(--color-slate);
     --accent: var(--color-primary-100);
     --accent-foreground: var(--color-primary-700);
 
@@ -81,7 +81,7 @@
     --info: var(--color-info);
     --info-foreground: #ffffff;
 
-    --border: color-mix(in srgb, var(--color-primary-300) 35%, transparent);
+    --border: color-mix(in srgb, var(--color-slate) 25%, transparent);
     --input: color-mix(in srgb, var(--color-primary-200) 50%, transparent);
     --ring: var(--color-primary-400);
 
@@ -89,7 +89,7 @@
     --chart-2: var(--color-success);
     --chart-3: var(--color-warning);
     --chart-4: var(--color-info);
-    --chart-5: var(--color-secondary);
+    --chart-5: var(--color-slate);
 
     --radius: 0.75rem;
 
@@ -109,8 +109,8 @@
     --scrollbar-thumb: rgba(255, 255, 255, 0.45);
     --scrollbar-thumb-hover: rgba(255, 255, 255, 0.65);
 
-    --dashboard-shadow: 0 1px 2px color-mix(in srgb, var(--color-primary-900) 4%, transparent),
-        0 4px 12px color-mix(in srgb, var(--color-primary-500) 10%, transparent);
+    --dashboard-shadow: 0 1px 2px color-mix(in srgb, var(--color-primary-900) 3%, transparent),
+        0 4px 12px color-mix(in srgb, var(--color-primary-500) 4%, transparent);
     --dashboard-gradient: linear-gradient(
         135deg,
         var(--color-primary-500) 0%,
@@ -139,7 +139,7 @@
     --accent-foreground: var(--color-primary-100);
 
     --destructive: var(--color-danger-hover);
-    --border: color-mix(in srgb, var(--color-primary-600) 50%, transparent);
+    --border: color-mix(in srgb, var(--color-slate) 40%, transparent);
     --input: color-mix(in srgb, var(--color-primary-700) 60%, transparent);
     --ring: var(--color-primary-400);
 
@@ -151,5 +151,5 @@
     --scrollbar-thumb: rgba(255, 255, 255, 0.35);
 
     --dashboard-shadow: 0 1px 2px rgba(0, 0, 0, 0.2),
-        0 4px 16px color-mix(in srgb, var(--color-primary-500) 10%, transparent);
+        0 4px 16px color-mix(in srgb, var(--color-primary-500) 4%, transparent);
 }

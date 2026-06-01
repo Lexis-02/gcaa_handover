@@ -50,7 +50,7 @@ export default function LookupValueShow({
                     </div>
                 </dl>
                 <div className="flex gap-2">
-                    <Button asChild variant="outline">
+                    <Button asChild variant="default">
                         <Link href={`${base}/${record.id}/edit`}>
                             <Pencil className="size-4 mr-2" />
                             Edit

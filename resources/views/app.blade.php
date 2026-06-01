@@ -37,6 +37,8 @@
 
         @fonts
 
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
+
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         <x-inertia::head>

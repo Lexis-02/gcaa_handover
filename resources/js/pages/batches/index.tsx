@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ListRowActions } from '@/components/list-row-actions';
+import { PageSearchInput } from '@/components/page-search-input';
 import { pageEnter } from '@/lib/motion';
 
 type BatchRecord = {
@@ -18,11 +19,14 @@ type BatchRecord = {
 
 export default function BatchesIndex({
     batches,
+    filters,
     meta,
 }: {
     batches: BatchRecord[];
+    filters: { q: string };
     meta: { can_create: boolean };
 }) {
+    const hasSearch = filters?.q?.trim().length > 0;
     return (
         <>
             <Head title="Handover batches" />
@@ -32,16 +36,24 @@ export default function BatchesIndex({
                 initial="hidden"
                 animate="visible"
             >
-                {meta.can_create && (
-                    <div className="flex justify-end">
-                        <Link
-                            href="/batches/create"
-                            className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-                        >
-                            Add batch
-                        </Link>
-                    </div>
-                )}
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <PageSearchInput 
+                        value={filters?.q ?? ''}
+                        routePath="/batches"
+                        placeholder="Search batch code, year, or notes..."
+                    />
+
+                    {meta.can_create && (
+                        <div className="flex justify-end">
+                            <Link
+                                href="/batches/create"
+                                className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                            >
+                                Add batch
+                            </Link>
+                        </div>
+                    )}
+                </div>
 
                 <div className="overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border/60">
                     <div className="custom-scrollbar overflow-x-auto">
@@ -66,8 +78,10 @@ export default function BatchesIndex({
                                             colSpan={7}
                                             className="px-4 py-12 text-center text-muted-foreground"
                                         >
-                                            No batches yet.
-                                            {meta.can_create && (
+                                            {hasSearch 
+                                                ? 'No batches match your search.'
+                                                : 'No batches yet.'}
+                                            {!hasSearch && meta.can_create && (
                                                 <>
                                                     {' '}
                                                     <Link

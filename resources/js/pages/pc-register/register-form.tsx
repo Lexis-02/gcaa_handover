@@ -241,13 +241,13 @@ export function RegisterForm({
                     </section>
 
                     <div className="flex items-center gap-3 pt-2">
-                        <Button type="submit" disabled={processing}>
+                        <Button type="submit" variant="success" disabled={processing}>
                             <Save className="size-4" />
                             {submitLabel}
                         </Button>
                         <Button
                             type="button"
-                            variant="outline"
+                            variant="secondary"
                             onClick={() => window.history.back()}
                             disabled={processing}
                         >

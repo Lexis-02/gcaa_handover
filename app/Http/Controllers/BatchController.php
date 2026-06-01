@@ -23,8 +23,17 @@ class BatchController extends Controller
     {
         abort_unless($request->user()?->can('batch.create'), 403);
 
-        $records = Batch::query()
-            ->withCount('pcAssets')
+        $search = $request->string('q')->trim()->toString();
+
+        $query = Batch::query()->withCount('pcAssets');
+
+        if ($search !== '') {
+            $query->where('batch_code', 'like', "%{$search}%")
+                ->orWhere('year', 'like', "%{$search}%")
+                ->orWhere('notes', 'like', "%{$search}%");
+        }
+
+        $records = $query
             ->orderByDesc('year')
             ->orderByDesc('id')
             ->get()
@@ -36,6 +45,9 @@ class BatchController extends Controller
 
         return Inertia::render('batches/index', [
             'batches' => $records,
+            'filters' => [
+                'q' => $search,
+            ],
             'meta' => [
                 'can_create' => $request->user()->can('batch.create'),
             ],

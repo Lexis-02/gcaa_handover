@@ -75,11 +75,11 @@ export default function DepartmentForm({
                                 </Label>
                             </div>
                             <div className="flex items-center gap-3 pt-2">
-                                <Button type="submit" disabled={processing}>
+                                <Button type="submit" variant="success" disabled={processing}>
                                     <Save className="size-4" />
                                     {isEdit ? 'Save changes' : 'Add department'}
                                 </Button>
-                                <Button asChild variant="outline">
+                                <Button asChild variant="secondary">
                                     <Link href="/lookups/departments">Cancel</Link>
                                 </Button>
                             </div>

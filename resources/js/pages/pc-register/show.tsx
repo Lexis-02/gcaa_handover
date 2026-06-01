@@ -246,7 +246,7 @@ export default function PcRegisterShow({
                                 />
                             )}
                             {meta.can_edit && (
-                                <Button asChild variant="outline" size="default">
+                                <Button asChild variant="default" size="default">
                                     <Link href={`/pc-register/${record.id}/edit`}>
                                         <Pencil className="size-4" />
                                         Edit

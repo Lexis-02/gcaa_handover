@@ -70,11 +70,11 @@ export default function BuildingForm({
                                 </Label>
                             </div>
                             <div className="flex items-center gap-3 pt-2">
-                                <Button type="submit" disabled={processing}>
+                                <Button type="submit" variant="success" disabled={processing}>
                                     <Save className="size-4" />
                                     {isEdit ? 'Save changes' : 'Add building'}
                                 </Button>
-                                <Button asChild variant="outline">
+                                <Button asChild variant="secondary">
                                     <Link href="/lookups/buildings">Cancel</Link>
                                 </Button>
                             </div>

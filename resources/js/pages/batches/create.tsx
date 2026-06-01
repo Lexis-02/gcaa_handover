@@ -101,11 +101,11 @@ export default function BatchesCreate({ defaults }: PageProps) {
                             </div>
 
                             <div className="flex items-center gap-3 pt-2">
-                                <Button type="submit" disabled={processing}>
+                                <Button type="submit" variant="success" disabled={processing}>
                                     <Save className="size-4" />
                                     Create batch
                                 </Button>
-                                <Button asChild variant="outline">
+                                <Button asChild variant="secondary">
                                     <Link href="/batches">Cancel</Link>
                                 </Button>
                             </div>

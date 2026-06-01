@@ -264,10 +264,18 @@ export function HandoverForm({
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-3">
-                        <Button type="submit" disabled={processing}>
+                    <div className="flex items-center gap-3 pt-2">
+                        <Button type="submit" variant="success" disabled={processing}>
                             <Save className="size-4" />
                             {submitLabel}
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => window.history.back()}
+                            disabled={processing}
+                        >
+                            Cancel
                         </Button>
                     </div>
                 </>

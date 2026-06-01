@@ -4,6 +4,7 @@ import {
     HandoverRecordFilter,
     type HandoverFilterValue,
 } from '@/components/handover-record-filter';
+import { PageSearchInput } from '@/components/page-search-input';
 import { ListRowActions } from '@/components/list-row-actions';
 import { SmartPagination } from '@/components/smart-pagination';
 import { pageEnter } from '@/lib/motion';
@@ -118,12 +119,19 @@ export default function PcHandoverIndex({
                             </>
                         )}
                     </div>
-                    <HandoverRecordFilter
-                        value={filters.status ?? ''}
-                        search={filters.q}
-                        appearance="plain"
-                        className="sm:ml-auto"
-                    />
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:ml-auto">
+                        <PageSearchInput 
+                            value={filters?.q ?? ''}
+                            routePath="/pc-handover"
+                            placeholder="Search records..."
+                            className="w-full sm:w-64 lg:w-80"
+                        />
+                        <HandoverRecordFilter
+                            value={filters.status ?? ''}
+                            search={filters.q}
+                            appearance="plain"
+                        />
+                    </div>
                 </div>
 
                 <div className="overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border/60">

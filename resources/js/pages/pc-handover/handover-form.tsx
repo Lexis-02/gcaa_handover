@@ -222,35 +222,6 @@ export function HandoverForm({
                             </div>
                             <div className="space-y-2">
                                 <Label className={formLabelClassName}>
-                                    Returned to stores?
-                                </Label>
-                                <select
-                                    name="returned_to_stores"
-                                    defaultValue={
-                                        record.returned_to_stores ?? ''
-                                    }
-                                    required
-                                    className={selectClassName}
-                                >
-                                    <option value="" disabled>
-                                        Select…
-                                    </option>
-                                    {options.yes_no_options.map((value) => (
-                                        <option key={value} value={value}>
-                                            {value}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.returned_to_stores && (
-                                    <p className="text-sm text-destructive">
-                                        {errors.returned_to_stores}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                        <div className="grid gap-4 sm:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label className={formLabelClassName}>
                                     Return Action
                                 </Label>
                                 <select

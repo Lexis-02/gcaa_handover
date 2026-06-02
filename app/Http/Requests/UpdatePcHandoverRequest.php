@@ -32,7 +32,6 @@ class UpdatePcHandoverRequest extends FormRequest
             'condition' => ['required', 'string', Rule::in($lookups->oldPcConditions())],
             'reason_for_replacement' => ['nullable', 'string', 'max:2000'],
             'data_wiped' => ['required', 'string', Rule::in($lookups->yesNoOptions())],
-            'returned_to_stores' => ['required', 'string', Rule::in($lookups->yesNoOptions())],
             'return_action' => ['required', 'string', 'in:return_to_stores,given_to_user'],
             'old_hostname' => ['nullable', 'string', 'max:255'],
             'given_to_fullname' => ['required_if:return_action,given_to_user', 'nullable', 'string', 'max:255'],

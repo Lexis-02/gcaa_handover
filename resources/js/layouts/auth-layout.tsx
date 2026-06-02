@@ -27,7 +27,13 @@ export default function AuthLayout({
     children: React.ReactNode;
 }) {
     const { resolvedAppearance, updateAppearance } = useAppearance();
-    const isDark = resolvedAppearance === 'dark';
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const isDark = mounted ? resolvedAppearance === 'dark' : false;
 
     const [currentSlide, setCurrentSlide] = useState(0);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);

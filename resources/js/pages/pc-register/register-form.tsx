@@ -78,12 +78,18 @@ export function RegisterForm({
                     )}
 
                     <section className="grid gap-4 md:grid-cols-2">
-                        <BatchCombobox
-                            batches={options.batches}
-                            defaultValue={record.batch_id}
-                            disabled={!!record.id}
-                            error={errors.batch_id}
-                        />
+                        <div className="space-y-1">
+                            <BatchCombobox
+                                batches={options.batches}
+                                defaultValue={record.batch_id}
+                                disabled={!!record.id}
+                                error={errors.batch_id}
+                                label="Procurement Batch"
+                            />
+                            <p className="text-xs text-muted-foreground ml-1">
+                                Batches are created per procurement project.
+                            </p>
+                        </div>
 
                         <FormInput
                             id="asset_tag"

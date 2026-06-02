@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('data_wiped')->nullable();
             $table->string('data_wiped_by')->nullable();
             $table->timestamp('data_wiped_at')->nullable();
-            $table->string('returned_to_stores')->nullable();
             $table->timestamp('returned_at')->nullable();
             $table->timestamps();
         });

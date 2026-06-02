@@ -27,7 +27,7 @@ class PcRegisterService
                 'building:id,name',
                 'assignedStaff:id,full_name,staff_number,designation',
                 'handoverStages:id,pc_asset_id,stage,actioned_at',
-                'oldPcReturn:id,pc_asset_id,returned_to_stores,data_wiped',
+                'oldPcReturn:id,pc_asset_id,return_action,data_wiped',
             ]);
 
         $term = $search !== null ? trim($search) : '';

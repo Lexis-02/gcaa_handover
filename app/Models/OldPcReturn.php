@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'data_wiped',
     'data_wiped_by',
     'data_wiped_at',
-    'returned_to_stores',
     'returned_at',
     'return_action',
     'given_to_fullname',
@@ -50,7 +49,7 @@ class OldPcReturn extends Model
     public function isFullyReturned(): bool
     {
         return self::isAffirmative($this->data_wiped)
-            && self::isAffirmative($this->returned_to_stores);
+            && $this->return_action === 'return_to_stores';
     }
 
     protected static function booted()

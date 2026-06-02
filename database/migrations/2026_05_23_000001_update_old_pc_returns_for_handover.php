@@ -21,23 +21,20 @@ return new class extends Migration
 
         Schema::table('old_pc_returns', function (Blueprint $table) {
             $table->string('data_wiped_new')->nullable()->after('reason_for_replacement');
-            $table->string('returned_to_stores_new')->nullable()->after('data_wiped_new');
         });
 
         DB::table('old_pc_returns')->orderBy('id')->each(function (object $row): void {
             DB::table('old_pc_returns')->where('id', $row->id)->update([
                 'data_wiped_new' => $row->data_wiped ? 'Yes' : 'No',
-                'returned_to_stores_new' => $row->returned_to_stores ? 'Yes' : 'No',
             ]);
         });
 
         Schema::table('old_pc_returns', function (Blueprint $table) {
-            $table->dropColumn(['data_wiped', 'returned_to_stores']);
+            $table->dropColumn(['data_wiped']);
         });
 
         Schema::table('old_pc_returns', function (Blueprint $table) {
             $table->renameColumn('data_wiped_new', 'data_wiped');
-            $table->renameColumn('returned_to_stores_new', 'returned_to_stores');
         });
 
         if (Schema::getConnection()->getDriverName() === 'mysql') {
@@ -59,23 +56,20 @@ return new class extends Migration
 
         Schema::table('old_pc_returns', function (Blueprint $table) {
             $table->boolean('data_wiped_bool')->default(false);
-            $table->boolean('returned_to_stores_bool')->default(false);
         });
 
         DB::table('old_pc_returns')->orderBy('id')->each(function (object $row): void {
             DB::table('old_pc_returns')->where('id', $row->id)->update([
                 'data_wiped_bool' => $row->data_wiped === 'Yes',
-                'returned_to_stores_bool' => $row->returned_to_stores === 'Yes',
             ]);
         });
 
         Schema::table('old_pc_returns', function (Blueprint $table) {
-            $table->dropColumn(['data_wiped', 'returned_to_stores']);
+            $table->dropColumn(['data_wiped']);
         });
 
         Schema::table('old_pc_returns', function (Blueprint $table) {
             $table->renameColumn('data_wiped_bool', 'data_wiped');
-            $table->renameColumn('returned_to_stores_bool', 'returned_to_stores');
         });
     }
 };

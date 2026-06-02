@@ -10,25 +10,28 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
         $departments = [
-            ['name' => 'ICT', 'code' => 'ICT'],
-            ['name' => 'Air Navigation Services (ANS)', 'code' => 'ANS'],
-            ['name' => 'Aerodromes & Aviation Safety', 'code' => 'ASD'],
-            ['name' => 'Economic Regulation', 'code' => 'ERD'],
-            ['name' => 'Human Resource', 'code' => 'HRD'],
+            ['name' => 'General Services', 'code' => 'GS'],
+            ['name' => 'Air Traffic Safety Engineering', 'code' => 'ATSE'],
+            ['name' => 'Air Traffic Services', 'code' => 'ATS'],
+            ['name' => 'Safety Regulations', 'code' => 'SR'],
+            ['name' => 'Economic Regulations And Business Development', 'code' => 'ERBD'],
+            ['name' => 'Human Resources', 'code' => 'HR'],
             ['name' => 'Finance', 'code' => 'FIN'],
             ['name' => 'Audit', 'code' => 'AUD'],
-            ['name' => 'Legal', 'code' => 'LEG'],
-            ['name' => 'Procurement', 'code' => 'PRO'],
-            ['name' => 'Estate & Transport', 'code' => 'EST'],
-            ['name' => 'Aviation Security (AVSEC)', 'code' => 'AVS'],
-            ['name' => 'Public Affairs', 'code' => 'PAD'],
-            ['name' => 'Training (GATA)', 'code' => 'GAT'],
-            ['name' => 'Office of the DG', 'code' => 'ODG'],
+            ['name' => 'Legal and International Relation', 'code' => 'LIR'],
+            ['name' => 'Corporate Planning', 'code' => 'CP'],
+            ['name' => 'Finance and Administration Secretariat', 'code' => 'FAS'],
+            ['name' => 'Technical Secretariat', 'code' => 'TS'],
+            ['name' => 'DG Secretariat', 'code' => 'DGS'],
         ];
 
+        // Deactivate old departments so they don't appear in lookups
+        // but preserve them for existing records
+        Department::query()->update(['is_active' => false]);
+
         foreach ($departments as $dept) {
-            Department::updateOrCreate(['code' => $dept['code']], [
-                'name' => $dept['name'],
+            Department::updateOrCreate(['name' => $dept['name']], [
+                'code' => $dept['code'],
                 'is_active' => true,
             ]);
         }

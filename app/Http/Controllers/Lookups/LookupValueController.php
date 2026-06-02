@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Lookups\StoreLookupValueRequest;
 use App\Http\Requests\Lookups\UpdateLookupValueRequest;
 use App\Models\LookupValue;
+use App\Models\OldPcReturn;
 use App\Models\PcAsset;
 use App\Services\LookupService;
 use Illuminate\Http\RedirectResponse;
@@ -112,10 +113,27 @@ class LookupValueController extends Controller
             'is_active' => $request->boolean('is_active', true),
         ]);
 
-        if ($lookup_value->type === 'pc_condition' && $oldLabel !== $newLabel) {
-            PcAsset::query()
-                ->where('condition_on_issue', $oldLabel)
-                ->update(['condition_on_issue' => $newLabel]);
+        if ($oldLabel !== $newLabel) {
+            if ($lookup_value->type === 'pc_condition') {
+                PcAsset::query()
+                    ->where('condition_on_issue', $oldLabel)
+                    ->update(['condition_on_issue' => $newLabel]);
+            } elseif ($lookup_value->type === 'old_pc_condition') {
+                OldPcReturn::query()
+                    ->where('condition', $oldLabel)
+                    ->update(['condition' => $newLabel]);
+            } elseif ($lookup_value->type === 'os') {
+                PcAsset::query()
+                    ->where('os', $oldLabel)
+                    ->update(['os' => $newLabel]);
+            } elseif ($lookup_value->type === 'yes_no') {
+                OldPcReturn::query()
+                    ->where('data_wiped', $oldLabel)
+                    ->update(['data_wiped' => $newLabel]);
+                OldPcReturn::query()
+                    ->where('returned_to_stores', $oldLabel)
+                    ->update(['returned_to_stores' => $newLabel]);
+            }
         }
 
         Inertia::flash('toast', [
@@ -132,19 +150,26 @@ class LookupValueController extends Controller
 
         $this->assertTypeMatch($type, $lookup_value);
 
+        $inUse = false;
+
         if ($lookup_value->type === 'pc_condition') {
-            $inUse = PcAsset::query()
-                ->where('condition_on_issue', $lookup_value->label)
-                ->exists();
+            $inUse = PcAsset::query()->where('condition_on_issue', $lookup_value->label)->exists();
+        } elseif ($lookup_value->type === 'old_pc_condition') {
+            $inUse = OldPcReturn::query()->where('condition', $lookup_value->label)->exists();
+        } elseif ($lookup_value->type === 'os') {
+            $inUse = PcAsset::query()->where('os', $lookup_value->label)->exists();
+        } elseif ($lookup_value->type === 'yes_no') {
+            $inUse = OldPcReturn::query()->where('data_wiped', $lookup_value->label)
+                ->orWhere('returned_to_stores', $lookup_value->label)->exists();
+        }
 
-            if ($inUse) {
-                Inertia::flash('toast', [
-                    'type' => 'error',
-                    'message' => 'Cannot delete — PCs use this condition value.',
-                ]);
+        if ($inUse) {
+            Inertia::flash('toast', [
+                'type' => 'error',
+                'message' => 'Cannot delete — this value is actively used in system records.',
+            ]);
 
-                return redirect()->route('lookups.values.index', ['type' => $type]);
-            }
+            return redirect()->route('lookups.values.index', ['type' => $type]);
         }
 
         $lookup_value->delete();

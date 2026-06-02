@@ -118,7 +118,7 @@ class PcRegisterController extends Controller
         return Inertia::render('pc-register/show', [
             'record' => $this->register->serializeForList($pc_register),
             'meta' => [
-                'can_edit' => $user->can('pc.manage') && $pc_register->status === 'pending',
+                'can_edit' => $user->can('pc.manage'),
                 'can_delete' => $this->userCanDelete($user, $pc_register),
                 'can_manage_old_pc' => $user->can('old-pc.submit')
                     || $user->can('stage1.signoff')
@@ -164,15 +164,6 @@ class PcRegisterController extends Controller
     {
         abort_unless($request->user()?->can('pc.manage'), 403);
 
-        if ($pc_register->status !== 'pending') {
-            Inertia::flash('toast', [
-                'type' => 'warning',
-                'message' => 'Only pending PCs can be edited. Stage sign-offs are locked.',
-            ]);
-
-            return redirect()->route('pc-register.show', $pc_register);
-        }
-
         $pc_register->load(['batch:id,batch_code,year']);
 
         return Inertia::render('pc-register/edit', [
@@ -187,15 +178,6 @@ class PcRegisterController extends Controller
 
     public function update(UpdatePcRegisterRequest $request, PcAsset $pc_register): RedirectResponse
     {
-        if ($pc_register->status !== 'pending') {
-            Inertia::flash('toast', [
-                'type' => 'warning',
-                'message' => 'Only pending PCs can be edited.',
-            ]);
-
-            return redirect()->route('pc-register.show', $pc_register);
-        }
-
         $pc_register->update($request->validated());
 
         if ($request->validated('condition_on_issue') === 'Faulty on Arrival') {

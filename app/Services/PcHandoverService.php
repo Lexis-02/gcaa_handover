@@ -98,13 +98,6 @@ class PcHandoverService
         return PcAsset::query()
             ->with(['assignedStaff:id,full_name,staff_number', 'department:id,name'])
             ->whereDoesntHave('oldPcReturn')
-            ->where(function ($query) {
-                $query->whereNotNull('assigned_staff_id')
-                      ->orWhere(function ($q) {
-                          $q->whereNotNull('assigned_user_name')
-                            ->where('assigned_user_name', '!=', '');
-                      });
-            })
             ->orderBy('ref_no')
             ->get(['id', 'ref_no', 'serial_number', 'make_model', 'assigned_staff_id', 'assigned_user_name', 'department_id']);
     }
@@ -129,6 +122,11 @@ class PcHandoverService
                 ['value' => 'return_to_stores', 'label' => 'Return to Stores'],
                 ['value' => 'given_to_user', 'label' => 'Given to another user'],
             ],
+            'departments' => \App\Models\Department::query()
+                ->select(['id', 'name'])
+                ->orderBy('name')
+                ->get()
+                ->toArray(),
         ];
     }
 
@@ -137,7 +135,7 @@ class PcHandoverService
      */
     public function serializeForForm(OldPcReturn $return): array
     {
-        $return->loadMissing(['pcAsset.assignedStaff', 'pcAsset.department']);
+        $return->loadMissing(['pcAsset.assignedStaff', 'pcAsset.department', 'givenToDepartment']);
 
         return [
             'id' => $return->id,
@@ -148,12 +146,19 @@ class PcHandoverService
             'old_asset_tag' => $return->old_asset_tag,
             'old_make_model' => $return->old_make_model,
             'old_serial_no' => $return->old_serial_no,
+            'old_hostname' => $return->old_hostname,
             'year_of_purchase' => $return->year_of_purchase,
             'condition' => $return->condition,
             'reason_for_replacement' => $return->reason_for_replacement,
             'data_wiped' => $return->data_wiped,
             'returned_to_stores' => $return->returned_to_stores,
             'return_action' => $return->return_action,
+            'given_to_fullname' => $return->given_to_fullname,
+            'given_to_staff_number' => $return->given_to_staff_number,
+            'given_to_designation' => $return->given_to_designation,
+            'given_to_department_id' => $return->given_to_department_id,
+            'given_to_telephone' => $return->given_to_telephone,
+            'given_to_department_name' => $return->givenToDepartment?->name,
         ];
     }
 

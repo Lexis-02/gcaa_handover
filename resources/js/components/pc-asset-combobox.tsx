@@ -25,8 +25,8 @@ type PcAssetComboboxProps = {
 function toOptions(pcs: PcAssetOption[]): SearchComboboxOption[] {
     return pcs.map((pc) => ({
         id: pc.id,
-        primary: pc.end_user ?? 'Unassigned',
-        secondary: pc.ref_no,
+        primary: pc.ref_no,
+        secondary: `Assigned to: ${pc.end_user ?? 'Unassigned'}`,
         leading: <User className="size-3.5 shrink-0 text-primary" aria-hidden />,
     }));
 }
@@ -35,7 +35,7 @@ export function PcAssetCombobox({
     pcs,
     name = 'pc_asset_id',
     defaultValue,
-    label = 'End user / new PC',
+    label = 'Associated New PC',
     error,
     required = true,
 }: PcAssetComboboxProps) {
@@ -46,9 +46,9 @@ export function PcAssetCombobox({
             options={options}
             name={name}
             label={label}
-            placeholder="Type end-user name to search…"
+            placeholder="Type reference no or user name to search…"
             emptyMessage="No eligible PCs available."
-            noMatchMessage="No match. Try another name or ref no."
+            noMatchMessage="No match. Try another ref no or name."
             defaultValue={defaultValue}
             required={required}
             error={error}
@@ -59,8 +59,9 @@ export function PcAssetCombobox({
                     <p className="text-xs text-muted-foreground">
                         Selected:{' '}
                         <span className="font-medium text-foreground">
-                            {pc?.ref_no ?? option.secondary}
+                            {pc?.ref_no ?? option.primary}
                         </span>
+                        {pc?.end_user ? ` · ${pc.end_user}` : ''}
                         {pc?.department ? ` · ${pc.department}` : ''}
                     </p>
                 );

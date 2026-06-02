@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'old_asset_tag',
     'old_make_model',
     'old_serial_no',
+    'old_hostname',
     'year_of_purchase',
     'condition',
     'reason_for_replacement',
@@ -21,7 +22,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'data_wiped_at',
     'returned_to_stores',
     'returned_at',
-    'return_action'
+    'return_action',
+    'given_to_fullname',
+    'given_to_staff_number',
+    'given_to_designation',
+    'given_to_department_id',
+    'given_to_telephone'
 ])]
 class OldPcReturn extends Model
 {
@@ -74,5 +80,10 @@ class OldPcReturn extends Model
     public function staff(): BelongsTo
     {
         return $this->belongsTo(Staff::class);
+    }
+
+    public function givenToDepartment(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'given_to_department_id');
     }
 }

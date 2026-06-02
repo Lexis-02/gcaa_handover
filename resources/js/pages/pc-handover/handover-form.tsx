@@ -1,11 +1,11 @@
 import { Form } from '@inertiajs/react';
+import { Save } from 'lucide-react';
 import { FormInput } from '@/components/form-input';
 import {
     PcAssetCombobox,
     type PcAssetOption,
 } from '@/components/pc-asset-combobox';
 import { Button } from '@/components/ui/button';
-import { Save } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
@@ -14,6 +14,7 @@ export type HandoverFormOptions = {
     old_pc_conditions: string[];
     yes_no_options: string[];
     return_actions: { value: string; label: string }[];
+    departments?: { id: number; name: string }[];
 };
 
 export type HandoverFormData = {
@@ -30,6 +31,12 @@ export type HandoverFormData = {
     data_wiped?: string;
     returned_to_stores?: string;
     return_action?: string;
+    old_hostname?: string | null;
+    given_to_fullname?: string | null;
+    given_to_staff_number?: string | null;
+    given_to_designation?: string | null;
+    given_to_department_id?: number | null;
+    given_to_telephone?: string | null;
 };
 
 const formLabelClassName =
@@ -119,19 +126,27 @@ export function HandoverForm({
                                 error={errors.year_of_purchase}
                             />
                         </div>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                            <FormInput
+                                label="Old make / model"
+                                name="old_make_model"
+                                defaultValue={record.old_make_model ?? ''}
+                                error={errors.old_make_model}
+                                required
+                            />
+                            <FormInput
+                                label="Old serial no."
+                                name="old_serial_no"
+                                defaultValue={record.old_serial_no ?? ''}
+                                error={errors.old_serial_no}
+                                required
+                            />
+                        </div>
                         <FormInput
-                            label="Old make / model"
-                            name="old_make_model"
-                            defaultValue={record.old_make_model ?? ''}
-                            error={errors.old_make_model}
-                            required
-                        />
-                        <FormInput
-                            label="Old serial no."
-                            name="old_serial_no"
-                            defaultValue={record.old_serial_no ?? ''}
-                            error={errors.old_serial_no}
-                            required
+                            label="Old hostname (if known)"
+                            name="old_hostname"
+                            defaultValue={record.old_hostname ?? ''}
+                            error={errors.old_hostname}
                         />
                         <div className="space-y-2">
                             <Label className={formLabelClassName}>
@@ -243,6 +258,17 @@ export function HandoverForm({
                                     defaultValue={
                                         record.return_action ?? ''
                                     }
+                                    onChange={(e) => {
+                                        // A small inline script to toggle the "Given to another user" fields
+                                        const givenToSection = document.getElementById('given_to_section');
+                                        if (givenToSection) {
+                                            if (e.target.value === 'given_to_user') {
+                                                givenToSection.classList.remove('hidden');
+                                            } else {
+                                                givenToSection.classList.add('hidden');
+                                            }
+                                        }
+                                    }}
                                     required
                                     className={selectClassName}
                                 >
@@ -260,6 +286,65 @@ export function HandoverForm({
                                         {errors.return_action}
                                     </p>
                                 )}
+                            </div>
+                        </div>
+
+                        <div 
+                            id="given_to_section" 
+                            className={cn("space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4", record.return_action !== 'given_to_user' && 'hidden')}
+                        >
+                            <h3 className="text-sm font-semibold tracking-tight">Given to Another User Details</h3>
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <FormInput
+                                    label="Full Name"
+                                    name="given_to_fullname"
+                                    defaultValue={record.given_to_fullname ?? ''}
+                                    error={errors.given_to_fullname}
+                                />
+                                <FormInput
+                                    label="Staff Number"
+                                    name="given_to_staff_number"
+                                    defaultValue={record.given_to_staff_number ?? ''}
+                                    error={errors.given_to_staff_number}
+                                />
+                                <FormInput
+                                    label="Designation / Job Title"
+                                    name="given_to_designation"
+                                    defaultValue={record.given_to_designation ?? ''}
+                                    error={errors.given_to_designation}
+                                />
+                                <div className="space-y-2">
+                                    <Label className={formLabelClassName}>
+                                        Department / Unit
+                                    </Label>
+                                    <select
+                                        name="given_to_department_id"
+                                        defaultValue={record.given_to_department_id ?? ''}
+                                        className={selectClassName}
+                                    >
+                                        <option value="">
+                                            — Select Department —
+                                        </option>
+                                        {options.departments?.map((d) => (
+                                            <option key={d.id} value={d.id}>
+                                                {d.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.given_to_department_id && (
+                                        <p className="text-sm text-destructive">
+                                            {errors.given_to_department_id}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="sm:col-span-2">
+                                    <FormInput
+                                        label="Telephone / Ext."
+                                        name="given_to_telephone"
+                                        defaultValue={record.given_to_telephone ?? ''}
+                                        error={errors.given_to_telephone}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

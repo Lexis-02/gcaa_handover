@@ -182,7 +182,7 @@ class PcRegisterService
             'form_3_signed' => $stages->has(3),
             'old_pc_returned' => (bool) $asset->oldPcReturn?->isFullyReturned(),
             'old_pc_return_id' => $asset->oldPcReturn?->id,
-            'can_edit' => $asset->status === 'pending',
+            'can_edit' => true,
             'stage_progress' => $this->stageProgress($asset),
             'next_signer' => $this->nextSignerLabel($asset),
         ];

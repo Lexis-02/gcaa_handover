@@ -45,7 +45,7 @@ export function SummaryKpiCards({ overall }: { overall: Overall }) {
                     key={card.label}
                     variants={pageItem}
                     transition={{ delay: index * 0.06 }}
-                    className="rounded-xl border border-border/60 bg-card p-4 shadow-sm"
+                    className="rounded-xl border border-border/60 bg-card p-4 shadow-none"
                 >
                     <div className="flex items-start justify-between gap-3">
                         <div>

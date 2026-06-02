@@ -21,6 +21,12 @@ type HandoverRecord = {
     returned_to_stores: string;
     return_action: string;
     return_action_label: string;
+    old_hostname?: string | null;
+    given_to_fullname?: string | null;
+    given_to_staff_number?: string | null;
+    given_to_designation?: string | null;
+    given_to_telephone?: string | null;
+    given_to_department_name?: string | null;
     created_at: string;
     updated_at: string;
 };
@@ -131,6 +137,7 @@ export default function PcHandoverShow({ record, meta }: PageProps) {
                             <DetailCell label="Asset tag" value={record.old_asset_tag} />
                             <DetailCell label="Make / model" value={record.old_make_model} />
                             <DetailCell label="Serial number" value={record.old_serial_no} />
+                            <DetailCell label="Hostname" value={record.old_hostname} />
                             <DetailCell label="Year of purchase" value={record.year_of_purchase} />
                             <DetailCell label="End user" value={record.end_user_name} />
                             <DetailCell label="Department" value={record.department_name} />
@@ -151,6 +158,18 @@ export default function PcHandoverShow({ record, meta }: PageProps) {
                             <DetailCell label="Action taken" value={record.return_action_label} />
                         </dl>
                     </SectionCard>
+
+                    {record.return_action === 'given_to_user' && (
+                        <SectionCard title="Given to Another User Details" icon={Laptop}>
+                            <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                <DetailCell label="Full Name" value={record.given_to_fullname} />
+                                <DetailCell label="Staff Number" value={record.given_to_staff_number} />
+                                <DetailCell label="Designation / Job Title" value={record.given_to_designation} />
+                                <DetailCell label="Department / Unit" value={record.given_to_department_name} />
+                                <DetailCell label="Telephone / Ext." value={record.given_to_telephone} />
+                            </dl>
+                        </SectionCard>
+                    )}
                 </div>
             </motion.div>
         </>

@@ -34,6 +34,12 @@ class UpdatePcHandoverRequest extends FormRequest
             'data_wiped' => ['required', 'string', Rule::in($lookups->yesNoOptions())],
             'returned_to_stores' => ['required', 'string', Rule::in($lookups->yesNoOptions())],
             'return_action' => ['required', 'string', 'in:return_to_stores,given_to_user'],
+            'old_hostname' => ['nullable', 'string', 'max:255'],
+            'given_to_fullname' => ['required_if:return_action,given_to_user', 'nullable', 'string', 'max:255'],
+            'given_to_staff_number' => ['required_if:return_action,given_to_user', 'nullable', 'string', 'max:100'],
+            'given_to_designation' => ['required_if:return_action,given_to_user', 'nullable', 'string', 'max:255'],
+            'given_to_department_id' => ['required_if:return_action,given_to_user', 'nullable', 'integer', Rule::exists('departments', 'id')],
+            'given_to_telephone' => ['required_if:return_action,given_to_user', 'nullable', 'string', 'max:100'],
         ];
     }
 }

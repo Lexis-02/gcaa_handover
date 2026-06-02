@@ -2,12 +2,22 @@ import type { InertiaLinkProps } from '@inertiajs/react';
 import { toUrl } from '@/lib/utils';
 import type { NavChildItem } from '@/types';
 
+function getPathname(url: string): string {
+    let path = url;
+    if (path.startsWith('http')) {
+        try {
+            path = new URL(path).pathname;
+        } catch {}
+    }
+    return path.replace(/\/$/, '') || '/';
+}
+
 export function isNavChildActive(
     child: NavChildItem,
     currentPath: string,
 ): boolean {
-    const hrefPath = toUrl(child.href).replace(/\/$/, '') || '/';
-    const path = currentPath.replace(/\/$/, '') || '/';
+    const hrefPath = getPathname(toUrl(child.href));
+    const path = getPathname(currentPath);
     const match = child.match ?? 'exact';
 
     if (match === 'edit') {
@@ -34,8 +44,8 @@ export function isNavHrefActive(
     currentPath: string,
     exact = true,
 ): boolean {
-    const hrefPath = toUrl(href).replace(/\/$/, '') || '/';
-    const path = currentPath.replace(/\/$/, '') || '/';
+    const hrefPath = getPathname(toUrl(href));
+    const path = getPathname(currentPath);
 
     return exact
         ? path === hrefPath

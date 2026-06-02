@@ -17,8 +17,8 @@ class UserSeeder extends Seeder
         $hq = Building::where('name', 'HQ')->first();
         $gata = Building::where('name', 'GATA')->first();
 
-        $ict = Department::where('code', 'ICT')->first();
-        $hr = Department::where('code', 'HRD')->first();
+        $ict = Department::where('code', 'GS')->first();
+        $hr = Department::where('code', 'HR')->first();
 
         // 1. ICT Admin / Network Engineer
         $ictAdminUser = User::create([

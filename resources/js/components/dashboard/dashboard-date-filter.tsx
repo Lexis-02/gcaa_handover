@@ -69,10 +69,10 @@ export function DashboardDateFilter({
                 <Button
                     variant="outline"
                     className={cn(
-                        'h-10 shrink-0 gap-2 rounded-xl border-border/80 bg-card px-3 font-normal',
+                        'group h-10 shrink-0 gap-2 rounded-xl border-border/80 bg-card px-3 font-normal',
                     )}
                 >
-                    <CalendarDays className="size-4 text-primary" />
+                    <CalendarDays className="size-4 text-primary group-hover:text-primary-foreground" />
                     <span className="hidden sm:inline">{label}</span>
                     <span className="sm:hidden">Dates</span>
                     <ChevronDown className="size-4 opacity-60" />

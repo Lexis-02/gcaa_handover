@@ -33,11 +33,13 @@ export default function DepartmentsIndex({
                 <div className="overflow-hidden">
                     <table className="w-full border-collapse text-sm">
                         <thead>
-                            <tr className="border-b border-border/60 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            <tr className="border-b border-border/60 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                 <th className="px-4 py-3">Name</th>
                                 <th className="px-4 py-3">Code</th>
                                 <th className="px-4 py-3">Status</th>
-                                <th className="px-4 py-3 text-right">Actions</th>
+                                <th className="px-4 py-3 text-right">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody>

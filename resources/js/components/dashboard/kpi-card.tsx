@@ -19,7 +19,7 @@ export function KpiCard({ kpi, index = 0, className }: KpiCardProps) {
             variants={pageItem}
             transition={{ delay: index * 0.05 }}
             className={cn(
-                'flex flex-col gap-4 rounded-2xl border border-border/60 bg-card p-6 shadow-sm',
+                'flex flex-col gap-4 rounded-2xl border border-border/60 bg-card p-6',
                 className,
             )}
         >

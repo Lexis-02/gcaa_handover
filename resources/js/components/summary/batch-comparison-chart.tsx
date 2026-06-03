@@ -88,7 +88,11 @@ export function BatchComparisonChart({ data }: { data: BatchComparison[] }) {
                         cursor={{ fill: barCursorFill }}
                         content={<SummaryChartTooltip labelKey="batch_code" />}
                     />
-                    <Legend content={(props) => <SummaryLegend payload={props.payload} />} />
+                    <Legend
+                        content={(props) => (
+                            <SummaryLegend payload={props.payload} />
+                        )}
+                    />
                     {SERIES.map((series) => (
                         <Bar
                             key={series.key}
@@ -147,11 +151,7 @@ export function BatchPercentChart({ data }: { data: BatchComparison[] }) {
                     />
                     <Tooltip
                         cursor={{ fill: barCursorFill }}
-                        content={
-                            <SummaryChartTooltip
-                                labelKey="batch_code"
-                            />
-                        }
+                        content={<SummaryChartTooltip labelKey="batch_code" />}
                         formatter={(value) => [
                             `${Number(value ?? 0).toFixed(1)}%`,
                             '% Complete',

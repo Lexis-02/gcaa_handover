@@ -30,7 +30,6 @@ export default function UsersCreate({
                     </div>
                 </div>
 
-
                 <section className="mt-4">
                     <Form action="/users" method="post" className="space-y-6">
                         {({ processing, errors }) => (

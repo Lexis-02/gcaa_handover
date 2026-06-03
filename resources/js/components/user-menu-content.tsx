@@ -1,5 +1,13 @@
 import { Link, router } from '@inertiajs/react';
-import { LogOut, Sun, Moon, Monitor, Palette, Check, UserCircle } from 'lucide-react';
+import {
+    LogOut,
+    Sun,
+    Moon,
+    Monitor,
+    Palette,
+    Check,
+    UserCircle,
+} from 'lucide-react';
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -63,26 +71,41 @@ export function UserMenuContent({ user }: Props) {
                         Theme
                     </DropdownMenuSubTrigger>
                     <DropdownMenuSubContent className="w-36">
-                        <DropdownMenuItem onClick={() => updateAppearance('light')} className="cursor-pointer flex items-center justify-between">
+                        <DropdownMenuItem
+                            onClick={() => updateAppearance('light')}
+                            className="flex cursor-pointer items-center justify-between"
+                        >
                             <span className="flex items-center">
                                 <Sun className="mr-2 h-4 w-4" />
                                 Light
                             </span>
-                            {appearance === 'light' && <Check className="h-4 w-4 text-accent" />}
+                            {appearance === 'light' && (
+                                <Check className="h-4 w-4 text-accent" />
+                            )}
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => updateAppearance('dark')} className="cursor-pointer flex items-center justify-between">
+                        <DropdownMenuItem
+                            onClick={() => updateAppearance('dark')}
+                            className="flex cursor-pointer items-center justify-between"
+                        >
                             <span className="flex items-center">
                                 <Moon className="mr-2 h-4 w-4" />
                                 Dark
                             </span>
-                            {appearance === 'dark' && <Check className="h-4 w-4 text-accent" />}
+                            {appearance === 'dark' && (
+                                <Check className="h-4 w-4 text-accent" />
+                            )}
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => updateAppearance('system')} className="cursor-pointer flex items-center justify-between">
+                        <DropdownMenuItem
+                            onClick={() => updateAppearance('system')}
+                            className="flex cursor-pointer items-center justify-between"
+                        >
                             <span className="flex items-center">
                                 <Monitor className="mr-2 h-4 w-4" />
                                 System
                             </span>
-                            {appearance === 'system' && <Check className="h-4 w-4 text-accent" />}
+                            {appearance === 'system' && (
+                                <Check className="h-4 w-4 text-accent" />
+                            )}
                         </DropdownMenuItem>
                     </DropdownMenuSubContent>
                 </DropdownMenuSub>

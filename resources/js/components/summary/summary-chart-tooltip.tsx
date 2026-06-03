@@ -62,9 +62,9 @@ export function SummaryChartTooltip({
                             : raw.toFixed(1);
                         if (
                             name.includes('%') ||
-                            name === 'Complete' &&
+                            (name === 'Complete' &&
                                 typeof label === 'string' &&
-                                label.includes('%')
+                                label.includes('%'))
                         ) {
                             display = `${display}%`;
                         }
@@ -82,7 +82,7 @@ export function SummaryChartTooltip({
                                 />
                                 {name}
                             </span>
-                            <span className="font-mono font-semibold tabular-nums text-foreground">
+                            <span className="font-mono font-semibold text-foreground tabular-nums">
                                 {display}
                             </span>
                         </li>
@@ -112,8 +112,7 @@ export function SummaryLegend({
                     <span
                         className="size-2.5 rounded-sm ring-1 ring-black/5"
                         style={{
-                            backgroundColor:
-                                entry.color ?? chartColors.primary,
+                            backgroundColor: entry.color ?? chartColors.primary,
                         }}
                     />
                     <span>{entry.value}</span>

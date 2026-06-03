@@ -12,8 +12,7 @@ export default function AppLayout({
     breadcrumbs?: BreadcrumbItem[];
     children: React.ReactNode;
 }) {
-    const pageTitle =
-        title ?? breadcrumbs[breadcrumbs.length - 1]?.title ?? '';
+    const pageTitle = title ?? breadcrumbs[breadcrumbs.length - 1]?.title ?? '';
 
     return (
         <AppLayoutTemplate pageTitle={pageTitle}>

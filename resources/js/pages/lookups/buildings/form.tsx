@@ -56,7 +56,11 @@ export default function BuildingForm({
                                 error={errors.region}
                             />
                             <div className="flex items-center gap-2">
-                                <input type="hidden" name="is_active" value="0" />
+                                <input
+                                    type="hidden"
+                                    name="is_active"
+                                    value="0"
+                                />
                                 <input
                                     id="is_active"
                                     type="checkbox"
@@ -65,17 +69,26 @@ export default function BuildingForm({
                                     defaultChecked={record?.is_active ?? true}
                                     className="size-4 rounded border-border"
                                 />
-                                <Label htmlFor="is_active" className="text-sm font-medium text-foreground">
+                                <Label
+                                    htmlFor="is_active"
+                                    className="text-sm font-medium text-foreground"
+                                >
                                     Active
                                 </Label>
                             </div>
                             <div className="flex items-center gap-3 pt-2">
-                                <Button type="submit" variant="success" disabled={processing}>
+                                <Button
+                                    type="submit"
+                                    variant="success"
+                                    disabled={processing}
+                                >
                                     <Save className="size-4" />
                                     {isEdit ? 'Save changes' : 'Add building'}
                                 </Button>
                                 <Button asChild variant="secondary">
-                                    <Link href="/lookups/buildings">Cancel</Link>
+                                    <Link href="/lookups/buildings">
+                                        Cancel
+                                    </Link>
                                 </Button>
                             </div>
                         </>

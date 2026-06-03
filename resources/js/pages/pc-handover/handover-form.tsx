@@ -39,12 +39,11 @@ export type HandoverFormData = {
     given_to_telephone?: string | null;
 };
 
-const formLabelClassName =
-    'text-sm font-medium text-foreground select-none';
+const formLabelClassName = 'text-sm font-medium text-foreground select-none';
 
 const selectClassName = cn(
     'h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm',
-    'text-slate-900 outline-none transition-all duration-300',
+    'text-slate-900 transition-all duration-300 outline-none',
     'focus:border-accent/80 focus:bg-white focus:ring-4 focus:ring-accent/10',
     'dark:border-slate-800/80 dark:bg-slate-950/40 dark:text-slate-100',
     'dark:focus:border-accent/80 dark:focus:bg-slate-950/80',
@@ -226,17 +225,25 @@ export function HandoverForm({
                                 </Label>
                                 <select
                                     name="return_action"
-                                    defaultValue={
-                                        record.return_action ?? ''
-                                    }
+                                    defaultValue={record.return_action ?? ''}
                                     onChange={(e) => {
                                         // A small inline script to toggle the "Given to another user" fields
-                                        const givenToSection = document.getElementById('given_to_section');
+                                        const givenToSection =
+                                            document.getElementById(
+                                                'given_to_section',
+                                            );
                                         if (givenToSection) {
-                                            if (e.target.value === 'given_to_user') {
-                                                givenToSection.classList.remove('hidden');
+                                            if (
+                                                e.target.value ===
+                                                'given_to_user'
+                                            ) {
+                                                givenToSection.classList.remove(
+                                                    'hidden',
+                                                );
                                             } else {
-                                                givenToSection.classList.add('hidden');
+                                                givenToSection.classList.add(
+                                                    'hidden',
+                                                );
                                             }
                                         }
                                     }}
@@ -247,7 +254,10 @@ export function HandoverForm({
                                         Select return action…
                                     </option>
                                     {options.return_actions?.map((opt) => (
-                                        <option key={opt.value} value={opt.value}>
+                                        <option
+                                            key={opt.value}
+                                            value={opt.value}
+                                        >
                                             {opt.label}
                                         </option>
                                     ))}
@@ -260,28 +270,40 @@ export function HandoverForm({
                             </div>
                         </div>
 
-                        <div 
-                            id="given_to_section" 
-                            className={cn("space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4", record.return_action !== 'given_to_user' && 'hidden')}
+                        <div
+                            id="given_to_section"
+                            className={cn(
+                                'space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4',
+                                record.return_action !== 'given_to_user' &&
+                                    'hidden',
+                            )}
                         >
-                            <h3 className="text-sm font-semibold tracking-tight">Given to Another User Details</h3>
+                            <h3 className="text-sm font-semibold tracking-tight">
+                                Given to Another User Details
+                            </h3>
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <FormInput
                                     label="Full Name"
                                     name="given_to_fullname"
-                                    defaultValue={record.given_to_fullname ?? ''}
+                                    defaultValue={
+                                        record.given_to_fullname ?? ''
+                                    }
                                     error={errors.given_to_fullname}
                                 />
                                 <FormInput
                                     label="Staff Number"
                                     name="given_to_staff_number"
-                                    defaultValue={record.given_to_staff_number ?? ''}
+                                    defaultValue={
+                                        record.given_to_staff_number ?? ''
+                                    }
                                     error={errors.given_to_staff_number}
                                 />
                                 <FormInput
                                     label="Designation / Job Title"
                                     name="given_to_designation"
-                                    defaultValue={record.given_to_designation ?? ''}
+                                    defaultValue={
+                                        record.given_to_designation ?? ''
+                                    }
                                     error={errors.given_to_designation}
                                 />
                                 <div className="space-y-2">
@@ -290,7 +312,9 @@ export function HandoverForm({
                                     </Label>
                                     <select
                                         name="given_to_department_id"
-                                        defaultValue={record.given_to_department_id ?? ''}
+                                        defaultValue={
+                                            record.given_to_department_id ?? ''
+                                        }
                                         className={selectClassName}
                                     >
                                         <option value="">
@@ -312,7 +336,9 @@ export function HandoverForm({
                                     <FormInput
                                         label="Telephone / Ext."
                                         name="given_to_telephone"
-                                        defaultValue={record.given_to_telephone ?? ''}
+                                        defaultValue={
+                                            record.given_to_telephone ?? ''
+                                        }
                                         error={errors.given_to_telephone}
                                     />
                                 </div>
@@ -321,7 +347,11 @@ export function HandoverForm({
                     </div>
 
                     <div className="flex items-center gap-3 pt-2">
-                        <Button type="submit" variant="success" disabled={processing}>
+                        <Button
+                            type="submit"
+                            variant="success"
+                            disabled={processing}
+                        >
                             <Save className="size-4" />
                             {submitLabel}
                         </Button>

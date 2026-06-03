@@ -1,13 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import {
-    Building2,
-    Calendar,
-    Clock,
-    Pencil,
-    Shield,
-    User,
-} from 'lucide-react';
+import { Building2, Calendar, Clock, Pencil, Shield, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { confirmDelete } from '@/lib/sweetalert';
 import { pageEnter } from '@/lib/motion';
@@ -42,7 +35,7 @@ function InfoTile({
                 <Icon className="size-4" />
             </div>
             <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                     {label}
                 </p>
                 <p className="mt-0.5 text-sm font-medium">{value ?? '—'}</p>

@@ -22,19 +22,19 @@ export default function DepartmentShow({ record }: { record: Department }) {
             >
                 <dl className="space-y-4 rounded-xl border border-border/60 bg-card p-6">
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
                             Name
                         </dt>
                         <dd className="mt-1 font-medium">{record.name}</dd>
                     </div>
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
                             Code
                         </dt>
                         <dd className="mt-1 font-mono">{record.code}</dd>
                     </div>
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
                             Status
                         </dt>
                         <dd className="mt-1">

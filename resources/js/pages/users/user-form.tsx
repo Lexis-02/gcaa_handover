@@ -28,7 +28,7 @@ type UserRecord = {
 
 const selectClassName = cn(
     'h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm',
-    'text-slate-900 outline-none transition-all duration-300',
+    'text-slate-900 transition-all duration-300 outline-none',
     'focus:border-accent/80 focus:bg-white focus:ring-4 focus:ring-accent/10',
     'dark:border-slate-800/80 dark:bg-slate-950/40 dark:text-slate-100',
     'dark:focus:border-accent/80 dark:focus:bg-slate-950/80',
@@ -100,14 +100,10 @@ export function UserFormFields({
                 )}
             </div>
 
-
-
             <FormInput
                 id="password"
                 label={
-                    isEdit
-                        ? 'New password (leave blank to keep)'
-                        : 'Password'
+                    isEdit ? 'New password (leave blank to keep)' : 'Password'
                 }
                 name="password"
                 type="password"

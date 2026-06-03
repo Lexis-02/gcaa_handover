@@ -63,8 +63,8 @@ export default function HandoverSignOffsIndex({
                         {stage_heading}
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                        {records.total}{' '}
-                        {records.total === 1 ? 'PC' : 'PCs'} in your queue
+                        {records.total} {records.total === 1 ? 'PC' : 'PCs'} in
+                        your queue
                     </p>
                 </div>
 
@@ -72,7 +72,7 @@ export default function HandoverSignOffsIndex({
                     <div className="custom-scrollbar overflow-x-auto">
                         <table className="w-full border-collapse text-sm">
                             <thead>
-                                <tr className="border-b bg-muted/40 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                <tr className="border-b bg-muted/40 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                     <th className="px-4 py-3">Ref / PC</th>
                                     <th className="hidden px-4 py-3 md:table-cell">
                                         Department
@@ -162,10 +162,7 @@ export default function HandoverSignOffsIndex({
                     </div>
                 </div>
 
-                <SmartPagination
-                    meta={records}
-                    path="/handover-sign-offs"
-                />
+                <SmartPagination meta={records} path="/handover-sign-offs" />
             </motion.div>
         </>
     );

@@ -21,7 +21,10 @@ export function HeaderIconButton({
             variant="ghost"
             size="icon"
             aria-label={label}
-            className={cn('relative size-9 text-muted-foreground hover:bg-muted/80', className)}
+            className={cn(
+                'relative size-9 text-muted-foreground hover:bg-muted/80',
+                className,
+            )}
             {...props}
         >
             <Icon className="size-[18px]" strokeWidth={1.75} />
@@ -31,4 +34,3 @@ export function HeaderIconButton({
         </Button>
     );
 }
-

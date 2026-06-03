@@ -27,7 +27,9 @@ function toOptions(pcs: PcAssetOption[]): SearchComboboxOption[] {
         id: pc.id,
         primary: pc.ref_no,
         secondary: `Assigned to: ${pc.end_user ?? 'Unassigned'}`,
-        leading: <User className="size-3.5 shrink-0 text-primary" aria-hidden />,
+        leading: (
+            <User className="size-3.5 shrink-0 text-primary" aria-hidden />
+        ),
     }));
 }
 

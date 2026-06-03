@@ -33,26 +33,36 @@ export default function LookupValueShow({
             >
                 <dl className="space-y-4 rounded-xl border border-border/60 bg-card p-6">
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">Type</dt>
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
+                            Type
+                        </dt>
                         <dd className="mt-1">{title}</dd>
                     </div>
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">Label</dt>
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
+                            Label
+                        </dt>
                         <dd className="mt-1 font-medium">{record.label}</dd>
                     </div>
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">Sort order</dt>
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
+                            Sort order
+                        </dt>
                         <dd className="mt-1">{record.sort_order}</dd>
                     </div>
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">Status</dt>
-                        <dd className="mt-1">{record.is_active ? 'Active' : 'Inactive'}</dd>
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
+                            Status
+                        </dt>
+                        <dd className="mt-1">
+                            {record.is_active ? 'Active' : 'Inactive'}
+                        </dd>
                     </div>
                 </dl>
                 <div className="flex gap-2">
                     <Button asChild variant="default">
                         <Link href={`${base}/${record.id}/edit`}>
-                            <Pencil className="size-4 mr-2" />
+                            <Pencil className="mr-2 size-4" />
                             Edit
                         </Link>
                     </Button>

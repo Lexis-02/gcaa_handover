@@ -65,9 +65,14 @@ function StagePipeline({
                         <div
                             className={cn(
                                 'flex size-6 items-center justify-center rounded-full text-[10px] font-semibold transition-colors',
-                                active && 'bg-primary text-primary-foreground shadow-sm',
-                                done && !active && 'bg-muted text-muted-foreground',
-                                !active && !done && 'bg-muted/30 text-muted-foreground/40 border border-border/50',
+                                active &&
+                                    'bg-primary text-primary-foreground shadow-sm',
+                                done &&
+                                    !active &&
+                                    'bg-muted text-muted-foreground',
+                                !active &&
+                                    !done &&
+                                    'border border-border/50 bg-muted/30 text-muted-foreground/40',
                             )}
                             title={step.description}
                         >
@@ -93,8 +98,6 @@ export default function NotificationsIndex({
     unread_count,
     stages,
 }: PageProps) {
-
-
     const markAllRead = () => {
         router.post('/notifications/read-all', {}, { preserveScroll: true });
     };
@@ -123,10 +126,11 @@ export default function NotificationsIndex({
                             )}
                         </h1>
                         <p className="mt-2 text-sm text-muted-foreground">
-                            Stay updated on PC handover stages and your sign-off queues.
+                            Stay updated on PC handover stages and your sign-off
+                            queues.
                         </p>
                     </div>
-                    
+
                     <div className="flex shrink-0 items-center gap-3">
                         {unread_count > 0 && (
                             <Button
@@ -149,13 +153,16 @@ export default function NotificationsIndex({
                             <div className="flex size-12 items-center justify-center rounded-full bg-muted">
                                 <BellRing className="size-6 text-muted-foreground/60" />
                             </div>
-                            <p className="mt-4 font-medium text-foreground">You're all caught up</p>
-                            <p className="mt-1 text-sm text-muted-foreground max-w-sm">
-                                There are no new sign-off requests. When a PC enters your queue, it will appear here.
+                            <p className="mt-4 font-medium text-foreground">
+                                You're all caught up
+                            </p>
+                            <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+                                There are no new sign-off requests. When a PC
+                                enters your queue, it will appear here.
                             </p>
                             <Link
                                 href="/handover-sign-offs"
-                                className="mt-6 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                className="mt-6 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
                             >
                                 View sign-off queue
                             </Link>
@@ -173,14 +180,14 @@ export default function NotificationsIndex({
                                     className={cn(
                                         'group relative rounded-lg border bg-card p-5 shadow-sm transition-all hover:shadow-md',
                                         unread
-                                            ? 'border-l-4 border-l-primary border-y-border border-r-border'
+                                            ? 'border-l-4 border-y-border border-r-border border-l-primary'
                                             : 'border-border',
                                     )}
                                 >
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                                         <div className="min-w-0 flex-1">
                                             <div className="mb-2 flex items-center gap-3">
-                                                <span className="inline-flex items-center rounded bg-muted px-2 py-0.5 text-xs font-medium font-mono text-muted-foreground">
+                                                <span className="inline-flex items-center rounded bg-muted px-2 py-0.5 font-mono text-xs font-medium text-muted-foreground">
                                                     {item.ref_no}
                                                 </span>
                                                 <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -188,16 +195,24 @@ export default function NotificationsIndex({
                                                     {item.created_human}
                                                 </span>
                                             </div>
-                                            
-                                            <h3 className={cn("text-base font-medium leading-snug", unread ? "text-foreground" : "text-foreground/90")}>
+
+                                            <h3
+                                                className={cn(
+                                                    'text-base leading-snug font-medium',
+                                                    unread
+                                                        ? 'text-foreground'
+                                                        : 'text-foreground/90',
+                                                )}
+                                            >
                                                 {item.headline}
                                             </h3>
-                                            
-                                            <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+
+                                            <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
                                                 {item.message}
                                             </p>
-                                            
-                                            {(item.end_user || item.department) && (
+
+                                            {(item.end_user ||
+                                                item.department) && (
                                                 <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                                                     {item.end_user && (
                                                         <span className="flex items-center gap-1.5">
@@ -213,13 +228,13 @@ export default function NotificationsIndex({
                                                     )}
                                                 </div>
                                             )}
-                                            
+
                                             <StagePipeline
                                                 currentStage={item.stage}
                                                 stages={stages}
                                             />
                                         </div>
-                                        
+
                                         <div className="flex shrink-0 flex-row items-center gap-4 sm:flex-col sm:items-end sm:gap-2">
                                             <Link
                                                 href={item.action_url}
@@ -231,7 +246,9 @@ export default function NotificationsIndex({
                                             {unread && (
                                                 <button
                                                     type="button"
-                                                    onClick={() => markRead(item.id)}
+                                                    onClick={() =>
+                                                        markRead(item.id)
+                                                    }
                                                     className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
                                                 >
                                                     Mark as read

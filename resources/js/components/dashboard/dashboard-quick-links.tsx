@@ -15,12 +15,14 @@ export function DashboardQuickLinks({ links }: DashboardQuickLinksProps) {
 
     return (
         <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                 Quick links
             </p>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {links.map((link, index) => {
-                    const Icon = resolveNavIcon(link.icon) ?? resolveNavIcon('layout-grid');
+                    const Icon =
+                        resolveNavIcon(link.icon) ??
+                        resolveNavIcon('layout-grid');
 
                     return (
                         <motion.div

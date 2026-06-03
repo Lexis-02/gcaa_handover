@@ -19,32 +19,38 @@ const HANDOVER_SEARCH_PATH = '/pc-handover';
 
 type SearchableList = 'register' | 'handover' | null;
 
-function resolveSearchContext(component: string, urlPath: string): SearchableList {
-    if (component.startsWith('pc-register') || urlPath.startsWith(REGISTER_SEARCH_PATH)) {
+function resolveSearchContext(
+    component: string,
+    urlPath: string,
+): SearchableList {
+    if (
+        component.startsWith('pc-register') ||
+        urlPath.startsWith(REGISTER_SEARCH_PATH)
+    ) {
         return 'register';
     }
 
-    if (component.startsWith('pc-handover') || urlPath.startsWith(HANDOVER_SEARCH_PATH)) {
+    if (
+        component.startsWith('pc-handover') ||
+        urlPath.startsWith(HANDOVER_SEARCH_PATH)
+    ) {
         return 'handover';
     }
 
     return null;
 }
 
-export function HeaderSearch({
-    className,
-    placeholder,
-}: HeaderSearchProps) {
+export function HeaderSearch({ className, placeholder }: HeaderSearchProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const page = usePage<ListPageFilters>();
     const urlPath = page.url.split('?')[0];
     const searchContext = resolveSearchContext(page.component, urlPath);
-    const isIndexPage = page.component === 'pc-register/index' || page.component === 'pc-handover/index';
+    const isIndexPage =
+        page.component === 'pc-register/index' ||
+        page.component === 'pc-handover/index';
 
-    const queryFromServer = isIndexPage
-        ? (page.props.filters?.q ?? '')
-        : '';
+    const queryFromServer = isIndexPage ? (page.props.filters?.q ?? '') : '';
     const [value, setValue] = useState(queryFromServer);
 
     useEffect(() => {
@@ -114,11 +120,15 @@ export function HeaderSearch({
 
     const defaultPlaceholder = (() => {
         if (searchContext === 'register') {
-            return isIndexPage ? 'Search ref no., asset tag, user, department…' : 'Search PCs — press Enter to search';
+            return isIndexPage
+                ? 'Search ref no., asset tag, user, department…'
+                : 'Search PCs — press Enter to search';
         }
 
         if (searchContext === 'handover') {
-            return isIndexPage ? 'Search ref, user, department, old PC…' : 'Search handovers — press Enter to search';
+            return isIndexPage
+                ? 'Search ref, user, department, old PC…'
+                : 'Search handovers — press Enter to search';
         }
 
         return 'Search PCs — press Enter to open register';

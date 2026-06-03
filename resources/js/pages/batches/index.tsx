@@ -37,7 +37,7 @@ export default function BatchesIndex({
                 animate="visible"
             >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <PageSearchInput 
+                    <PageSearchInput
                         value={filters?.q ?? ''}
                         routePath="/batches"
                         placeholder="Search batch code, year, or notes..."
@@ -59,7 +59,7 @@ export default function BatchesIndex({
                     <div className="custom-scrollbar overflow-x-auto">
                         <table className="w-full border-collapse text-sm">
                             <thead>
-                                <tr className="border-b bg-muted/40 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                <tr className="border-b bg-muted/40 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                     <th className="px-4 py-3">Batch code</th>
                                     <th className="px-4 py-3">Year</th>
                                     <th className="px-4 py-3">Total PCs</th>
@@ -78,7 +78,7 @@ export default function BatchesIndex({
                                             colSpan={7}
                                             className="px-4 py-12 text-center text-muted-foreground"
                                         >
-                                            {hasSearch 
+                                            {hasSearch
                                                 ? 'No batches match your search.'
                                                 : 'No batches yet.'}
                                             {!hasSearch && meta.can_create && (
@@ -133,7 +133,9 @@ export default function BatchesIndex({
                                                     deleteUrl={`/batches/${batch.id}`}
                                                     itemLabel={batch.batch_code}
                                                     showEdit={batch.can_edit}
-                                                    showDelete={batch.can_delete}
+                                                    showDelete={
+                                                        batch.can_delete
+                                                    }
                                                 />
                                             </td>
                                         </tr>

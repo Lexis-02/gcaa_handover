@@ -24,7 +24,7 @@ export function HandoverLegend({
             }
         >
             {!isGuide && (
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="mb-3 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                     Handover legend — who signs before Complete
                 </p>
             )}
@@ -34,17 +34,20 @@ export function HandoverLegend({
                         Stages &amp; signatories
                     </p>
                     <p className="mt-0.5 text-sm text-muted-foreground">
-                        Who must sign before the handover is approved as Complete
+                        Who must sign before the handover is approved as
+                        Complete
                     </p>
                 </div>
             )}
-            <div className={isGuide ? 'overflow-x-auto p-1' : 'overflow-x-auto'}>
+            <div
+                className={isGuide ? 'overflow-x-auto p-1' : 'overflow-x-auto'}
+            >
                 <table className="w-full min-w-[520px] border-collapse text-left text-sm">
                     <thead>
                         <tr
                             className={
                                 isGuide
-                                    ? 'bg-muted/40 text-xs font-semibold uppercase tracking-wide text-muted-foreground'
+                                    ? 'bg-muted/40 text-xs font-semibold tracking-wide text-muted-foreground uppercase'
                                     : 'border-b border-border/60 text-xs text-muted-foreground'
                             }
                         >

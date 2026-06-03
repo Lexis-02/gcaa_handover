@@ -8,7 +8,12 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 export type RegisterFormOptions = {
-    batches: { id: number; batch_code: string; year: number; total_pcs: number }[];
+    batches: {
+        id: number;
+        batch_code: string;
+        year: number;
+        total_pcs: number;
+    }[];
     departments: { id: number; name: string; code: string }[];
     buildings: { id: number; name: string }[];
     conditions: string[];
@@ -31,12 +36,11 @@ export type RegisterFormData = {
     room_ext?: string | null;
 };
 
-const formLabelClassName =
-    'text-sm font-medium text-foreground select-none';
+const formLabelClassName = 'text-sm font-medium text-foreground select-none';
 
 const selectClassName = cn(
     'h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm',
-    'text-slate-900 outline-none transition-all duration-300',
+    'text-slate-900 transition-all duration-300 outline-none',
     'focus:border-accent/80 focus:bg-white focus:ring-4 focus:ring-accent/10',
     'dark:border-slate-800/80 dark:bg-slate-950/40 dark:text-slate-100',
     'dark:focus:border-accent/80 dark:focus:bg-slate-950/80',
@@ -86,7 +90,7 @@ export function RegisterForm({
                                 error={errors.batch_id}
                                 label="Procurement Batch"
                             />
-                            <p className="text-xs text-muted-foreground ml-1">
+                            <p className="ml-1 text-xs text-muted-foreground">
                                 Batches are created per procurement project.
                             </p>
                         </div>
@@ -247,7 +251,11 @@ export function RegisterForm({
                     </section>
 
                     <div className="flex items-center gap-3 pt-2">
-                        <Button type="submit" variant="success" disabled={processing}>
+                        <Button
+                            type="submit"
+                            variant="success"
+                            disabled={processing}
+                        >
                             <Save className="size-4" />
                             {submitLabel}
                         </Button>

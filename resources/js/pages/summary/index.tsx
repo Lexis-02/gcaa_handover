@@ -125,7 +125,7 @@ export default function SummaryIndex({
                     <div>
                         <div className="flex items-center gap-2 text-primary">
                             <Activity className="size-5" />
-                            <span className="text-xs font-semibold uppercase tracking-widest">
+                            <span className="text-xs font-semibold tracking-widest uppercase">
                                 Live
                             </span>
                         </div>

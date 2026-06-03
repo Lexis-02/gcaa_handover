@@ -18,11 +18,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { isNavChildActive } from '@/lib/nav-active';
-import {
-    dropdownChild,
-    dropdownPanel,
-    springSnappy,
-} from '@/lib/motion';
+import { dropdownChild, dropdownPanel, springSnappy } from '@/lib/motion';
 import {
     sidebarLinkBase,
     sidebarParentActive,
@@ -81,7 +77,7 @@ function CollapsedNavFlyout({
                 'bg-sidebar p-3 text-sidebar-foreground shadow-xl',
             )}
         >
-            <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-sidebar-foreground/70">
+            <p className="mb-2 px-2 text-xs font-semibold tracking-wide text-sidebar-foreground/70 uppercase">
                 {item.title}
             </p>
             <ul className="flex min-w-0 flex-col gap-1 border-l border-white/10 pl-3">
@@ -285,14 +281,18 @@ export function NavCollapsibleItem({ item }: NavCollapsibleItemProps) {
                                                             )}
                                                         >
                                                             <Link
-                                                                href={child.href}
+                                                                href={
+                                                                    child.href
+                                                                }
                                                                 prefetch
                                                             >
                                                                 {ChildIcon && (
                                                                     <ChildIcon className="size-4 shrink-0 opacity-80" />
                                                                 )}
                                                                 <span>
-                                                                    {child.title}
+                                                                    {
+                                                                        child.title
+                                                                    }
                                                                 </span>
                                                             </Link>
                                                         </SidebarMenuSubButton>

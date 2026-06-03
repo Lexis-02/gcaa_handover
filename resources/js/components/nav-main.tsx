@@ -10,10 +10,7 @@ import {
 import { NavCollapsibleItem } from '@/components/nav-collapsible-item';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { sidebarItem, sidebarList } from '@/lib/motion';
-import {
-    sidebarLinkActive,
-    sidebarLinkBase,
-} from '@/lib/sidebar-nav-styles';
+import { sidebarLinkActive, sidebarLinkBase } from '@/lib/sidebar-nav-styles';
 import { cn } from '@/lib/utils';
 import type { NavItem } from '@/types';
 
@@ -44,10 +41,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                         const active = isCurrentUrl(item.href);
 
                         return (
-                            <motion.div
-                                key={item.title}
-                                variants={sidebarItem}
-                            >
+                            <motion.div key={item.title} variants={sidebarItem}>
                                 <SidebarMenuItem>
                                     <SidebarMenuButton
                                         asChild

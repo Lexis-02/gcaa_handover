@@ -95,7 +95,11 @@ export default function UsersIndex({ records, filters }: PageProps) {
                                     variant="ghost"
                                     onClick={() => {
                                         setSearch('');
-                                        router.get('/users', {}, { preserveScroll: true });
+                                        router.get(
+                                            '/users',
+                                            {},
+                                            { preserveScroll: true },
+                                        );
                                     }}
                                 >
                                     Clear
@@ -107,8 +111,7 @@ export default function UsersIndex({ records, filters }: PageProps) {
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm text-muted-foreground">
-                        {records.total}{' '}
-                        {records.total === 1 ? 'user' : 'users'}
+                        {records.total} {records.total === 1 ? 'user' : 'users'}
                         {filters.q && (
                             <>
                                 {' '}
@@ -120,14 +123,13 @@ export default function UsersIndex({ records, filters }: PageProps) {
                             </>
                         )}
                     </p>
-
                 </div>
 
                 <div className="overflow-hidden">
                     <div className="custom-scrollbar overflow-x-auto">
                         <table className="w-full border-collapse text-sm">
                             <thead>
-                                <tr className="border-b border-border/60 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                <tr className="border-b border-border/60 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                     <th className="px-4 py-3">Name</th>
                                     <th className="px-4 py-3">Username</th>
                                     <th className="px-4 py-3">Role</th>

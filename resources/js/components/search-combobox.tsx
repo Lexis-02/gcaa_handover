@@ -1,4 +1,11 @@
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import {
+    useEffect,
+    useId,
+    useMemo,
+    useRef,
+    useState,
+    type ReactNode,
+} from 'react';
 import { ChevronDown, Search } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -50,13 +57,16 @@ export function SearchCombobox({
     const inputRef = useRef<HTMLInputElement>(null);
 
     const initial =
-        options.find((option) => String(option.id) === String(defaultValue ?? '')) ??
-        null;
+        options.find(
+            (option) => String(option.id) === String(defaultValue ?? ''),
+        ) ?? null;
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState(
         defaultQuery || initial?.primary || (allowEmpty ? '' : ''),
     );
-    const [selected, setSelected] = useState<SearchComboboxOption | null>(initial);
+    const [selected, setSelected] = useState<SearchComboboxOption | null>(
+        initial,
+    );
 
     const filtered = useMemo(() => {
         const term = query.trim().toLowerCase();
@@ -97,7 +107,10 @@ export function SearchCombobox({
 
     return (
         <div ref={containerRef} className="space-y-2">
-            <Label htmlFor={listId} className="text-sm font-medium text-foreground">
+            <Label
+                htmlFor={listId}
+                className="text-sm font-medium text-foreground"
+            >
                 {label}
             </Label>
             <input
@@ -128,7 +141,7 @@ export function SearchCombobox({
                     onFocus={() => !disabled && setOpen(true)}
                     className={cn(
                         'h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pr-10 pl-10 text-sm',
-                        'text-slate-900 outline-none transition-all duration-300',
+                        'text-slate-900 transition-all duration-300 outline-none',
                         'focus:border-accent/80 focus:bg-white focus:ring-4 focus:ring-accent/10',
                         'dark:border-slate-800/80 dark:bg-slate-950/40 dark:text-slate-100',
                         'dark:focus:border-accent/80 dark:focus:bg-slate-950/80',
@@ -150,7 +163,9 @@ export function SearchCombobox({
                                         'flex w-full px-3 py-2.5 text-left text-sm text-muted-foreground hover:bg-muted/60',
                                         !selected && 'bg-primary/5',
                                     )}
-                                    onMouseDown={(event) => event.preventDefault()}
+                                    onMouseDown={(event) =>
+                                        event.preventDefault()
+                                    }
                                     onClick={() => pick(null)}
                                 >
                                     {emptyLabel}

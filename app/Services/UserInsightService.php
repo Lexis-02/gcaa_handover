@@ -12,8 +12,11 @@ class UserInsightService
     /**
      * Get insight data for the dashboard.
      */
-    public function getDashboardData(?int $departmentId = null)
+    public function getDashboardData(?int $departmentId = null, ?string $from = null, ?string $to = null)
     {
+        $fromDate = $from ? Carbon::parse($from)->startOfDay() : Carbon::now()->subDays(30)->startOfDay();
+        $toDate = $to ? Carbon::parse($to)->endOfDay() : Carbon::now()->endOfDay();
+
         $usersQuery = User::query();
         if ($departmentId) {
             $usersQuery->where('department_id', $departmentId);
@@ -21,13 +24,13 @@ class UserInsightService
         
         $userIds = $usersQuery->pluck('id');
 
-        // Heatmap Data (Last 30 days)
+        // Heatmap Data (Date Range)
         $heatmapData = UserActivity::select(
                 DB::raw('DATE(created_at) as date'),
                 DB::raw('count(*) as count')
             )
             ->whereIn('user_id', $userIds)
-            ->where('created_at', '>=', Carbon::now()->subDays(30))
+            ->whereBetween('created_at', [$fromDate, $toDate])
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -37,6 +40,7 @@ class UserInsightService
         $bottlenecks = UserActivity::with('user')
             ->select('user_id', DB::raw('AVG(duration_seconds) as avg_duration'), DB::raw('count(*) as tasks_count'))
             ->whereIn('user_id', $userIds)
+            ->whereBetween('created_at', [$fromDate, $toDate])
             ->whereNotNull('duration_seconds')
             ->groupBy('user_id')
             ->orderByDesc('avg_duration')
@@ -54,6 +58,7 @@ class UserInsightService
         $topPerformers = UserActivity::with('user')
             ->select('user_id', DB::raw('count(*) as tasks_count'))
             ->whereIn('user_id', $userIds)
+            ->whereBetween('created_at', [$fromDate, $toDate])
             ->groupBy('user_id')
             ->orderByDesc('tasks_count')
             ->take(5)
@@ -65,8 +70,26 @@ class UserInsightService
                 ];
             });
 
+        // Scatter Graph Data (All users for bottleneck visualization)
+        $scatterData = UserActivity::with('user')
+            ->select('user_id', DB::raw('AVG(duration_seconds) as avg_duration'), DB::raw('count(*) as tasks_count'))
+            ->whereIn('user_id', $userIds)
+            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->whereNotNull('duration_seconds')
+            ->groupBy('user_id')
+            ->take(50)
+            ->get()
+            ->map(function ($activity) {
+                return [
+                    'user' => $activity->user->full_name ?? 'Unknown',
+                    'avg_duration' => round($activity->avg_duration / 3600, 1),
+                    'tasks_count' => $activity->tasks_count,
+                ];
+            });
+
         return [
             'heatmap' => $heatmapData,
+            'scatterData' => $scatterData,
             'bottlenecks' => $bottlenecks,
             'topPerformers' => $topPerformers,
         ];

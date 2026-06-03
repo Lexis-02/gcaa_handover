@@ -70,17 +70,26 @@ export default function DepartmentForm({
                                     defaultChecked={record?.is_active ?? true}
                                     className="size-4 rounded border-border"
                                 />
-                                <Label htmlFor="is_active" className="text-sm font-medium text-foreground">
+                                <Label
+                                    htmlFor="is_active"
+                                    className="text-sm font-medium text-foreground"
+                                >
                                     Active
                                 </Label>
                             </div>
                             <div className="flex items-center gap-3 pt-2">
-                                <Button type="submit" variant="success" disabled={processing}>
+                                <Button
+                                    type="submit"
+                                    variant="success"
+                                    disabled={processing}
+                                >
                                     <Save className="size-4" />
                                     {isEdit ? 'Save changes' : 'Add department'}
                                 </Button>
                                 <Button asChild variant="secondary">
-                                    <Link href="/lookups/departments">Cancel</Link>
+                                    <Link href="/lookups/departments">
+                                        Cancel
+                                    </Link>
                                 </Button>
                             </div>
                         </>

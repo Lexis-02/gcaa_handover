@@ -24,9 +24,11 @@ export function RoleInsightCard({ stats }: RoleInsightCardProps) {
             <div>
                 <div className="mb-3 flex items-center gap-2 text-primary">
                     <Sparkles className="size-5" />
-                    <span className="text-sm font-semibold">{insight.title}</span>
+                    <span className="text-sm font-semibold">
+                        {insight.title}
+                    </span>
                 </div>
-                <p className="text-lg font-semibold leading-snug text-foreground">
+                <p className="text-lg leading-snug font-semibold text-foreground">
                     {insight.body}
                 </p>
                 <p className="mt-4 font-mono text-3xl font-bold text-foreground">
@@ -36,11 +38,7 @@ export function RoleInsightCard({ stats }: RoleInsightCardProps) {
                     items need attention in your scope
                 </p>
             </div>
-            <Button
-                asChild
-                size="sm"
-                className="mt-6 w-fit rounded-xl"
-            >
+            <Button asChild size="sm" className="mt-6 w-fit rounded-xl">
                 <Link href={insight.href}>
                     {insight.cta}
                     <ArrowRight className="size-4" />

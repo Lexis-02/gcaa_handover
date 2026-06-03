@@ -197,7 +197,7 @@ return [
             'title' => 'Insights & Analytics',
             'route' => 'insights.index',
             'icon' => 'line-chart',
-            'roles' => ['super_admin', 'director'],
+            'roles' => ['ict_admin'],
         ],
         [
             'title' => 'Notifications',

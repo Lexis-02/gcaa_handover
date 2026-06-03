@@ -27,7 +27,7 @@ export function PageSearchInput({
 
     const runSearch = (term: string) => {
         const urlParams = new URLSearchParams(window.location.search);
-        
+
         if (term.trim()) {
             urlParams.set('q', term.trim());
         } else {
@@ -77,7 +77,7 @@ export function PageSearchInput({
                 onChange={(e) => handleChange(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
-                className="h-9 md:h-10 pl-9 pr-4 rounded-lg bg-background shadow-sm placeholder:text-muted-foreground/70"
+                className="h-9 rounded-lg bg-background pr-4 pl-9 shadow-sm placeholder:text-muted-foreground/70 md:h-10"
             />
         </div>
     );

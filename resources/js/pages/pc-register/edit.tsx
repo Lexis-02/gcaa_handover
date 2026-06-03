@@ -29,7 +29,6 @@ export default function PcRegisterEdit({ record, options }: PageProps) {
                     options={options}
                     submitLabel="Save changes"
                 />
-
             </motion.div>
         </>
     );

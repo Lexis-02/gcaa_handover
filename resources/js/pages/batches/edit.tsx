@@ -19,7 +19,7 @@ type BatchRecord = {
 
 const selectClassName = cn(
     'h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm',
-    'text-slate-900 outline-none transition-all duration-300',
+    'text-slate-900 transition-all duration-300 outline-none',
     'focus:border-accent/80 focus:bg-white focus:ring-4 focus:ring-accent/10',
     'dark:border-slate-800/80 dark:bg-slate-950/40 dark:text-slate-100',
 );
@@ -82,7 +82,10 @@ export default function BatchesEdit({
                             />
 
                             <div className="space-y-2">
-                                <Label htmlFor="notes" className="text-sm font-medium">
+                                <Label
+                                    htmlFor="notes"
+                                    className="text-sm font-medium"
+                                >
                                     Notes (optional)
                                 </Label>
                                 <textarea
@@ -90,17 +93,26 @@ export default function BatchesEdit({
                                     name="notes"
                                     rows={3}
                                     defaultValue={batch.notes ?? ''}
-                                    className={cn(selectClassName, 'h-auto py-2')}
+                                    className={cn(
+                                        selectClassName,
+                                        'h-auto py-2',
+                                    )}
                                 />
                             </div>
 
                             <div className="flex items-center gap-3 pt-2">
-                                <Button type="submit" variant="success" disabled={processing}>
+                                <Button
+                                    type="submit"
+                                    variant="success"
+                                    disabled={processing}
+                                >
                                     <Save className="size-4" />
                                     Save changes
                                 </Button>
                                 <Button asChild variant="secondary">
-                                    <Link href={`/batches/${batch.id}`}>Cancel</Link>
+                                    <Link href={`/batches/${batch.id}`}>
+                                        Cancel
+                                    </Link>
                                 </Button>
                             </div>
                         </>

@@ -32,15 +32,20 @@ export default function LookupValuesIndex({
                 initial="hidden"
                 animate="visible"
             >
-                <LookupPageHeader addHref={`${base}/create`} addLabel={`Add value`} />
+                <LookupPageHeader
+                    addHref={`${base}/create`}
+                    addLabel={`Add value`}
+                />
                 <div className="overflow-hidden">
                     <table className="w-full border-collapse text-sm">
                         <thead>
-                            <tr className="border-b border-border/60 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            <tr className="border-b border-border/60 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                 <th className="px-4 py-3">Label</th>
                                 <th className="px-4 py-3">Order</th>
                                 <th className="px-4 py-3">Status</th>
-                                <th className="px-4 py-3 text-right">Actions</th>
+                                <th className="px-4 py-3 text-right">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +57,9 @@ export default function LookupValuesIndex({
                                     <td className="px-4 py-3 font-medium">
                                         {row.label}
                                     </td>
-                                    <td className="px-4 py-3">{row.sort_order}</td>
+                                    <td className="px-4 py-3">
+                                        {row.sort_order}
+                                    </td>
                                     <td className="px-4 py-3">
                                         {row.is_active ? 'Active' : 'Inactive'}
                                     </td>

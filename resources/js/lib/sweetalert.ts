@@ -43,11 +43,17 @@ export function showSuccess(message: string, title = 'Success'): Promise<void> {
     return showModal('success', title, message);
 }
 
-export function showError(message: string, title = 'Something went wrong'): Promise<void> {
+export function showError(
+    message: string,
+    title = 'Something went wrong',
+): Promise<void> {
     return showModal('error', title, message);
 }
 
-export function showWarning(message: string, title = 'Please note'): Promise<void> {
+export function showWarning(
+    message: string,
+    title = 'Please note',
+): Promise<void> {
     return showModal('warning', title, message);
 }
 

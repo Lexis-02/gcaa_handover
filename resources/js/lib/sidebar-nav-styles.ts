@@ -26,7 +26,7 @@ export const sidebarSubLinkActive = cn(
 
 export const sidebarParentOpen = cn(
     'bg-white/[0.07] text-sidebar-foreground',
-    'ring-1 ring-inset ring-white/[0.08]',
+    'ring-1 ring-white/[0.08] ring-inset',
 );
 
 export const sidebarParentActive = cn(

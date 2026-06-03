@@ -52,10 +52,13 @@ export default function DashboardIndex({
     quick_links,
 }: DashboardPageProps) {
     const isClerk = role === 'registry_clerk';
-    const inPipeline = isClerk ? 0 : Math.max(
-        0,
-        (stats as any).summary?.total_pcs - (stats as any).summary?.complete,
-    );
+    const inPipeline = isClerk
+        ? 0
+        : Math.max(
+              0,
+              (stats as any).summary?.total_pcs -
+                  (stats as any).summary?.complete,
+          );
 
     return (
         <>
@@ -91,7 +94,11 @@ export default function DashboardIndex({
                     <>
                         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                             {stats.kpis?.map((kpi, index) => (
-                                <KpiCard key={kpi.label} kpi={kpi} index={index} />
+                                <KpiCard
+                                    key={kpi.label}
+                                    kpi={kpi}
+                                    index={index}
+                                />
                             ))}
                         </div>
 
@@ -100,13 +107,17 @@ export default function DashboardIndex({
                                 <DashboardPipelinePanel
                                     segments={stats.pipeline}
                                     chartData={stats.pipeline_chart}
-                                    completionRate={stats.summary.completion_rate}
+                                    completionRate={
+                                        stats.summary.completion_rate
+                                    }
                                     totalPcs={stats.summary.total_pcs}
                                 />
                             </div>
                             <Suspense fallback={<ChartFallback />}>
                                 <DashboardCompletionChart
-                                    completionRate={stats.summary.completion_rate}
+                                    completionRate={
+                                        stats.summary.completion_rate
+                                    }
                                     totalPcs={stats.summary.total_pcs}
                                     complete={stats.summary.complete}
                                     inPipeline={inPipeline}
@@ -115,7 +126,9 @@ export default function DashboardIndex({
                         </div>
 
                         <Suspense fallback={<ChartFallback />}>
-                            <DashboardActivityChart data={stats.weekly_activity} />
+                            <DashboardActivityChart
+                                data={stats.weekly_activity}
+                            />
                         </Suspense>
                     </>
                 )}

@@ -33,18 +33,28 @@ class InsightController extends Controller
     public function index(Request $request)
     {
         $departmentId = $this->resolveDepartmentId($request);
-        $data = $this->insightService->getDashboardData($departmentId);
+        $from = $request->query('from', now()->subDays(30)->toDateString());
+        $to = $request->query('to', now()->toDateString());
+        
+        $data = $this->insightService->getDashboardData($departmentId, $from, $to);
 
         return Inertia::render('insights/index', [
             'insights' => $data,
             'scope' => $departmentId ? 'Department' : 'Global',
+            'filters' => [
+                'from' => $from,
+                'to' => $to,
+            ],
         ]);
     }
 
     public function exportPdf(Request $request)
     {
         $departmentId = $this->resolveDepartmentId($request);
-        $data = $this->insightService->getDashboardData($departmentId);
+        $from = $request->query('from', now()->subDays(30)->toDateString());
+        $to = $request->query('to', now()->toDateString());
+
+        $data = $this->insightService->getDashboardData($departmentId, $from, $to);
 
         $pdf = Pdf::loadView('exports.insights-pdf', ['data' => $data]);
 
@@ -54,7 +64,10 @@ class InsightController extends Controller
     public function exportExcel(Request $request)
     {
         $departmentId = $this->resolveDepartmentId($request);
-        $data = $this->insightService->getDashboardData($departmentId);
+        $from = $request->query('from', now()->subDays(30)->toDateString());
+        $to = $request->query('to', now()->toDateString());
+
+        $data = $this->insightService->getDashboardData($departmentId, $from, $to);
 
         $exportData = [];
         foreach ($data['topPerformers'] as $tp) {

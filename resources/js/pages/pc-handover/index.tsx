@@ -73,11 +73,7 @@ function handoverRowLinks(row: HandoverRow, canCreate: boolean) {
     };
 }
 
-export default function PcHandoverIndex({
-    records,
-    filters,
-    meta,
-}: PageProps) {
+export default function PcHandoverIndex({ records, filters, meta }: PageProps) {
     const hasSearch = filters.q.trim().length > 0;
     const hasStatusFilter = Boolean(filters.status);
 
@@ -119,8 +115,8 @@ export default function PcHandoverIndex({
                             </>
                         )}
                     </div>
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:ml-auto">
-                        <PageSearchInput 
+                    <div className="flex flex-col gap-2 sm:ml-auto sm:flex-row sm:items-center">
+                        <PageSearchInput
                             value={filters?.q ?? ''}
                             routePath="/pc-handover"
                             placeholder="Search records..."
@@ -138,7 +134,7 @@ export default function PcHandoverIndex({
                     <div className="custom-scrollbar overflow-x-auto">
                         <table className="w-full border-collapse text-sm">
                             <thead>
-                                <tr className="border-b bg-muted/40 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                <tr className="border-b bg-muted/40 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                     <th className="px-4 py-3">#</th>
                                     <th className="px-4 py-3">Ref / PC</th>
                                     <th className="px-4 py-3">End user</th>
@@ -163,16 +159,16 @@ export default function PcHandoverIndex({
                                             {!hasSearch &&
                                                 !hasStatusFilter &&
                                                 meta.can_create && (
-                                                <>
-                                                    {' '}
-                                                    <Link
-                                                        href="/pc-handover/create"
-                                                        className="font-medium text-primary underline-offset-4 hover:underline"
-                                                    >
-                                                        Add old PC details
-                                                    </Link>
-                                                </>
-                                            )}
+                                                    <>
+                                                        {' '}
+                                                        <Link
+                                                            href="/pc-handover/create"
+                                                            className="font-medium text-primary underline-offset-4 hover:underline"
+                                                        >
+                                                            Add old PC details
+                                                        </Link>
+                                                    </>
+                                                )}
                                         </td>
                                     </tr>
                                 ) : (
@@ -183,108 +179,121 @@ export default function PcHandoverIndex({
                                         );
 
                                         return (
-                                        <tr
-                                            key={row.id}
-                                            className="border-b border-border/40 align-middle hover:bg-muted/20"
-                                        >
-                                            <td className="px-4 py-3 text-xs text-muted-foreground">
-                                                {row.row_number}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <Link
-                                                    href={links.refHref}
-                                                    className="font-mono text-xs font-semibold text-primary hover:underline"
-                                                >
-                                                    {row.ref_no}
-                                                </Link>
-                                                <p className="mt-0.5 font-medium">
-                                                    {row.new_make_model}
-                                                </p>
-                                                <p className="text-xs text-muted-foreground md:hidden">
-                                                    {row.end_user_name ?? '—'}
-                                                </p>
-                                            </td>
-                                            <td className="hidden px-4 py-3 md:table-cell">
-                                                <p className="font-medium">
-                                                    {row.end_user_name ?? '—'}
-                                                </p>
-                                            </td>
-                                            <td className="hidden px-4 py-3 md:table-cell">
-                                                {row.department?.name ?? '—'}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                {row.has_old_pc_return ? (
-                                                    <>
-                                                        <Link
-                                                            href={links.refHref}
-                                                            className="font-medium text-primary hover:underline"
-                                                        >
-                                                            {row.old_pc_summary}
-                                                        </Link>
-                                                        <p className="text-xs text-muted-foreground">
-                                                            {row.old_pc_condition}
-                                                        </p>
-                                                    </>
-                                                ) : (
-                                                    <span className="inline-flex rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-medium text-amber-900 dark:text-amber-200">
-                                                        Pending details
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                {row.has_old_pc_return ? (
-                                                    <div className="flex flex-wrap gap-1.5 text-xs">
-                                                        <span
-                                                            className={cn(
-                                                                'rounded-full px-2 py-0.5 font-medium',
-                                                                row.data_wiped ===
-                                                                    'Yes'
-                                                                    ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300'
-                                                                    : 'bg-muted text-muted-foreground',
-                                                            )}
-                                                            title="Data wiped"
-                                                        >
-                                                            Wipe{' '}
-                                                            {compactYesNo(
-                                                                row.data_wiped,
-                                                            )}
+                                            <tr
+                                                key={row.id}
+                                                className="border-b border-border/40 align-middle hover:bg-muted/20"
+                                            >
+                                                <td className="px-4 py-3 text-xs text-muted-foreground">
+                                                    {row.row_number}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <Link
+                                                        href={links.refHref}
+                                                        className="font-mono text-xs font-semibold text-primary hover:underline"
+                                                    >
+                                                        {row.ref_no}
+                                                    </Link>
+                                                    <p className="mt-0.5 font-medium">
+                                                        {row.new_make_model}
+                                                    </p>
+                                                    <p className="text-xs text-muted-foreground md:hidden">
+                                                        {row.end_user_name ??
+                                                            '—'}
+                                                    </p>
+                                                </td>
+                                                <td className="hidden px-4 py-3 md:table-cell">
+                                                    <p className="font-medium">
+                                                        {row.end_user_name ??
+                                                            '—'}
+                                                    </p>
+                                                </td>
+                                                <td className="hidden px-4 py-3 md:table-cell">
+                                                    {row.department?.name ??
+                                                        '—'}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    {row.has_old_pc_return ? (
+                                                        <>
+                                                            <Link
+                                                                href={
+                                                                    links.refHref
+                                                                }
+                                                                className="font-medium text-primary hover:underline"
+                                                            >
+                                                                {
+                                                                    row.old_pc_summary
+                                                                }
+                                                            </Link>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {
+                                                                    row.old_pc_condition
+                                                                }
+                                                            </p>
+                                                        </>
+                                                    ) : (
+                                                        <span className="inline-flex rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-medium text-amber-900 dark:text-amber-200">
+                                                            Pending details
                                                         </span>
-                                                        <span
-                                                            className={cn(
-                                                                'rounded-full px-2 py-0.5 font-medium',
-                                                                row.returned_to_stores ===
-                                                                    'Yes'
-                                                                    ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300'
-                                                                    : 'bg-muted text-muted-foreground',
-                                                            )}
-                                                            title="Returned to stores"
-                                                        >
-                                                            Stores{' '}
-                                                            {compactYesNo(
-                                                                row.returned_to_stores,
-                                                            )}
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    {row.has_old_pc_return ? (
+                                                        <div className="flex flex-wrap gap-1.5 text-xs">
+                                                            <span
+                                                                className={cn(
+                                                                    'rounded-full px-2 py-0.5 font-medium',
+                                                                    row.data_wiped ===
+                                                                        'Yes'
+                                                                        ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300'
+                                                                        : 'bg-muted text-muted-foreground',
+                                                                )}
+                                                                title="Data wiped"
+                                                            >
+                                                                Wipe{' '}
+                                                                {compactYesNo(
+                                                                    row.data_wiped,
+                                                                )}
+                                                            </span>
+                                                            <span
+                                                                className={cn(
+                                                                    'rounded-full px-2 py-0.5 font-medium',
+                                                                    row.returned_to_stores ===
+                                                                        'Yes'
+                                                                        ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300'
+                                                                        : 'bg-muted text-muted-foreground',
+                                                                )}
+                                                                title="Returned to stores"
+                                                            >
+                                                                Stores{' '}
+                                                                {compactYesNo(
+                                                                    row.returned_to_stores,
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-muted-foreground">
+                                                            —
                                                         </span>
-                                                    </div>
-                                                ) : (
-                                                    <span className="text-muted-foreground">
-                                                        —
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <ListRowActions
-                                                    viewHref={links.viewHref}
-                                                    editHref={links.editHref}
-                                                    itemLabel={row.ref_no}
-                                                    showEdit={
-                                                        meta.can_create &&
-                                                        links.editHref !==
-                                                            undefined
-                                                    }
-                                                    showDelete={false}
-                                                />
-                                            </td>
-                                        </tr>
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <ListRowActions
+                                                        viewHref={
+                                                            links.viewHref
+                                                        }
+                                                        editHref={
+                                                            links.editHref
+                                                        }
+                                                        itemLabel={row.ref_no}
+                                                        showEdit={
+                                                            meta.can_create &&
+                                                            links.editHref !==
+                                                                undefined
+                                                        }
+                                                        showDelete={false}
+                                                    />
+                                                </td>
+                                            </tr>
                                         );
                                     })
                                 )}

@@ -39,13 +39,25 @@ export function ListRowActions({
 
     return (
         <div className={cn('flex items-center justify-end gap-1', className)}>
-            <Button asChild variant="ghost" size="icon" className="size-8 text-muted-foreground hover:bg-muted hover:text-foreground" title="View">
+            <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                className="size-8 text-muted-foreground hover:bg-muted hover:text-foreground"
+                title="View"
+            >
                 <Link href={viewHref}>
                     <Eye className="size-4" />
                 </Link>
             </Button>
             {showEdit && editHref && (
-                <Button asChild variant="ghost" size="icon" className="size-8 text-muted-foreground hover:bg-muted hover:text-foreground" title="Edit">
+                <Button
+                    asChild
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 text-muted-foreground hover:bg-muted hover:text-foreground"
+                    title="Edit"
+                >
                     <Link href={editHref}>
                         <Pencil className="size-4" />
                     </Link>

@@ -60,7 +60,11 @@ export default function LookupValueForm({
                                 error={errors.sort_order}
                             />
                             <div className="flex items-center gap-2">
-                                <input type="hidden" name="is_active" value="0" />
+                                <input
+                                    type="hidden"
+                                    name="is_active"
+                                    value="0"
+                                />
                                 <input
                                     id="is_active"
                                     type="checkbox"
@@ -69,12 +73,19 @@ export default function LookupValueForm({
                                     defaultChecked={record?.is_active ?? true}
                                     className="size-4 rounded border-border"
                                 />
-                                <Label htmlFor="is_active" className="text-sm font-medium text-foreground">
+                                <Label
+                                    htmlFor="is_active"
+                                    className="text-sm font-medium text-foreground"
+                                >
                                     Active
                                 </Label>
                             </div>
                             <div className="flex items-center gap-3 pt-2">
-                                <Button type="submit" variant="success" disabled={processing}>
+                                <Button
+                                    type="submit"
+                                    variant="success"
+                                    disabled={processing}
+                                >
                                     <Save className="size-4" />
                                     {isEdit ? 'Save changes' : 'Add value'}
                                 </Button>

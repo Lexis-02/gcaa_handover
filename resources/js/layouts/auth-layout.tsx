@@ -60,14 +60,15 @@ export default function AuthLayout({
 
     return (
         <div
-            className={`relative flex flex-col md:flex-row min-h-screen overflow-hidden font-sans transition-colors duration-300 ${
-                isDark ? 'bg-[#020617] text-slate-100' : 'bg-slate-50 text-slate-800'
+            className={`relative flex min-h-screen flex-col overflow-hidden font-sans transition-colors duration-300 md:flex-row ${
+                isDark
+                    ? 'bg-[#020617] text-slate-100'
+                    : 'bg-slate-50 text-slate-800'
             }`}
         >
             <FlashAlerts />
             {/* ── LEFT PANEL: 65% — cinematic image slideshow ─────────────────── */}
-            <div className="hidden md:block md:w-[65%] shrink-0 relative overflow-hidden">
-
+            <div className="relative hidden shrink-0 overflow-hidden md:block md:w-[65%]">
                 {/*
                     All slides are ALWAYS mounted. Only CSS opacity + transition
                     controls visibility — no mount/unmount = absolutely no flash.
@@ -95,7 +96,7 @@ export default function AuthLayout({
 
                 {/* Light overlay — visible diagonal light wash */}
                 <div
-                    className="absolute inset-0 pointer-events-none"
+                    className="pointer-events-none absolute inset-0"
                     style={{
                         zIndex: 2,
                         background: `
@@ -111,7 +112,7 @@ export default function AuthLayout({
 
                 {/* Bottom / left edge darkening for contrast with panel */}
                 <div
-                    className="absolute inset-0 pointer-events-none"
+                    className="pointer-events-none absolute inset-0"
                     style={{
                         zIndex: 3,
                         background: `
@@ -123,7 +124,7 @@ export default function AuthLayout({
 
                 {/* Slide indicators */}
                 <div
-                    className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2.5"
+                    className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2.5"
                     style={{ zIndex: 5 }}
                 >
                     {SLIDE_IMAGES.map((_, index) => {
@@ -132,20 +133,21 @@ export default function AuthLayout({
                             <button
                                 key={index}
                                 onClick={() => handleDotClick(index)}
-                                className="group relative h-1.5 rounded-full overflow-hidden cursor-pointer"
+                                className="group relative h-1.5 cursor-pointer overflow-hidden rounded-full"
                                 style={{
                                     width: isActive ? '32px' : '12px',
                                     backgroundColor: isActive
                                         ? 'rgba(255,255,255,0.9)'
                                         : 'rgba(255,255,255,0.35)',
-                                    transition: 'width 0.5s ease, background-color 0.5s ease',
+                                    transition:
+                                        'width 0.5s ease, background-color 0.5s ease',
                                 }}
                                 aria-label={`Go to slide ${index + 1}`}
                             >
                                 {isActive && (
                                     <span
                                         key={`p-${currentSlide}`}
-                                        className="absolute inset-y-0 left-0 bg-white/60 rounded-full"
+                                        className="absolute inset-y-0 left-0 rounded-full bg-white/60"
                                         style={{
                                             animation: `progressFill ${SLIDE_INTERVAL}ms linear forwards`,
                                         }}
@@ -159,7 +161,7 @@ export default function AuthLayout({
 
             {/* ── RIGHT PANEL: 35% — auth form ───────────────────────────────── */}
             <div
-                className={`flex-1 md:w-[35%] flex flex-col min-h-screen px-8 md:px-10 py-6 md:py-10 transition-colors duration-300 ${
+                className={`flex min-h-screen flex-1 flex-col px-8 py-6 transition-colors duration-300 md:w-[35%] md:px-10 md:py-10 ${
                     isDark ? 'bg-[#020617]' : 'bg-slate-50'
                 }`}
                 style={{ zIndex: 20 }}
@@ -167,13 +169,19 @@ export default function AuthLayout({
                 {/* Dark / light mode icon toggle */}
                 <div className="flex justify-end">
                     <button
-                        onClick={() => updateAppearance(isDark ? 'light' : 'dark')}
-                        className={`flex items-center justify-center w-9 h-9 rounded-full border transition-all duration-300 cursor-pointer ${
+                        onClick={() =>
+                            updateAppearance(isDark ? 'light' : 'dark')
+                        }
+                        className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border transition-all duration-300 ${
                             isDark
-                                ? 'bg-slate-800 border-slate-700 text-amber-400 hover:bg-slate-700 hover:text-amber-300 hover:border-slate-600'
-                                : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 shadow-sm'
+                                ? 'border-slate-700 bg-slate-800 text-amber-400 hover:border-slate-600 hover:bg-slate-700 hover:text-amber-300'
+                                : 'border-slate-200 bg-white text-slate-500 shadow-sm hover:bg-slate-100 hover:text-slate-700'
                         }`}
-                        title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                        title={
+                            isDark
+                                ? 'Switch to light mode'
+                                : 'Switch to dark mode'
+                        }
                     >
                         {isDark ? (
                             <Sun className="h-4 w-4 transition-transform duration-300 hover:rotate-45" />
@@ -184,21 +192,25 @@ export default function AuthLayout({
                 </div>
 
                 {/* Auth form — centred vertically */}
-                <div className="flex flex-col justify-center flex-1 w-full max-w-[380px] mx-auto py-8">
+                <div className="mx-auto flex w-full max-w-[380px] flex-1 flex-col justify-center py-8">
                     <div className="mb-8">
                         <AppLogo variant="auth" />
                     </div>
 
                     <div className="mb-7 space-y-2">
-                        <h1 className={`text-xl font-bold tracking-tight leading-tight ${
-                            isDark ? 'text-white' : 'text-slate-900'
-                        }`}>
+                        <h1
+                            className={`text-xl leading-tight font-bold tracking-tight ${
+                                isDark ? 'text-white' : 'text-slate-900'
+                            }`}
+                        >
                             {title}
                         </h1>
                         {description && (
-                            <p className={`text-sm leading-snug ${
-                                isDark ? 'text-slate-400' : 'text-slate-500'
-                            }`}>
+                            <p
+                                className={`text-sm leading-snug ${
+                                    isDark ? 'text-slate-400' : 'text-slate-500'
+                                }`}
+                            >
                                 {description}
                             </p>
                         )}
@@ -208,10 +220,13 @@ export default function AuthLayout({
                 </div>
 
                 {/* Footer */}
-                <div className={`text-center text-[10px] uppercase tracking-wider ${
-                    isDark ? 'text-slate-600' : 'text-slate-400'
-                }`}>
-                    &copy; {new Date().getFullYear()} Ghana Civil Aviation Authority (GCAA). All rights reserved.
+                <div
+                    className={`text-center text-[10px] tracking-wider uppercase ${
+                        isDark ? 'text-slate-600' : 'text-slate-400'
+                    }`}
+                >
+                    &copy; {new Date().getFullYear()} Ghana Civil Aviation
+                    Authority (GCAA). All rights reserved.
                 </div>
             </div>
 

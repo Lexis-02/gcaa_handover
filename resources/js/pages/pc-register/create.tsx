@@ -1,10 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { pageEnter } from '@/lib/motion';
-import {
-    RegisterForm,
-    type RegisterFormOptions,
-} from './register-form';
+import { RegisterForm, type RegisterFormOptions } from './register-form';
 
 type PageProps = {
     options: RegisterFormOptions;
@@ -26,7 +23,6 @@ export default function PcRegisterCreate({ options }: PageProps) {
                     options={options}
                     submitLabel="Add to register"
                 />
-
             </motion.div>
         </>
     );

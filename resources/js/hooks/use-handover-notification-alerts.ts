@@ -71,9 +71,7 @@ export function useHandoverNotificationAlerts(): void {
         notifications: NotificationsShared | null;
     }>().props;
 
-    const lastKnownId = useRef<string | null>(
-        notifications?.latest_id ?? null,
-    );
+    const lastKnownId = useRef<string | null>(notifications?.latest_id ?? null);
     const playedIds = useRef<Set<string>>(new Set());
     const lastReminderAt = useRef(0);
     const pendingLoginAlert = useRef(false);

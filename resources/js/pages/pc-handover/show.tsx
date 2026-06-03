@@ -1,6 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, Laptop, AlertCircle, Settings2, Pencil } from 'lucide-react';
+import {
+    ChevronLeft,
+    Laptop,
+    AlertCircle,
+    Settings2,
+    Pencil,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { pageEnter } from '@/lib/motion';
 import { cn } from '@/lib/utils';
@@ -48,11 +54,16 @@ function DetailCell({
     className?: string;
 }) {
     return (
-        <div className={cn('rounded-lg border border-border/50 bg-muted/15 px-4 py-3', className)}>
-            <dt className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <div
+            className={cn(
+                'rounded-lg border border-border/50 bg-muted/15 px-4 py-3',
+                className,
+            )}
+        >
+            <dt className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                 {label}
             </dt>
-            <dd className="mt-1.5 text-sm font-medium leading-snug text-foreground">
+            <dd className="mt-1.5 text-sm leading-snug font-medium text-foreground">
                 {value ?? '—'}
             </dd>
         </div>
@@ -74,7 +85,9 @@ function SectionCard({
                 <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <Icon className="size-4" />
                 </span>
-                <h2 className="text-sm font-semibold tracking-tight">{title}</h2>
+                <h2 className="text-sm font-semibold tracking-tight">
+                    {title}
+                </h2>
             </div>
             <div className="p-5">{children}</div>
         </section>
@@ -115,13 +128,25 @@ export default function PcHandoverShow({ record, meta }: PageProps) {
                                 {record.old_make_model}
                             </h1>
                             <p className="text-sm text-muted-foreground">
-                                Linked PC: <Link href={`/pc-register/${record.pc_asset_id}`} className="text-primary hover:underline">{record.ref_no}</Link>
+                                Linked PC:{' '}
+                                <Link
+                                    href={`/pc-register/${record.pc_asset_id}`}
+                                    className="text-primary hover:underline"
+                                >
+                                    {record.ref_no}
+                                </Link>
                             </p>
                         </div>
                         <div className="flex shrink-0 items-center gap-2">
                             {meta.can_edit && (
-                                <Button asChild variant="default" size="default">
-                                    <Link href={`/pc-handover/${record.id}/edit`}>
+                                <Button
+                                    asChild
+                                    variant="default"
+                                    size="default"
+                                >
+                                    <Link
+                                        href={`/pc-handover/${record.id}/edit`}
+                                    >
                                         <Pencil className="size-4" />
                                         Edit
                                     </Link>
@@ -134,39 +159,93 @@ export default function PcHandoverShow({ record, meta }: PageProps) {
                 <div className="flex flex-col gap-6 px-4 py-6 md:px-6">
                     <SectionCard title="Old PC Details" icon={Laptop}>
                         <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                            <DetailCell label="Asset tag" value={record.old_asset_tag} />
-                            <DetailCell label="Make / model" value={record.old_make_model} />
-                            <DetailCell label="Serial number" value={record.old_serial_no} />
-                            <DetailCell label="Hostname" value={record.old_hostname} />
-                            <DetailCell label="Year of purchase" value={record.year_of_purchase} />
-                            <DetailCell label="End user" value={record.end_user_name} />
-                            <DetailCell label="Department" value={record.department_name} />
+                            <DetailCell
+                                label="Asset tag"
+                                value={record.old_asset_tag}
+                            />
+                            <DetailCell
+                                label="Make / model"
+                                value={record.old_make_model}
+                            />
+                            <DetailCell
+                                label="Serial number"
+                                value={record.old_serial_no}
+                            />
+                            <DetailCell
+                                label="Hostname"
+                                value={record.old_hostname}
+                            />
+                            <DetailCell
+                                label="Year of purchase"
+                                value={record.year_of_purchase}
+                            />
+                            <DetailCell
+                                label="End user"
+                                value={record.end_user_name}
+                            />
+                            <DetailCell
+                                label="Department"
+                                value={record.department_name}
+                            />
                         </dl>
                     </SectionCard>
 
                     <SectionCard title="Status & Condition" icon={AlertCircle}>
                         <dl className="grid gap-3 sm:grid-cols-2">
-                            <DetailCell label="Condition" value={record.condition} />
-                            <DetailCell label="Reason for replacement" value={record.reason_for_replacement} />
+                            <DetailCell
+                                label="Condition"
+                                value={record.condition}
+                            />
+                            <DetailCell
+                                label="Reason for replacement"
+                                value={record.reason_for_replacement}
+                            />
                         </dl>
                     </SectionCard>
 
                     <SectionCard title="Action & Return" icon={Settings2}>
                         <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                            <DetailCell label="Data wiped" value={record.data_wiped} />
-                            <DetailCell label="Returned to stores" value={record.returned_to_stores} />
-                            <DetailCell label="Action taken" value={record.return_action_label} />
+                            <DetailCell
+                                label="Data wiped"
+                                value={record.data_wiped}
+                            />
+                            <DetailCell
+                                label="Returned to stores"
+                                value={record.returned_to_stores}
+                            />
+                            <DetailCell
+                                label="Action taken"
+                                value={record.return_action_label}
+                            />
                         </dl>
                     </SectionCard>
 
                     {record.return_action === 'given_to_user' && (
-                        <SectionCard title="Given to Another User Details" icon={Laptop}>
+                        <SectionCard
+                            title="Given to Another User Details"
+                            icon={Laptop}
+                        >
                             <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                                <DetailCell label="Full Name" value={record.given_to_fullname} />
-                                <DetailCell label="Staff Number" value={record.given_to_staff_number} />
-                                <DetailCell label="Designation / Job Title" value={record.given_to_designation} />
-                                <DetailCell label="Department / Unit" value={record.given_to_department_name} />
-                                <DetailCell label="Telephone / Ext." value={record.given_to_telephone} />
+                                <DetailCell
+                                    label="Full Name"
+                                    value={record.given_to_fullname}
+                                />
+                                <DetailCell
+                                    label="Staff Number"
+                                    value={record.given_to_staff_number}
+                                />
+                                <DetailCell
+                                    label="Designation / Job Title"
+                                    value={record.given_to_designation}
+                                />
+                                <DetailCell
+                                    label="Department / Unit"
+                                    value={record.given_to_department_name}
+                                />
+                                <DetailCell
+                                    label="Telephone / Ext."
+                                    value={record.given_to_telephone}
+                                />
                             </dl>
                         </SectionCard>
                     )}

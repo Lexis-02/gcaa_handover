@@ -12,11 +12,11 @@ export const selectCn = cn(
     // Default border + hover
     'border-border/60 hover:border-border',
     // Focus ring — matches FormInput primary accent
-    'focus:border-primary/60 focus:ring-4 focus:ring-primary/[0.08] focus:bg-background',
+    'focus:border-primary/60 focus:bg-background focus:ring-4 focus:ring-primary/[0.08]',
     // Transitions
     'transition-all duration-200 ease-in-out',
     // Disabled
-    'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted/30',
+    'disabled:cursor-not-allowed disabled:bg-muted/30 disabled:opacity-50',
     // Placeholder / option colour
     'placeholder:text-muted-foreground/50',
 );
@@ -31,6 +31,6 @@ export const formLabelCn = cn(
 );
 
 export const checkboxCn = cn(
-    'size-4 rounded border-border/60 accent-primary cursor-pointer',
+    'size-4 cursor-pointer rounded border-border/60 accent-primary',
     'transition-all duration-150',
 );

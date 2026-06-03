@@ -54,7 +54,6 @@ function formatRole(role: string): string {
     return role.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-
 function QuickLink({
     href,
     icon: Icon,
@@ -163,16 +162,20 @@ export default function ProfileIndex({
                             </p>
                         </div>
                     </div>
-                    
+
                     {/* Stats strip attached to bottom of header */}
                     <div className="grid border-t border-border/60 bg-muted/15 sm:grid-cols-2 lg:grid-cols-4">
-                        <div className="flex items-center gap-3 border-b border-border/60 p-4 sm:border-b-0 sm:border-r lg:p-5">
+                        <div className="flex items-center gap-3 border-b border-border/60 p-4 sm:border-r sm:border-b-0 lg:p-5">
                             <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-background text-muted-foreground shadow-sm ring-1 ring-border/50">
                                 <Building2 className="size-4" />
                             </div>
                             <div className="min-w-0">
-                                <p className="text-xs font-medium text-muted-foreground">Department</p>
-                                <p className="mt-0.5 text-sm font-semibold text-foreground">{profile.department?.name ?? '—'}</p>
+                                <p className="text-xs font-medium text-muted-foreground">
+                                    Department
+                                </p>
+                                <p className="mt-0.5 text-sm font-semibold text-foreground">
+                                    {profile.department?.name ?? '—'}
+                                </p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3 border-b border-border/60 p-4 sm:border-b-0 lg:border-r lg:p-5">
@@ -180,22 +183,34 @@ export default function ProfileIndex({
                                 <IdCard className="size-4" />
                             </div>
                             <div className="min-w-0">
-                                <p className="text-xs font-medium text-muted-foreground">Staff profile</p>
-                                <p className="mt-0.5 text-sm font-semibold text-foreground truncate">{profile.staff?.full_name ?? '—'}</p>
+                                <p className="text-xs font-medium text-muted-foreground">
+                                    Staff profile
+                                </p>
+                                <p className="mt-0.5 truncate text-sm font-semibold text-foreground">
+                                    {profile.staff?.full_name ?? '—'}
+                                </p>
                                 {profile.staff?.staff_number && (
-                                    <p className="text-xs text-muted-foreground">{profile.staff.staff_number}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {profile.staff.staff_number}
+                                    </p>
                                 )}
                             </div>
                         </div>
-                        <div className="flex items-center gap-3 border-b border-border/60 p-4 sm:border-b-0 sm:border-r lg:p-5">
+                        <div className="flex items-center gap-3 border-b border-border/60 p-4 sm:border-r sm:border-b-0 lg:p-5">
                             <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-background text-muted-foreground shadow-sm ring-1 ring-border/50">
                                 <Clock className="size-4" />
                             </div>
                             <div className="min-w-0">
-                                <p className="text-xs font-medium text-muted-foreground">Last login</p>
-                                <p className="mt-0.5 text-sm font-semibold text-foreground">{profile.last_login_at ?? '—'}</p>
+                                <p className="text-xs font-medium text-muted-foreground">
+                                    Last login
+                                </p>
+                                <p className="mt-0.5 text-sm font-semibold text-foreground">
+                                    {profile.last_login_at ?? '—'}
+                                </p>
                                 {profile.last_login_human && (
-                                    <p className="text-xs text-muted-foreground">{profile.last_login_human}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {profile.last_login_human}
+                                    </p>
                                 )}
                             </div>
                         </div>
@@ -204,8 +219,12 @@ export default function ProfileIndex({
                                 <Calendar className="size-4" />
                             </div>
                             <div className="min-w-0">
-                                <p className="text-xs font-medium text-muted-foreground">Member since</p>
-                                <p className="mt-0.5 text-sm font-semibold text-foreground">{profile.member_since ?? '—'}</p>
+                                <p className="text-xs font-medium text-muted-foreground">
+                                    Member since
+                                </p>
+                                <p className="mt-0.5 text-sm font-semibold text-foreground">
+                                    {profile.member_since ?? '—'}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -229,11 +248,12 @@ export default function ProfileIndex({
                                     </h2>
                                 </div>
                             </div>
-                            
+
                             <div className="p-5">
                                 {status === 'verification-link-sent' && (
                                     <p className="mb-5 rounded-lg bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800 dark:text-emerald-300">
-                                        A new verification link has been sent to your email address.
+                                        A new verification link has been sent to
+                                        your email address.
                                     </p>
                                 )}
 
@@ -262,19 +282,23 @@ export default function ProfileIndex({
                                                     name="username"
                                                     required
                                                     autoComplete="username"
-                                                    defaultValue={profile.username}
+                                                    defaultValue={
+                                                        profile.username
+                                                    }
                                                     icon={AtSign}
                                                     error={errors.username}
                                                 />
                                             </div>
-                                            
+
                                             <div className="flex justify-end border-t border-border/40 pt-5">
                                                 <Button
                                                     type="submit"
                                                     disabled={processing}
                                                     className="w-full sm:w-auto"
                                                 >
-                                                    {processing ? 'Saving…' : 'Save changes'}
+                                                    {processing
+                                                        ? 'Saving…'
+                                                        : 'Save changes'}
                                                 </Button>
                                             </div>
                                         </>
@@ -299,7 +323,9 @@ export default function ProfileIndex({
                             className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm"
                         >
                             <div className="border-b border-border/50 bg-muted/25 px-5 py-3.5">
-                                <h3 className="text-sm font-semibold tracking-tight">Quick links</h3>
+                                <h3 className="text-sm font-semibold tracking-tight">
+                                    Quick links
+                                </h3>
                             </div>
                             <div className="flex flex-col divide-y divide-border/40">
                                 {profile.primary_role !== 'registry_clerk' && (

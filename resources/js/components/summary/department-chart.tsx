@@ -68,7 +68,10 @@ export function DepartmentAssignedChart({ data }: { data: DepartmentRow[] }) {
                         type="category"
                         dataKey="short_name"
                         width={76}
-                        tick={{ fontSize: 10, fill: chartColors.mutedForeground }}
+                        tick={{
+                            fontSize: 10,
+                            fill: chartColors.mutedForeground,
+                        }}
                         axisLine={false}
                         tickLine={false}
                     />
@@ -76,7 +79,11 @@ export function DepartmentAssignedChart({ data }: { data: DepartmentRow[] }) {
                         cursor={{ fill: barCursorFill }}
                         content={<SummaryChartTooltip labelKey="name" />}
                     />
-                    <Legend content={(props) => <SummaryLegend payload={props.payload} />} />
+                    <Legend
+                        content={(props) => (
+                            <SummaryLegend payload={props.payload} />
+                        )}
+                    />
                     <Bar
                         dataKey="completed"
                         name="Completed"
@@ -134,7 +141,10 @@ export function DepartmentPercentChart({ data }: { data: DepartmentRow[] }) {
                     />
                     <XAxis
                         dataKey="short_name"
-                        tick={{ fontSize: 10, fill: chartColors.mutedForeground }}
+                        tick={{
+                            fontSize: 10,
+                            fill: chartColors.mutedForeground,
+                        }}
                         interval={0}
                         angle={-32}
                         textAnchor="end"

@@ -23,22 +23,30 @@ export default function BuildingShow({ record }: { record: Building }) {
             >
                 <dl className="space-y-4 rounded-xl border border-border/60 bg-card p-6">
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">Name</dt>
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
+                            Name
+                        </dt>
                         <dd className="mt-1 font-medium">{record.name}</dd>
                     </div>
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">Region</dt>
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
+                            Region
+                        </dt>
                         <dd className="mt-1">{record.region ?? '—'}</dd>
                     </div>
                     <div>
-                        <dt className="text-xs font-medium uppercase text-muted-foreground">Status</dt>
-                        <dd className="mt-1">{record.is_active ? 'Active' : 'Inactive'}</dd>
+                        <dt className="text-xs font-medium text-muted-foreground uppercase">
+                            Status
+                        </dt>
+                        <dd className="mt-1">
+                            {record.is_active ? 'Active' : 'Inactive'}
+                        </dd>
                     </div>
                 </dl>
                 <div className="flex gap-2">
                     <Button asChild variant="default">
                         <Link href={`/lookups/buildings/${record.id}/edit`}>
-                            <Pencil className="size-4 mr-2" />
+                            <Pencil className="mr-2 size-4" />
                             Edit
                         </Link>
                     </Button>

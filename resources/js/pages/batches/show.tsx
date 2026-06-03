@@ -21,7 +21,7 @@ type BatchDetail = {
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
     return (
         <div className="space-y-1">
-            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                 {label}
             </dt>
             <dd className="text-sm font-medium">{value ?? '—'}</dd>
@@ -110,9 +110,7 @@ export default function BatchesShow({
                 </section>
 
                 <Button asChild variant="outline" className="w-fit">
-                    <Link href="/pc-register/create">
-                        Add PC to register
-                    </Link>
+                    <Link href="/pc-register/create">Add PC to register</Link>
                 </Button>
             </motion.div>
         </>

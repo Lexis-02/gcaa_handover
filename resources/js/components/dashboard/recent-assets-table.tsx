@@ -29,7 +29,7 @@ export function RecentAssetsTable({
     return (
         <motion.div
             variants={pageItem}
-            className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm"
+            className="overflow-hidden rounded-2xl border border-border/60 bg-card"
         >
             <div className="flex items-center justify-between border-b border-border/60 px-6 py-4">
                 <div>
@@ -39,7 +39,12 @@ export function RecentAssetsTable({
                     </p>
                 </div>
                 {showViewAll && (
-                    <Button asChild variant="outline" size="sm" className="rounded-xl">
+                    <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="rounded-xl"
+                    >
                         <Link href="/pc-register">View all</Link>
                     </Button>
                 )}
@@ -55,11 +60,15 @@ export function RecentAssetsTable({
                             <tr className="border-b border-border/60 bg-muted/40 text-left text-muted-foreground">
                                 <th className="px-6 py-3 font-medium">Ref</th>
                                 <th className="px-6 py-3 font-medium">Model</th>
-                                <th className="px-6 py-3 font-medium">Status</th>
+                                <th className="px-6 py-3 font-medium">
+                                    Status
+                                </th>
                                 <th className="hidden px-6 py-3 font-medium md:table-cell">
                                     Department
                                 </th>
-                                <th className="px-6 py-3 font-medium">Updated</th>
+                                <th className="px-6 py-3 font-medium">
+                                    Updated
+                                </th>
                             </tr>
                         </thead>
                         <tbody>

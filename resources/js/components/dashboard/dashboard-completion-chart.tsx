@@ -57,7 +57,11 @@ export function DashboardCompletionChart({
                 ) : (
                     <>
                         <div className="h-52 min-h-52 w-full min-w-0">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                            <ResponsiveContainer
+                                width="100%"
+                                height="100%"
+                                minWidth={0}
+                            >
                                 <PieChart>
                                     <Pie
                                         data={chartData}
@@ -67,7 +71,11 @@ export function DashboardCompletionChart({
                                         cy="50%"
                                         innerRadius={58}
                                         outerRadius={82}
-                                        paddingAngle={complete > 0 && inPipeline > 0 ? 2 : 0}
+                                        paddingAngle={
+                                            complete > 0 && inPipeline > 0
+                                                ? 2
+                                                : 0
+                                        }
                                         stroke={chartColors.card}
                                         strokeWidth={2}
                                         animationDuration={700}
@@ -89,7 +97,7 @@ export function DashboardCompletionChart({
                         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                             <div className="text-center">
                                 <motion.p
-                                    className="font-mono text-3xl font-bold leading-none text-foreground"
+                                    className="font-mono text-3xl leading-none font-bold text-foreground"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: 0.2 }}

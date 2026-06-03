@@ -36,7 +36,7 @@ export function HandoverOversightBadge({
                     {oversight.stage_label} — {oversight.stage_description}
                 </span>
                 <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                    <span className="inline-flex rounded-md bg-sky-100/80 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-sky-700 dark:bg-sky-500/20 dark:text-sky-300">
+                    <span className="inline-flex rounded-md bg-sky-100/80 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-sky-700 uppercase dark:bg-sky-500/20 dark:text-sky-300">
                         Monitoring only
                     </span>
                     {awaiting && (

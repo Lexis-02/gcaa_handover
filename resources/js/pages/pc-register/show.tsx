@@ -105,10 +105,10 @@ function DetailCell({
                 className,
             )}
         >
-            <dt className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <dt className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                 {label}
             </dt>
-            <dd className="mt-1.5 text-sm font-medium leading-snug text-foreground">
+            <dd className="mt-1.5 text-sm leading-snug font-medium text-foreground">
                 {value ?? '—'}
             </dd>
         </div>
@@ -246,8 +246,14 @@ export default function PcRegisterShow({
                                 />
                             )}
                             {meta.can_edit && (
-                                <Button asChild variant="default" size="default">
-                                    <Link href={`/pc-register/${record.id}/edit`}>
+                                <Button
+                                    asChild
+                                    variant="default"
+                                    size="default"
+                                >
+                                    <Link
+                                        href={`/pc-register/${record.id}/edit`}
+                                    >
                                         <Pencil className="size-4" />
                                         Edit
                                     </Link>
@@ -280,7 +286,7 @@ export default function PcRegisterShow({
                                 !
                             </span>
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-wide text-amber-800/80 dark:text-amber-200/80">
+                                <p className="text-xs font-semibold tracking-wide text-amber-800/80 uppercase dark:text-amber-200/80">
                                     Awaiting sign-off
                                 </p>
                                 <p className="mt-0.5 text-sm font-medium text-amber-950 dark:text-amber-50">
@@ -364,7 +370,9 @@ export default function PcRegisterShow({
                             <DetailCell
                                 label="Form 1 signed"
                                 value={
-                                    <SignedBadge signed={record.form_1_signed} />
+                                    <SignedBadge
+                                        signed={record.form_1_signed}
+                                    />
                                 }
                             />
                             <DetailCell
@@ -374,7 +382,9 @@ export default function PcRegisterShow({
                             <DetailCell
                                 label="Form 2 signed"
                                 value={
-                                    <SignedBadge signed={record.form_2_signed} />
+                                    <SignedBadge
+                                        signed={record.form_2_signed}
+                                    />
                                 }
                             />
                             <DetailCell
@@ -384,7 +394,9 @@ export default function PcRegisterShow({
                             <DetailCell
                                 label="Form 3 signed"
                                 value={
-                                    <SignedBadge signed={record.form_3_signed} />
+                                    <SignedBadge
+                                        signed={record.form_3_signed}
+                                    />
                                 }
                             />
                             <DetailCell

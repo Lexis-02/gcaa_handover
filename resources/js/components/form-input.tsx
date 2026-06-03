@@ -26,17 +26,26 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
             required,
             ...props
         },
-        ref
+        ref,
     ) => {
         const [showPassword, setShowPassword] = React.useState(false);
         const [isFocused, setIsFocused] = React.useState(false);
 
         const isPassword = type === 'password';
-        const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
+        const inputType = isPassword
+            ? showPassword
+                ? 'text'
+                : 'password'
+            : type;
         const hasError = !!error;
 
         return (
-            <div className={cn('flex flex-col gap-1.5 w-full', containerClassName)}>
+            <div
+                className={cn(
+                    'flex w-full flex-col gap-1.5',
+                    containerClassName,
+                )}
+            >
                 {/* Label row */}
                 <div className="flex items-center justify-between px-0.5">
                     <label
@@ -94,7 +103,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                         }}
                         className={cn(
                             // Layout & base
-                            'w-full h-11 rounded-xl border text-sm outline-none',
+                            'h-11 w-full rounded-xl border text-sm outline-none',
                             'transition-all duration-200 ease-in-out',
                             // Typography & bg
                             'bg-background/80 text-foreground placeholder:text-muted-foreground/50',
@@ -104,14 +113,15 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                             // Default border
                             'border-border/60 hover:border-border',
                             // Focus — glowing ring matching primary accent
-                            !hasError && 'focus:border-primary/60 focus:ring-4 focus:ring-primary/[0.08] focus:bg-background',
+                            !hasError &&
+                                'focus:border-primary/60 focus:bg-background focus:ring-4 focus:ring-primary/[0.08]',
                             // Error
                             hasError && [
                                 'border-destructive/60 bg-destructive/[0.02]',
                                 'focus:border-destructive/80 focus:ring-4 focus:ring-destructive/[0.08]',
                             ],
                             // Disabled
-                            'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted/30',
+                            'disabled:cursor-not-allowed disabled:bg-muted/30 disabled:opacity-50',
                             className,
                         )}
                         {...props}
@@ -123,12 +133,14 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                             type="button"
                             onClick={() => setShowPassword((p) => !p)}
                             tabIndex={-1}
-                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            aria-label={
+                                showPassword ? 'Hide password' : 'Show password'
+                            }
                             className={cn(
                                 'absolute right-3 flex items-center justify-center',
                                 'rounded-md p-0.5 text-muted-foreground/50',
-                                'hover:text-foreground hover:bg-accent/40',
-                                'focus:outline-none transition-all duration-150',
+                                'hover:bg-accent/40 hover:text-foreground',
+                                'transition-all duration-150 focus:outline-none',
                             )}
                         >
                             {showPassword ? (
@@ -144,7 +156,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                 {error ? (
                     <p
                         role="alert"
-                        className="flex items-center gap-1 px-0.5 text-[11.5px] font-medium text-destructive animate-in fade-in-50 slide-in-from-top-1 duration-200"
+                        className="flex animate-in items-center gap-1 px-0.5 text-[11.5px] font-medium text-destructive duration-200 fade-in-50 slide-in-from-top-1"
                     >
                         <svg
                             className="size-3 shrink-0"
@@ -159,7 +171,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                 ) : null}
             </div>
         );
-    }
+    },
 );
 
 FormInput.displayName = 'FormInput';

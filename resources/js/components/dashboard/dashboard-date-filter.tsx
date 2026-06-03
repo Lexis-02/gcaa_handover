@@ -1,11 +1,5 @@
 import { router, usePage } from '@inertiajs/react';
-import {
-    endOfMonth,
-    format,
-    parseISO,
-    startOfMonth,
-    subDays,
-} from 'date-fns';
+import { endOfMonth, format, parseISO, startOfMonth, subDays } from 'date-fns';
 import { CalendarDays, ChevronDown } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -30,7 +24,11 @@ function toIsoDate(date: Date): string {
     return format(date, 'yyyy-MM-dd');
 }
 
-export function DashboardDateFilter() {
+export function DashboardDateFilter({
+    routePath = '/dashboard',
+}: {
+    routePath?: string;
+}) {
     const { filters } = usePage<{ filters: DashboardFilters }>().props;
     const [open, setOpen] = useState(false);
     const [draftFrom, setDraftFrom] = useState(filters.from);
@@ -50,7 +48,7 @@ export function DashboardDateFilter() {
 
     const applyRange = (from: Date, to: Date) => {
         router.get(
-            '/dashboard',
+            routePath,
             { from: toIsoDate(from), to: toIsoDate(to) },
             { preserveState: true, preserveScroll: true },
         );

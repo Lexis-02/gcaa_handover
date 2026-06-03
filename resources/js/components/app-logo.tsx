@@ -40,7 +40,7 @@ export default function AppLogo({
             >
                 <span
                     className={cn(
-                        'block truncate font-bold leading-tight tracking-tight',
+                        'block truncate leading-tight font-bold tracking-tight',
                         isAuth
                             ? 'text-2xl text-slate-900 sm:text-[1.65rem] dark:text-white'
                             : 'text-xl text-sidebar-foreground',

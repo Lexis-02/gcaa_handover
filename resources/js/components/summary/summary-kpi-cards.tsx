@@ -49,7 +49,7 @@ export function SummaryKpiCards({ overall }: { overall: Overall }) {
                 >
                     <div className="flex items-start justify-between gap-3">
                         <div>
-                            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                 {card.label}
                             </p>
                             <p className="mt-2 font-mono text-2xl font-bold tabular-nums">

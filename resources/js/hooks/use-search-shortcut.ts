@@ -6,7 +6,10 @@ export function useSearchShortcut(onActivate: () => void) {
 
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
-            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+            if (
+                (event.ctrlKey || event.metaKey) &&
+                event.key.toLowerCase() === 'k'
+            ) {
                 event.preventDefault();
                 handlerRef.current();
             }

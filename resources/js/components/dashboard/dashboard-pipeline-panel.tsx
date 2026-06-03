@@ -37,7 +37,7 @@ export function DashboardPipelinePanel({
     return (
         <motion.section
             variants={pageItem}
-            className="flex flex-col rounded-2xl border border-border/60 bg-card shadow-sm"
+            className="flex flex-col rounded-2xl border border-border/60 bg-card"
         >
             <div className="border-b border-border/50 px-6 py-5 md:px-8">
                 <div className="flex flex-wrap items-start justify-between gap-4">
@@ -118,8 +118,8 @@ export function DashboardPipelinePanel({
                 </ul>
             </div>
 
-            <div className="px-2 pb-4 pt-2 md:px-4">
-                <p className="mb-2 px-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <div className="px-2 pt-2 pb-4 md:px-4">
+                <p className="mb-2 px-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
                     Stage distribution
                 </p>
                 {total > 0 ? (
@@ -129,10 +129,19 @@ export function DashboardPipelinePanel({
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.4 }}
                     >
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                        <ResponsiveContainer
+                            width="100%"
+                            height="100%"
+                            minWidth={0}
+                        >
                             <BarChart
                                 data={chartData}
-                                margin={{ top: 8, right: 12, left: 0, bottom: 0 }}
+                                margin={{
+                                    top: 8,
+                                    right: 12,
+                                    left: 0,
+                                    bottom: 0,
+                                }}
                             >
                                 <CartesianGrid
                                     strokeDasharray="3 3"

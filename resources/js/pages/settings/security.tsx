@@ -28,84 +28,84 @@ export default function Security(props: Props) {
                 />
 
                 <div className="space-y-6">
-                <Heading
-                    variant="small"
-                    title="Update password"
-                    description="Ensure your account is using a long, random password to stay secure"
-                />
+                    <Heading
+                        variant="small"
+                        title="Update password"
+                        description="Ensure your account is using a long, random password to stay secure"
+                    />
 
-                <Form
-                    {...SecurityController.update.form()}
-                    options={{
-                        preserveScroll: true,
-                    }}
-                    resetOnError={[
-                        'password',
-                        'password_confirmation',
-                        'current_password',
-                    ]}
-                    resetOnSuccess
-                    onError={(errors) => {
-                        if (errors.password) {
-                            passwordInput.current?.focus();
-                        }
+                    <Form
+                        {...SecurityController.update.form()}
+                        options={{
+                            preserveScroll: true,
+                        }}
+                        resetOnError={[
+                            'password',
+                            'password_confirmation',
+                            'current_password',
+                        ]}
+                        resetOnSuccess
+                        onError={(errors) => {
+                            if (errors.password) {
+                                passwordInput.current?.focus();
+                            }
 
-                        if (errors.current_password) {
-                            currentPasswordInput.current?.focus();
-                        }
-                    }}
-                    className="space-y-6"
-                >
-                    {({ errors, processing }) => (
-                        <>
-                            <FormInput
-                                id="current_password"
-                                label="Current password"
-                                type="password"
-                                ref={currentPasswordInput}
-                                name="current_password"
-                                autoComplete="current-password"
-                                placeholder="Current password"
-                                icon={Lock}
-                                error={errors.current_password}
-                            />
+                            if (errors.current_password) {
+                                currentPasswordInput.current?.focus();
+                            }
+                        }}
+                        className="space-y-6"
+                    >
+                        {({ errors, processing }) => (
+                            <>
+                                <FormInput
+                                    id="current_password"
+                                    label="Current password"
+                                    type="password"
+                                    ref={currentPasswordInput}
+                                    name="current_password"
+                                    autoComplete="current-password"
+                                    placeholder="Current password"
+                                    icon={Lock}
+                                    error={errors.current_password}
+                                />
 
-                            <FormInput
-                                id="password"
-                                label="New password"
-                                type="password"
-                                ref={passwordInput}
-                                name="password"
-                                autoComplete="new-password"
-                                placeholder="New password"
-                                passwordrules={props.passwordRules}
-                                icon={Lock}
-                                error={errors.password}
-                            />
+                                <FormInput
+                                    id="password"
+                                    label="New password"
+                                    type="password"
+                                    ref={passwordInput}
+                                    name="password"
+                                    autoComplete="new-password"
+                                    placeholder="New password"
+                                    passwordrules={props.passwordRules}
+                                    icon={Lock}
+                                    error={errors.password}
+                                />
 
-                            <FormInput
-                                id="password_confirmation"
-                                label="Confirm password"
-                                type="password"
-                                name="password_confirmation"
-                                autoComplete="new-password"
-                                placeholder="Confirm password"
-                                passwordrules={props.passwordRules}
-                                icon={Lock}
-                                error={errors.password_confirmation}
-                            />
+                                <FormInput
+                                    id="password_confirmation"
+                                    label="Confirm password"
+                                    type="password"
+                                    name="password_confirmation"
+                                    autoComplete="new-password"
+                                    placeholder="Confirm password"
+                                    passwordrules={props.passwordRules}
+                                    icon={Lock}
+                                    error={errors.password_confirmation}
+                                />
 
-                            <div className="flex items-center gap-4">
-                                <Button
-                                    disabled={processing}
-                                    data-test="update-password-button"
-                                >
-                                    Save
-                                </Button>
-                            </div>
-                        </>
-                    )}
-                </Form>
+                                <div className="flex items-center gap-4">
+                                    <Button
+                                        disabled={processing}
+                                        data-test="update-password-button"
+                                    >
+                                        Save
+                                    </Button>
+                                </div>
+                            </>
+                        )}
+                    </Form>
                 </div>
 
                 <ManagePasskeys

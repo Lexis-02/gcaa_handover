@@ -25,13 +25,12 @@ function toOptions(staff: StaffOption[]): SearchComboboxOption[] {
     return staff.map((member) => ({
         id: member.id,
         primary: member.full_name,
-        secondary: [
-            member.staff_number,
-            member.department_name,
-        ]
+        secondary: [member.staff_number, member.department_name]
             .filter(Boolean)
             .join(' · '),
-        leading: <User className="size-3.5 shrink-0 text-primary" aria-hidden />,
+        leading: (
+            <User className="size-3.5 shrink-0 text-primary" aria-hidden />
+        ),
     }));
 }
 

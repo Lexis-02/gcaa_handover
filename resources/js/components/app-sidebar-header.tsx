@@ -15,7 +15,9 @@ export function AppSidebarHeader({ pageTitle = '' }: { pageTitle?: string }) {
     const user = auth.user;
 
     const focusSearch = () => {
-        document.querySelector<HTMLInputElement>('[data-header-search]')?.focus();
+        document
+            .querySelector<HTMLInputElement>('[data-header-search]')
+            ?.focus();
     };
 
     return (

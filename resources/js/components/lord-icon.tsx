@@ -1,10 +1,15 @@
 import React from 'react';
 
-
-
 export type LordIconProps = {
     src: string;
-    trigger?: 'hover' | 'click' | 'loop' | 'loop-on-hover' | 'morph' | 'morph-two-way' | 'in';
+    trigger?:
+        | 'hover'
+        | 'click'
+        | 'loop'
+        | 'loop-on-hover'
+        | 'morph'
+        | 'morph-two-way'
+        | 'in';
     colors?: string;
     size?: number | string;
     className?: string;

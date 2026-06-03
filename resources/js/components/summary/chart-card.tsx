@@ -27,7 +27,9 @@ export function ChartCard({
             )}
         >
             <div className="mb-4">
-                <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+                <h3 className="text-sm font-semibold tracking-tight">
+                    {title}
+                </h3>
                 {description && (
                     <p className="mt-1 text-xs text-muted-foreground">
                         {description}

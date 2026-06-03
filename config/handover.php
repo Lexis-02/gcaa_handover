@@ -65,7 +65,7 @@ return [
             'key' => 'complete',
             'label' => 'Complete',
             'description' => 'All stages signed off',
-            'form_label' => 'Form 3 + old PC returned',
+            'form_label' => 'Form 3 + old PC returned/reassigned',
             'signer_role' => null,
             'permission' => null,
         ],

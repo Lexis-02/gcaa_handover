@@ -255,10 +255,16 @@ class DashboardService
     public function navigationFor(User $user): array
     {
         $snapshot = $this->userSnapshot($user);
+        $unreadCount = $snapshot['unread_count'];
+        
+        $badges = [
+            'sign_off_queue' => $snapshot['sign_off_queue'],
+            'unread_notifications' => $unreadCount > 10 ? '10+' : $unreadCount,
+        ];
 
         return [
-            'main' => $this->filterNavItems(config('navigation.main', []), $snapshot['roles'], $snapshot['permissions'], []),
-            'footer' => $this->filterNavItems(config('navigation.footer', []), $snapshot['roles'], $snapshot['permissions'], []),
+            'main' => $this->filterNavItems(config('navigation.main', []), $snapshot['roles'], $snapshot['permissions'], $badges),
+            'footer' => $this->filterNavItems(config('navigation.footer', []), $snapshot['roles'], $snapshot['permissions'], $badges),
         ];
     }
 
@@ -305,7 +311,7 @@ class DashboardService
                         ->all();
                 }
 
-                if (! empty($item['badge']) && ($badges[$item['badge']] ?? 0) > 0) {
+                if (! empty($item['badge']) && ! empty($badges[$item['badge']])) {
                     $nav['badge'] = (string) $badges[$item['badge']];
                 }
 

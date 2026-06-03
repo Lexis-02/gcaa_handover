@@ -83,7 +83,6 @@ class PcHandoverService
                 : null,
             'old_pc_condition' => $old?->condition,
             'data_wiped' => $old?->data_wiped,
-            'returned_to_stores' => $old?->returned_to_stores,
             'return_action' => $old?->return_action,
             'has_old_pc_return' => $old !== null,
             'can_edit' => $old !== null,
@@ -119,7 +118,7 @@ class PcHandoverService
             'old_pc_conditions' => $this->lookups->oldPcConditions(),
             'yes_no_options' => $this->lookups->yesNoOptions(),
             'return_actions' => [
-                ['value' => 'return_to_stores', 'label' => 'Return to Stores'],
+                ['value' => 'return_to_stores', 'label' => 'Returned to ICT'],
                 ['value' => 'given_to_user', 'label' => 'Given to another user'],
             ],
             'departments' => \App\Models\Department::query()
@@ -151,7 +150,6 @@ class PcHandoverService
             'condition' => $return->condition,
             'reason_for_replacement' => $return->reason_for_replacement,
             'data_wiped' => $return->data_wiped,
-            'returned_to_stores' => $return->returned_to_stores,
             'return_action' => $return->return_action,
             'given_to_fullname' => $return->given_to_fullname,
             'given_to_staff_number' => $return->given_to_staff_number,
@@ -173,7 +171,7 @@ class PcHandoverService
             'created_at' => $return->created_at?->format('Y-m-d H:i'),
             'updated_at' => $return->updated_at?->format('Y-m-d H:i'),
             'return_action_label' => match ($return->return_action) {
-                'return_to_stores' => 'Return to Stores',
+                'return_to_stores' => 'Returned to ICT',
                 'given_to_user' => 'Given to another user',
                 default => $return->return_action,
             },

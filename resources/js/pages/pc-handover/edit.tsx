@@ -9,7 +9,7 @@ import {
 
 type PageProps = {
     record: HandoverFormData & { id: number };
-    options: Pick<HandoverFormOptions, 'old_pc_conditions' | 'yes_no_options'>;
+    options: Pick<HandoverFormOptions, 'old_pc_conditions' | 'yes_no_options' | 'return_actions' | 'departments'>;
 };
 
 export default function PcHandoverEdit({ record, options }: PageProps) {

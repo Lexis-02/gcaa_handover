@@ -115,6 +115,8 @@ class PcHandoverController extends Controller
             'options' => [
                 'old_pc_conditions' => $this->handover->formOptions()['old_pc_conditions'],
                 'yes_no_options' => $this->handover->formOptions()['yes_no_options'],
+                'return_actions' => $this->handover->formOptions()['return_actions'],
+                'departments' => $this->handover->formOptions()['departments'],
             ],
         ]);
     }

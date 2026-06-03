@@ -364,7 +364,7 @@ export default function PcRegisterShow({
                     >
                         <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             <DetailCell
-                                label="Stores issue date"
+                                label="ICT issue date"
                                 value={record.stores_issue_date}
                             />
                             <DetailCell
@@ -400,7 +400,11 @@ export default function PcRegisterShow({
                                 }
                             />
                             <DetailCell
-                                label="Old PC returned"
+                                label={
+                                    record.stage_progress?.old_pc_return_action === 'given_to_user'
+                                        ? 'Old PC reassigned'
+                                        : 'Old PC returned'
+                                }
                                 value={
                                     <div className="flex flex-wrap items-center gap-2">
                                         <SignedBadge

@@ -92,6 +92,7 @@ class PcRegisterService
             'stage_2' => $stages->has(2),
             'stage_3' => $stages->has(3),
             'old_pc_returned' => $oldReturned,
+            'old_pc_return_action' => $asset->oldPcReturn?->return_action,
             'complete' => $stages->has(1) && $stages->has(2) && $stages->has(3) && $oldReturned,
         ];
     }
@@ -121,7 +122,7 @@ class PcRegisterService
         }
 
         if (! $progress['old_pc_returned']) {
-            return 'End user (old PC return to stores)';
+            return 'End user (old PC return/reassign)';
         }
 
         return null;

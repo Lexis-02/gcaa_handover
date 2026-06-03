@@ -24,7 +24,6 @@ type HandoverRecord = {
     condition: string;
     reason_for_replacement: string;
     data_wiped: string;
-    returned_to_stores: string;
     return_action: string;
     return_action_label: string;
     old_hostname?: string | null;
@@ -208,10 +207,6 @@ export default function PcHandoverShow({ record, meta }: PageProps) {
                             <DetailCell
                                 label="Data wiped"
                                 value={record.data_wiped}
-                            />
-                            <DetailCell
-                                label="Returned to stores"
-                                value={record.returned_to_stores}
                             />
                             <DetailCell
                                 label="Action taken"

@@ -22,7 +22,7 @@ type HandoverRow = {
     old_pc_summary: string | null;
     old_pc_condition: string | null;
     data_wiped: string | null;
-    returned_to_stores: string | null;
+    return_action: string | null;
     has_old_pc_return: boolean;
     can_edit: boolean;
 };
@@ -257,17 +257,17 @@ export default function PcHandoverIndex({ records, filters, meta }: PageProps) {
                                                             <span
                                                                 className={cn(
                                                                     'rounded-full px-2 py-0.5 font-medium',
-                                                                    row.returned_to_stores ===
-                                                                        'Yes'
+                                                                    row.return_action
                                                                         ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300'
                                                                         : 'bg-muted text-muted-foreground',
                                                                 )}
-                                                                title="Returned to stores"
+                                                                title="Return action"
                                                             >
-                                                                Stores{' '}
-                                                                {compactYesNo(
-                                                                    row.returned_to_stores,
-                                                                )}
+                                                                {row.return_action === 'given_to_user'
+                                                                    ? 'Reassigned ✓'
+                                                                    : row.return_action === 'return_to_stores'
+                                                                    ? 'Stores ✓'
+                                                                    : 'Action —'}
                                                             </span>
                                                         </div>
                                                     ) : (

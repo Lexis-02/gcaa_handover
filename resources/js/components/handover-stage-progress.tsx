@@ -6,15 +6,9 @@ export type StageProgress = {
     stage_2: boolean;
     stage_3: boolean;
     old_pc_returned: boolean;
+    old_pc_return_action?: string | null;
     complete: boolean;
 };
-
-const steps = [
-    { key: 'stage_1' as const, short: '1', title: 'Stores / Form 1' },
-    { key: 'stage_2' as const, short: '2', title: 'Director / Form 2' },
-    { key: 'stage_3' as const, short: '3', title: 'End user / Form 3' },
-    { key: 'old_pc_returned' as const, short: 'PC', title: 'Old PC returned' },
-];
 
 export function HandoverStageProgress({
     progress,
@@ -23,6 +17,14 @@ export function HandoverStageProgress({
     progress: StageProgress;
     compact?: boolean;
 }) {
+    const pcTitle = progress.old_pc_return_action === 'given_to_user' ? 'Old PC reassigned' : 'Old PC returned';
+
+    const steps = [
+        { key: 'stage_1' as const, short: '1', title: 'ICT / Form 1' },
+        { key: 'stage_2' as const, short: '2', title: 'Director / Form 2' },
+        { key: 'stage_3' as const, short: '3', title: 'End user / Form 3' },
+        { key: 'old_pc_returned' as const, short: 'PC', title: pcTitle },
+    ];
     return (
         <div
             className={cn(

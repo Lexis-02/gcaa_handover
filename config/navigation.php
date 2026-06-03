@@ -203,6 +203,7 @@ return [
             'title' => 'Notifications',
             'route' => 'notifications.index',
             'icon' => 'bell',
+            'badge' => 'unread_notifications',
             'permissions' => [
                 'stage1.signoff',
                 'stage2.signoff',

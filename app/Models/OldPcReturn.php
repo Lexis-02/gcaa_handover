@@ -49,7 +49,7 @@ class OldPcReturn extends Model
     public function isFullyReturned(): bool
     {
         return self::isAffirmative($this->data_wiped)
-            && $this->return_action === 'return_to_stores';
+            && in_array($this->return_action, ['return_to_stores', 'given_to_user'], true);
     }
 
     protected static function booted()

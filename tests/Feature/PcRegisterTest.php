@@ -64,7 +64,12 @@ class PcRegisterTest extends TestCase
 
     public function test_end_user_cannot_create_pc_record(): void
     {
-        $user = User::query()->where('username', 'enduser')->first();
+        $user = User::query()->create([
+            'name' => 'End User',
+            'username' => 'enduser',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'is_active' => true,
+        ]);
         $batch = Batch::query()->first();
 
         $this->actingAs($user)
@@ -190,9 +195,9 @@ class PcRegisterTest extends TestCase
             ->get(route('pc-register.show', $asset))
             ->assertOk()
             ->assertInertia(fn ($page) => $page
-                ->where('record.next_signer', 'ICT Stores Officer')
-                ->where('meta.sign_off', null)
-                ->where('meta.handover_oversight.stage', 1)
+                ->where('record.next_signer', 'Stores Officer')
+                ->where('meta.sign_off.stage', 1)
+                ->where('meta.handover_oversight', null)
             );
     }
 

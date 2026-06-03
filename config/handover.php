@@ -30,7 +30,7 @@ return [
     | Handover stages (who signs before status becomes Complete)
     |--------------------------------------------------------------------------
     |
-    | Stage 1 — ICT Stores Officer (stage1.signoff): Form 1 / picked from stores
+    | Stage 1 — Stores Officer (stage1.signoff): Form 1 / picked from stores
     | Stage 2 — Department Director (stage2.signoff): Form 2 / received by director
     | Stage 3 — Assigned end user (stage3.signoff): Form 3 / issued to end user
     | Complete — All three forms signed AND old PC returned to stores
@@ -42,7 +42,7 @@ return [
             'label' => 'Stage 1',
             'description' => 'Picked from Stores',
             'form_label' => 'Form 1 signed',
-            'signer_role' => 'ICT Stores Officer',
+            'signer_role' => 'Stores Officer',
             'permission' => 'stage1.signoff',
         ],
         2 => [

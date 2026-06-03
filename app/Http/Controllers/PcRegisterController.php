@@ -164,6 +164,10 @@ class PcRegisterController extends Controller
     {
         abort_unless($request->user()?->can('pc.manage'), 403);
 
+        if ($pc_register->status !== 'pending') {
+            return redirect()->route('pc-register.show', $pc_register);
+        }
+
         $pc_register->load(['batch:id,batch_code,year']);
 
         return Inertia::render('pc-register/edit', [
@@ -178,6 +182,10 @@ class PcRegisterController extends Controller
 
     public function update(UpdatePcRegisterRequest $request, PcAsset $pc_register): RedirectResponse
     {
+        if ($pc_register->status !== 'pending') {
+            return redirect()->route('pc-register.show', $pc_register);
+        }
+
         $pc_register->update($request->validated());
 
         if ($request->validated('condition_on_issue') === 'Faulty on Arrival') {

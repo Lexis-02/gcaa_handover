@@ -168,19 +168,10 @@ export default function PcRegisterIndex({
                                             <td className="px-4 py-3">
                                                 <Link
                                                     href={`/pc-register/${row.id}`}
-                                                    className="font-mono text-xs font-semibold text-primary hover:underline"
+                                                    className="font-mono text-sm font-semibold text-primary hover:underline"
                                                 >
                                                     {row.ref_no}
                                                 </Link>
-                                                <p className="mt-0.5 font-medium">
-                                                    {row.make_model}
-                                                </p>
-                                                <p className="text-xs text-muted-foreground">
-                                                    {row.serial_number}
-                                                    {row.asset_tag
-                                                        ? ` · ${row.asset_tag}`
-                                                        : ''}
-                                                </p>
                                                 <p className="mt-1 text-xs text-muted-foreground md:hidden">
                                                     {row.assignee?.full_name ??
                                                         'Unassigned'}

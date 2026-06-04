@@ -44,6 +44,15 @@ type RegisterRecord = {
         staff_number: string;
         designation: string | null;
     } | null;
+    acc_power_adapter: boolean;
+    acc_carrying_bag: boolean;
+    acc_hdmi_vga: boolean;
+    acc_mouse: boolean;
+    acc_docking_station: boolean;
+    acc_headset: boolean;
+    acc_keyboard: boolean;
+    acc_monitor: boolean;
+    acc_other: string | null;
     stores_issue_date: string | null;
     form_1_signed: boolean;
     director_receipt_date: string | null;
@@ -332,6 +341,30 @@ export default function PcRegisterShow({
                                 value={record.building?.name}
                             />
                         </dl>
+                    </SectionCard>
+
+                    <SectionCard title="Accessories Issued" icon={Cpu}>
+                        <div className="rounded-lg border border-border/50 bg-muted/15 px-4 py-3">
+                            <dt className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                                Accessories
+                            </dt>
+                            <dd className="mt-1.5 text-sm leading-snug font-medium text-foreground">
+                                <ul className="list-inside list-disc">
+                                    {record.acc_power_adapter && <li>Power Adapter / Charger</li>}
+                                    {record.acc_carrying_bag && <li>Carrying Bag / Case</li>}
+                                    {record.acc_hdmi_vga && <li>HDMI / VGA Cable</li>}
+                                    {record.acc_mouse && <li>Mouse</li>}
+                                    {record.acc_docking_station && <li>Docking Station</li>}
+                                    {record.acc_headset && <li>Headset</li>}
+                                    {record.acc_keyboard && <li>Keyboard</li>}
+                                    {record.acc_monitor && <li>Monitor</li>}
+                                    {record.acc_other && <li>Other: {record.acc_other}</li>}
+                                    {!record.acc_power_adapter && !record.acc_carrying_bag && !record.acc_hdmi_vga && !record.acc_mouse && !record.acc_docking_station && !record.acc_headset && !record.acc_keyboard && !record.acc_monitor && !record.acc_other && (
+                                        <span className="text-muted-foreground italic">None</span>
+                                    )}
+                                </ul>
+                            </dd>
+                        </div>
                     </SectionCard>
 
                     <SectionCard title="Assignment" icon={User}>

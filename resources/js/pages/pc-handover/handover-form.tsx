@@ -6,6 +6,7 @@ import {
     type PcAssetOption,
 } from '@/components/pc-asset-combobox';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
@@ -37,6 +38,20 @@ export type HandoverFormData = {
     given_to_designation?: string | null;
     given_to_department_id?: number | null;
     given_to_telephone?: string | null;
+    acc_power_adapter?: boolean;
+    acc_carrying_bag?: boolean;
+    acc_hdmi_vga?: boolean;
+    acc_mouse?: boolean;
+    acc_docking_station?: boolean;
+    acc_headset?: boolean;
+    acc_keyboard?: boolean;
+    acc_monitor?: boolean;
+    acc_other?: string | null;
+    dbw_user_backed_up?: boolean;
+    dbw_ict_wiped?: boolean;
+    dbw_data_transferred?: boolean;
+    dbw_no_wipe_required?: boolean;
+    remarks?: string | null;
 };
 
 const formLabelClassName = 'text-sm font-medium text-foreground select-none';
@@ -193,32 +208,61 @@ export function HandoverForm({
                                 </p>
                             )}
                         </div>
-                        <div className="grid gap-4 sm:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label className={formLabelClassName}>
-                                    Data wiped?
-                                </Label>
-                                <select
-                                    name="data_wiped"
-                                    defaultValue={record.data_wiped ?? ''}
-                                    required
-                                    className={selectClassName}
-                                >
-                                    <option value="" disabled>
-                                        Select…
-                                    </option>
-                                    {options.yes_no_options.map((value) => (
-                                        <option key={value} value={value}>
-                                            {value}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.data_wiped && (
-                                    <p className="text-sm text-destructive">
-                                        {errors.data_wiped}
-                                    </p>
-                                )}
+                        <div className="space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4">
+                            <h3 className="text-sm font-semibold tracking-tight">Accessories Returned with Old PC (tick as applicable)</h3>
+                            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+                                {[
+                                    { name: 'acc_power_adapter', label: 'Power Adapter / Charger' },
+                                    { name: 'acc_carrying_bag', label: 'Carrying Bag / Case' },
+                                    { name: 'acc_hdmi_vga', label: 'HDMI / VGA Cable' },
+                                    { name: 'acc_mouse', label: 'Mouse' },
+                                    { name: 'acc_docking_station', label: 'Docking Station' },
+                                    { name: 'acc_headset', label: 'Headset' },
+                                    { name: 'acc_keyboard', label: 'Keyboard' },
+                                    { name: 'acc_monitor', label: 'Monitor' },
+                                ].map((acc) => (
+                                    <div key={acc.name} className="flex items-center space-x-2">
+                                        <input type="hidden" name={acc.name} value="0" />
+                                        <Checkbox name={acc.name} id={acc.name} value="1" defaultChecked={record[acc.name as keyof HandoverFormData] as boolean} />
+                                        <Label htmlFor={acc.name} className="font-normal">{acc.label}</Label>
+                                    </div>
+                                ))}
+                                <div className="flex items-center space-x-2 sm:col-span-2 md:col-span-3">
+                                    <Label htmlFor="acc_other" className="font-normal whitespace-nowrap">Other:</Label>
+                                    <input type="text" name="acc_other" id="acc_other" defaultValue={record.acc_other ?? ''} className="flex-1 border-b border-slate-300 bg-transparent outline-none focus:border-accent min-w-0" />
+                                </div>
                             </div>
+                        </div>
+
+                        <div className="space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4">
+                            <h3 className="text-sm font-semibold tracking-tight">Data Backup & Wipe Confirmation</h3>
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                {[
+                                    { name: 'dbw_user_backed_up', label: 'User data backed up by end-user' },
+                                    { name: 'dbw_ict_wiped', label: 'Old PC wiped / sanitized by ICT' },
+                                    { name: 'dbw_data_transferred', label: 'Data transferred to new PC' },
+                                    { name: 'dbw_no_wipe_required', label: 'No data wipe required' },
+                                ].map((dbw) => (
+                                    <div key={dbw.name} className="flex items-center space-x-2">
+                                        <input type="hidden" name={dbw.name} value="0" />
+                                        <Checkbox name={dbw.name} id={dbw.name} value="1" defaultChecked={record[dbw.name as keyof HandoverFormData] as boolean} />
+                                        <Label htmlFor={dbw.name} className="font-normal">{dbw.label}</Label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className={formLabelClassName}>Remarks (faults observed, missing parts, etc.)</Label>
+                            <textarea
+                                name="remarks"
+                                rows={3}
+                                defaultValue={record.remarks ?? ''}
+                                className={cn(selectClassName, 'h-auto min-h-[5.5rem] resize-y py-2.5')}
+                            />
+                        </div>
+
+                        <div className="grid gap-4 sm:grid-cols-2">
                             <div className="space-y-2">
                                 <Label className={formLabelClassName}>
                                     Return Action

@@ -24,11 +24,34 @@ use App\Models\Scopes\DepartmentScope;
     'assigned_user_name',
     'department_id',
     'building_id',
-    'room_ext'
+    'room_ext',
+    'acc_power_adapter',
+    'acc_carrying_bag',
+    'acc_hdmi_vga',
+    'acc_mouse',
+    'acc_docking_station',
+    'acc_headset',
+    'acc_keyboard',
+    'acc_monitor',
+    'acc_other'
 ])]
 class PcAsset extends Model
 {
     use HasFactory;
+
+    protected function casts(): array
+    {
+        return [
+            'acc_power_adapter' => 'boolean',
+            'acc_carrying_bag' => 'boolean',
+            'acc_hdmi_vga' => 'boolean',
+            'acc_mouse' => 'boolean',
+            'acc_docking_station' => 'boolean',
+            'acc_headset' => 'boolean',
+            'acc_keyboard' => 'boolean',
+            'acc_monitor' => 'boolean',
+        ];
+    }
 
     protected static function booted()
     {

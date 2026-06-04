@@ -4,6 +4,7 @@ import { FormInput } from '@/components/form-input';
 import { StaffCombobox } from '@/components/staff-combobox';
 import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
@@ -34,6 +35,15 @@ export type RegisterFormData = {
     department_id?: number | null;
     building_id?: number | null;
     room_ext?: string | null;
+    acc_power_adapter?: boolean;
+    acc_carrying_bag?: boolean;
+    acc_hdmi_vga?: boolean;
+    acc_mouse?: boolean;
+    acc_docking_station?: boolean;
+    acc_headset?: boolean;
+    acc_keyboard?: boolean;
+    acc_monitor?: boolean;
+    acc_other?: string | null;
 };
 
 const formLabelClassName = 'text-sm font-medium text-foreground select-none';
@@ -248,6 +258,32 @@ export function RegisterForm({
                             defaultValue={record.room_ext ?? ''}
                             error={errors.room_ext}
                         />
+                    </section>
+
+                    <section className="space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4">
+                        <h3 className="text-sm font-semibold tracking-tight">Accessories Issued (tick as applicable)</h3>
+                        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+                            {[
+                                { name: 'acc_power_adapter', label: 'Power Adapter / Charger' },
+                                { name: 'acc_carrying_bag', label: 'Carrying Bag / Case' },
+                                { name: 'acc_hdmi_vga', label: 'HDMI / VGA Cable' },
+                                { name: 'acc_mouse', label: 'Mouse' },
+                                { name: 'acc_docking_station', label: 'Docking Station' },
+                                { name: 'acc_headset', label: 'Headset' },
+                                { name: 'acc_keyboard', label: 'Keyboard' },
+                                { name: 'acc_monitor', label: 'Monitor' },
+                            ].map((acc) => (
+                                <div key={acc.name} className="flex items-center space-x-2">
+                                    <input type="hidden" name={acc.name} value="0" />
+                                    <Checkbox name={acc.name} id={acc.name} value="1" defaultChecked={record[acc.name as keyof RegisterFormData] as boolean} />
+                                    <Label htmlFor={acc.name} className="font-normal">{acc.label}</Label>
+                                </div>
+                            ))}
+                            <div className="flex items-center space-x-2 sm:col-span-2 md:col-span-3">
+                                <Label htmlFor="acc_other" className="font-normal whitespace-nowrap">Other:</Label>
+                                <input type="text" name="acc_other" id="acc_other" defaultValue={record.acc_other ?? ''} className="flex-1 border-b border-slate-300 bg-transparent outline-none focus:border-accent min-w-0" />
+                            </div>
+                        </div>
                     </section>
 
                     <div className="flex items-center gap-3 pt-2">

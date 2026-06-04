@@ -33,6 +33,15 @@ class UpdatePcRegisterRequest extends FormRequest
             'department_id' => ['nullable', 'exists:departments,id'],
             'building_id' => ['nullable', 'exists:buildings,id'],
             'room_ext' => ['nullable', 'string', 'max:50'],
+            'acc_power_adapter' => ['nullable', 'boolean'],
+            'acc_carrying_bag' => ['nullable', 'boolean'],
+            'acc_hdmi_vga' => ['nullable', 'boolean'],
+            'acc_mouse' => ['nullable', 'boolean'],
+            'acc_docking_station' => ['nullable', 'boolean'],
+            'acc_headset' => ['nullable', 'boolean'],
+            'acc_keyboard' => ['nullable', 'boolean'],
+            'acc_monitor' => ['nullable', 'boolean'],
+            'acc_other' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

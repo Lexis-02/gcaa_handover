@@ -62,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('pc-handover.update');
 
     Route::get('summary', [SummaryController::class, 'index'])->name('summary.index');
+    Route::get('summary/export/excel', [SummaryController::class, 'exportExcel'])->name('summary.export.excel');
 
     Route::prefix('insights')->name('insights.')->group(function () {
         Route::get('/', [InsightController::class, 'index'])->name('index');

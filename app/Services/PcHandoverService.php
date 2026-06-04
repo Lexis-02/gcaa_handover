@@ -157,6 +157,20 @@ class PcHandoverService
             'given_to_department_id' => $return->given_to_department_id,
             'given_to_telephone' => $return->given_to_telephone,
             'given_to_department_name' => $return->givenToDepartment?->name,
+            'acc_power_adapter' => $return->acc_power_adapter,
+            'acc_carrying_bag' => $return->acc_carrying_bag,
+            'acc_hdmi_vga' => $return->acc_hdmi_vga,
+            'acc_mouse' => $return->acc_mouse,
+            'acc_docking_station' => $return->acc_docking_station,
+            'acc_headset' => $return->acc_headset,
+            'acc_keyboard' => $return->acc_keyboard,
+            'acc_monitor' => $return->acc_monitor,
+            'acc_other' => $return->acc_other,
+            'dbw_user_backed_up' => $return->dbw_user_backed_up,
+            'dbw_ict_wiped' => $return->dbw_ict_wiped,
+            'dbw_data_transferred' => $return->dbw_data_transferred,
+            'dbw_no_wipe_required' => $return->dbw_no_wipe_required,
+            'remarks' => $return->remarks,
         ];
     }
 

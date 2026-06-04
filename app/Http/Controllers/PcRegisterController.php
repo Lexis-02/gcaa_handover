@@ -175,6 +175,9 @@ class PcRegisterController extends Controller
                 'id', 'ref_no', 'batch_id', 'asset_tag', 'make_model', 'serial_number',
                 'hostname', 'os', 'condition_on_issue', 'assigned_user_name',
                 'department_id', 'building_id', 'room_ext',
+                'acc_power_adapter', 'acc_carrying_bag', 'acc_hdmi_vga',
+                'acc_mouse', 'acc_docking_station', 'acc_headset',
+                'acc_keyboard', 'acc_monitor', 'acc_other'
             ]),
             'options' => $this->register->formOptions(),
         ]);

@@ -32,6 +32,20 @@ type HandoverRecord = {
     given_to_designation?: string | null;
     given_to_telephone?: string | null;
     given_to_department_name?: string | null;
+    acc_power_adapter?: boolean;
+    acc_carrying_bag?: boolean;
+    acc_hdmi_vga?: boolean;
+    acc_mouse?: boolean;
+    acc_docking_station?: boolean;
+    acc_headset?: boolean;
+    acc_keyboard?: boolean;
+    acc_monitor?: boolean;
+    acc_other?: string | null;
+    dbw_user_backed_up?: boolean;
+    dbw_ict_wiped?: boolean;
+    dbw_data_transferred?: boolean;
+    dbw_no_wipe_required?: boolean;
+    remarks?: string | null;
     created_at: string;
     updated_at: string;
 };
@@ -205,14 +219,56 @@ export default function PcHandoverShow({ record, meta }: PageProps) {
                     <SectionCard title="Action & Return" icon={Settings2}>
                         <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             <DetailCell
-                                label="Data wiped"
-                                value={record.data_wiped}
-                            />
-                            <DetailCell
                                 label="Action taken"
                                 value={record.return_action_label}
                             />
+                            {record.remarks && (
+                                <DetailCell
+                                    label="Remarks"
+                                    value={record.remarks}
+                                    className="sm:col-span-2"
+                                />
+                            )}
                         </dl>
+                        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                            <div className="rounded-lg border border-border/50 bg-muted/15 px-4 py-3">
+                                <dt className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                                    Accessories Returned
+                                </dt>
+                                <dd className="mt-1.5 text-sm leading-snug font-medium text-foreground">
+                                    <ul className="list-inside list-disc">
+                                        {record.acc_power_adapter && <li>Power Adapter / Charger</li>}
+                                        {record.acc_carrying_bag && <li>Carrying Bag / Case</li>}
+                                        {record.acc_hdmi_vga && <li>HDMI / VGA Cable</li>}
+                                        {record.acc_mouse && <li>Mouse</li>}
+                                        {record.acc_docking_station && <li>Docking Station</li>}
+                                        {record.acc_headset && <li>Headset</li>}
+                                        {record.acc_keyboard && <li>Keyboard</li>}
+                                        {record.acc_monitor && <li>Monitor</li>}
+                                        {record.acc_other && <li>Other: {record.acc_other}</li>}
+                                        {!record.acc_power_adapter && !record.acc_carrying_bag && !record.acc_hdmi_vga && !record.acc_mouse && !record.acc_docking_station && !record.acc_headset && !record.acc_keyboard && !record.acc_monitor && !record.acc_other && (
+                                            <span className="text-muted-foreground italic">None</span>
+                                        )}
+                                    </ul>
+                                </dd>
+                            </div>
+                            <div className="rounded-lg border border-border/50 bg-muted/15 px-4 py-3">
+                                <dt className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                                    Data Backup & Wipe Confirmation
+                                </dt>
+                                <dd className="mt-1.5 text-sm leading-snug font-medium text-foreground">
+                                    <ul className="list-inside list-disc">
+                                        {record.dbw_user_backed_up && <li>User data backed up by end-user</li>}
+                                        {record.dbw_ict_wiped && <li>Old PC wiped / sanitized by ICT</li>}
+                                        {record.dbw_data_transferred && <li>Data transferred to new PC</li>}
+                                        {record.dbw_no_wipe_required && <li>No data wipe required</li>}
+                                        {!record.dbw_user_backed_up && !record.dbw_ict_wiped && !record.dbw_data_transferred && !record.dbw_no_wipe_required && (
+                                            <span className="text-muted-foreground italic">None</span>
+                                        )}
+                                    </ul>
+                                </dd>
+                            </div>
+                        </div>
                     </SectionCard>
 
                     {record.return_action === 'given_to_user' && (

@@ -48,7 +48,7 @@ class HandoverNotificationService
         $config = config("handover.stages.{$stage}", []);
         $headline = 'Sign-off required — '.$asset->ref_no;
         $message = sprintf(
-            '%s is ready for %s (%s).',
+            '%s is awaiting sign-off: %s (%s).',
             $asset->ref_no,
             $config['description'] ?? "stage {$stage}",
             $config['signer_role'] ?? 'your action',

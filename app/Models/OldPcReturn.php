@@ -26,7 +26,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'given_to_staff_number',
     'given_to_designation',
     'given_to_department_id',
-    'given_to_telephone'
+    'given_to_telephone',
+    'acc_power_adapter',
+    'acc_carrying_bag',
+    'acc_hdmi_vga',
+    'acc_mouse',
+    'acc_docking_station',
+    'acc_headset',
+    'acc_keyboard',
+    'acc_monitor',
+    'acc_other',
+    'dbw_user_backed_up',
+    'dbw_ict_wiped',
+    'dbw_data_transferred',
+    'dbw_no_wipe_required',
+    'remarks',
 ])]
 class OldPcReturn extends Model
 {
@@ -38,6 +52,18 @@ class OldPcReturn extends Model
             'data_wiped_at' => 'datetime',
             'returned_at' => 'datetime',
             'year_of_purchase' => 'integer',
+            'acc_power_adapter' => 'boolean',
+            'acc_carrying_bag' => 'boolean',
+            'acc_hdmi_vga' => 'boolean',
+            'acc_mouse' => 'boolean',
+            'acc_docking_station' => 'boolean',
+            'acc_headset' => 'boolean',
+            'acc_keyboard' => 'boolean',
+            'acc_monitor' => 'boolean',
+            'dbw_user_backed_up' => 'boolean',
+            'dbw_ict_wiped' => 'boolean',
+            'dbw_data_transferred' => 'boolean',
+            'dbw_no_wipe_required' => 'boolean',
         ];
     }
 
@@ -48,7 +74,7 @@ class OldPcReturn extends Model
 
     public function isFullyReturned(): bool
     {
-        return self::isAffirmative($this->data_wiped)
+        return ($this->dbw_ict_wiped || $this->dbw_no_wipe_required || self::isAffirmative($this->data_wiped))
             && in_array($this->return_action, ['return_to_stores', 'given_to_user'], true);
     }
 

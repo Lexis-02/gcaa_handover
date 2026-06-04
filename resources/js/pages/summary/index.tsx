@@ -1,6 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Activity, BarChart3 } from 'lucide-react';
+import { Activity, BarChart3, Download, Printer } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
     BatchComparisonChart,
     BatchPercentChart,
@@ -109,6 +110,18 @@ export default function SummaryIndex({
         );
     };
 
+    const handlePrint = () => {
+        window.print();
+    };
+
+    const handleExportExcel = () => {
+        const url = new URL(window.location.origin + '/summary/export/excel');
+        if (selected_batch && selected_batch !== 'all') {
+            url.searchParams.append('batch', selected_batch);
+        }
+        window.location.href = url.toString();
+    };
+
     return (
         <>
             <Head title="Handover summary" />
@@ -141,26 +154,39 @@ export default function SummaryIndex({
                             {scoped_to_department && ' · Your department only'}
                         </p>
                     </div>
-                    <div className="flex min-w-[14rem] flex-col gap-1">
-                        <label
-                            htmlFor="batch-select"
-                            className="text-xs font-medium text-muted-foreground"
-                        >
-                            Batch filter
-                        </label>
-                        <select
-                            id="batch-select"
-                            value={selected_batch || 'all'}
-                            onChange={onBatchChange}
-                            className="h-10 rounded-lg border border-border bg-background px-3 text-sm font-medium shadow-sm"
-                        >
-                            <option value="all">All batches — overview</option>
-                            {batches.map((option) => (
-                                <option key={option.id} value={option.id}>
-                                    {option.label} ({option.total_pcs} PCs)
-                                </option>
-                            ))}
-                        </select>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4 print:hidden">
+                        <div className="flex min-w-[14rem] flex-col gap-1">
+                            <label
+                                htmlFor="batch-select"
+                                className="text-xs font-medium text-muted-foreground"
+                            >
+                                Batch filter
+                            </label>
+                            <select
+                                id="batch-select"
+                                value={selected_batch || 'all'}
+                                onChange={onBatchChange}
+                                className="h-10 rounded-lg border border-border bg-background px-3 text-sm font-medium shadow-sm"
+                            >
+                                <option value="all">All batches — overview</option>
+                                {batches.map((option) => (
+                                    <option key={option.id} value={option.id}>
+                                        {option.label} ({option.total_pcs} PCs)
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" className="h-10" onClick={handlePrint}>
+                                <Printer className="mr-2 size-4" />
+                                PDF
+                            </Button>
+                            <Button variant="outline" className="h-10" onClick={handleExportExcel}>
+                                <Download className="mr-2 size-4" />
+                                Excel
+                            </Button>
+                        </div>
                     </div>
                 </motion.div>
 
@@ -197,7 +223,7 @@ export default function SummaryIndex({
                 </motion.div>
 
                 {isAllBatches && batch_comparison.length > 0 && (
-                    <div className="grid gap-6 lg:grid-cols-2">
+                    <div className="grid gap-6 lg:grid-cols-2 print:grid-cols-2 print:break-inside-avoid print:gap-4">
                         <ChartCard
                             index={0}
                             title="Batch performance"
@@ -215,7 +241,7 @@ export default function SummaryIndex({
                     </div>
                 )}
 
-                <div className="grid gap-6 lg:grid-cols-2">
+                <div className="grid gap-6 lg:grid-cols-2 print:grid-cols-2 print:break-inside-avoid print:gap-4 print:mt-4">
                     <ChartCard
                         index={2}
                         title="Handover pipeline"
@@ -232,7 +258,7 @@ export default function SummaryIndex({
                     </ChartCard>
                 </div>
 
-                <div className="grid gap-6 lg:grid-cols-2">
+                <div className="grid gap-6 lg:grid-cols-2 print:grid-cols-2 print:break-inside-avoid print:gap-4 print:mt-4">
                     <ChartCard
                         index={4}
                         title="By department — workload"

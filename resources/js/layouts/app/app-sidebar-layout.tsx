@@ -10,10 +10,14 @@ export default function AppSidebarLayout({
 }: AppLayoutProps) {
     return (
         <AppShell variant="sidebar">
-            <AppSidebar />
-            <AppContent variant="sidebar">
-                <AppSidebarHeader pageTitle={pageTitle} />
-                <div className="custom-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
+            <div className="print:hidden">
+                <AppSidebar />
+            </div>
+            <AppContent variant="sidebar" className="print:m-0 print:w-full print:p-0">
+                <div className="print:hidden">
+                    <AppSidebarHeader pageTitle={pageTitle} />
+                </div>
+                <div scroll-region="true" className="custom-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto print:overflow-visible print:h-auto">
                     {children}
                 </div>
             </AppContent>
